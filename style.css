@@ -1,0 +1,62 @@
+@font-face {
+    font-family: Poppins;
+    src: url(./src/Poppins-Medium.ttf);
+}
+body{
+    margin:0;
+    overflow-x: hidden;
+}
+.maincont{
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat(12,100px);
+    grid-template-rows: minmax(150px,auto);
+    grid-gap:10px;
+    justify-content: space-around;
+}
+/*index.php*/
+.buyer{
+    grid-column: 8/11;
+    grid-row: 2/3;
+}
+.seller{
+    grid-column: 3/5;
+    grid-row: 3/4;
+}
+
+/*index.php end*/
+
+/*Header*/
+.mainhead{
+    display: grid;
+    grid-template-columns: repeat(12,100px);
+    grid-template-rows: minmax(150px,auto);
+    grid-gap:20px;
+    width:100vw;
+    height:150px;
+    box-shadow: 0.5px 0.5px 10px 0.5px;
+}
+.logo{
+    grid-column: 2/3;
+}
+.option{
+    grid-column: 10/12;
+    align-self: center;
+    justify-self: center;
+}
+a{
+    text-decoration: none;
+    color: #4990b5;
+    font-family: 'Poppins';
+    font-size: 20px;
+}
+/*Header end*/
+
+/*Footer*/
+.main-footer{
+    margin-top: 150px;
+    background-color: #4990b5;
+    width: 100vw;
+    height: 150px;
+}
+/*Footer end*/
