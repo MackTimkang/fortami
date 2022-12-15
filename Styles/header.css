@@ -1,0 +1,39 @@
+@font-face {
+    font-family: Poppins;
+    src: url(/src/Poppins-Medium.ttf);
+}
+*{
+    margin:0;
+    box-sizing: border-box;
+}
+.mainhead{
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat(8,1fr);
+    grid-template-rows: minmax(150px,auto);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+.mainhead img{
+    max-width: 150px ;
+    max-height: 150px;
+}
+.logo{
+    grid-column: 2/3;
+    padding: 10px;
+    justify-self: center;
+}
+.option{
+    grid-column: 7/9;
+    align-self: center;
+    
+}
+a{
+    font-family: 'Poppins';
+    font-size: 3vmin;
+    color: #4990b5;
+    text-decoration: none;
+}
+a:hover{
+    color:#000000;
+    cursor: pointer;
+}
