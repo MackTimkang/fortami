@@ -8,28 +8,34 @@
     src: url(/src/Poppins-Medium.ttf);
 }
 .maincont{
+    margin-top: 50px;
     width: 100vw;
     display: grid;
-    grid-template-columns: repeat(8,1fr);
+    grid-template-columns: repeat(12,1fr);
     grid-template-rows: minmax(150px,auto);
-    row-gap: 20px;
+    row-gap: 50px;
 }
 .buyer{
-    grid-column: 6/8;
+    grid-column: 9/12;
 }
-.maincont img{
-    width:100%;
-}
-.seller{
-    grid-column: 2/5;
-}
+
 .content1{
-    grid-column:2/5;
+    grid-column:5/9;
     grid-row-start: 1;
     align-self: center;
+
 }
+.maincont img{
+    max-width: 250px;
+}
+.seller{
+    grid-column: 3/6;
+    grid-row: 2/3;
+    justify-self: left;
+}
+
 .content2{
-    grid-column: 5/8;
+    grid-column: 5/9;
     grid-row-start: 2;
     align-self: center;
 }
@@ -37,6 +43,18 @@
     font-family: 'Poppins';
     font-size: 7vmin;
     text-align: right;
+}
+.content1 p{
+    font-size: 2.5vmin;
+    font-family: 'Poppins';
+    text-align: right;
+    font-style: italic;
+}
+.content2 p{
+    font-size: 2.5vmin;
+    font-family: 'Poppins';
+    text-align: left;
+    font-style: italic;
 }
 .content2 h1{
     font-family: 'Poppins';

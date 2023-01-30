@@ -9,12 +9,14 @@ include 'header.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="./Styles/style.css">
+    <link rel="stylesheet" href="./Styles/index.css">
 </head>
 <body>
     <div class="maincont">
         <div class="content1">
-            <h1>Cravings?</h1>
+            <p>Satisfy your</p>
+            <h1>Cravings</h1>
+            <p>Choose from our partner food shops</p>
             <form action="#" method="post">
                 <input type="submit" name="buynow" value="Buy now">
             </form>
@@ -25,7 +27,9 @@ include 'header.php';
             </div>  
         </div>
         <div class="content2">
-            <h1>Food Shop Owner?</h1>
+            <p>Have a</p>
+            <h1>Food Shop?</h1>
+            <p>Be our partner and reach more customers</p>
             <form action="#" method="post">
                 <input type="submit" name="sellnow" value="Sell now">
             </form>

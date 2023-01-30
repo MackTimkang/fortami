@@ -8,11 +8,11 @@ body{
 .mainfooter{
     margin-top: 20px;
     display:grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(12,1fr);
     grid-template-rows: minmax(150px,auto);
 }
 .credits{
-    grid-column: 2/4;
+    grid-column: 1/13;
     align-self: center;
     justify-self: center;
 }

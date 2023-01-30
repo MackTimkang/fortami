@@ -6,17 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
     <link rel="stylesheet" href="./Styles/header.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="mainhead">
         <div class="logo">
-            <img src="./src/FortamiLogo.png" alt="Fortami Logo">
+            <h1 id="logotext">Fortami</h1>
         </div>
         <div class="option">
-            <a href="login.php">Login</a>
-            <label for="seperator">|</label>
-            <a href="register.php">Register</a>
+           <nav>
+                <a href="index.php">Home</a>
+                <a href="Menu.php">Menu</a>
+                <a href="Foodshop.php">Food Shops</a>
+                <a href="faq.php">FAQs</a>
+           </nav>
+        </div>
+        <div class="option2">
+            <button onclick="window.open('')"><img src="./src/Cart.png" alt="Cart"></button>
+        </div>
+        <div class="profile">
+            <button onclick="location.href = 'login.php'"><img src="./src/userlogoblue.png" alt="User"></button>
         </div>
     </div>
+    
 </body>
 </html>
