@@ -1,7 +1,6 @@
 <?php
     include 'header.php';
-    require 'backend.php';
-
+    include 'backend.php';
     $backend = new Backend;
 ?>
 <!DOCTYPE html>

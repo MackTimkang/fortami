@@ -1,9 +1,9 @@
 <?php
-
+session_start();
     class Backend{
       public $host = 'localhost';
-      public $user = 'Mack24';
-      public $pass = 'Mack.24';
+      public $user = 'root';
+      public $pass = '';
       public $db = 'fortami';
       public $con;
 
@@ -13,6 +13,26 @@
 
       }//end of db construct
       
+      function checksession(){
+          if(isset($_SESSION['user'])){
+            //Validate session
+          }
+          else{
+             
+          }
+      }//checksession end
+
+      function logout(){
+        if (isset($_POST['logout'])) {
+          if (session_destroy()) {
+            header('location:index.php');
+          }
+          else{
+
+          }
+        }
+      }
+
       function login($uname,$pw){
         $sql = "SELECT * from user WHERE user_userName = '$uname'";
         $result = mysqli_query($this->con,$sql);
@@ -21,17 +41,28 @@
               $row = mysqli_fetch_assoc($result);
 
               if(password_verify($pw,$row['user_password'])){
-                
-                echo "<script>alert('Welcome Back!'); window.location.href = 'user.php'";
-                echo "</script>";
+                $_SESSION['user'] = $uname;
+                  if ($row['user_type'] == 'Seller') {
+                    echo "<script>alert('Welcome Back!'); window.location.href = 'sellerdash.php'";
+                    echo "</script>";
+                  }
+                  elseif ($row['user_type'] == 'Buyer') {
+                    echo "<script>alert('Welcome Back!'); window.location.href = 'buyerdash.php'";
+                    echo "</script>";
+                  }
+                  else{
+                    echo "Error in ".$this->con->error;
+                  }
               }
               else {
-                echo "Invalid Credentials, please check your username and password!";
+                echo "<script>alert('Invalid Credentials!');";
+                echo "</script>";
               }
                 
           }
           else {
-            echo "No user found";
+            echo "<script>alert('No user found!');";
+            echo "</script>";
           }
         }
       }//end of login function

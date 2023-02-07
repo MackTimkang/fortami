@@ -1,6 +1,7 @@
 <?php
-    include 'backend.php';
+    require_once 'backend.php';
     $backend = new Backend;
+    $backend->checksession();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +41,6 @@
     if(isset($_POST['login'])){
         $uname = $_POST['username'];
         $pass = $_POST['pword'];
-
         $backend->login($uname,$pass);
     }
    ?>

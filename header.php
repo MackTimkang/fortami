@@ -1,3 +1,6 @@
+<?php
+    $backend = new Backend;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,15 +21,22 @@
                 <a href="index.php">Home</a>
                 <a href="Menu.php">Menu</a>
                 <a href="Foodshop.php">Food Shops</a>
-                <a href="faq.php">FAQs</a>
+                <a href="faq.php">FAQs</a>  
            </nav>
         </div>
-        <div class="option2">
-            <button onclick="window.open('')"><img src="./src/Cart.png" alt="Cart"></button>
-        </div>
-        <div class="profile">
-            <button onclick="location.href = 'login.php'"><img src="./src/userlogoblue.png" alt="User"></button>
-        </div>
+        <div class="login">
+                    <?php
+                        if(isset($_SESSION['user'])){
+                            echo "<form action='' method='post'>";
+                            echo "<input class='logout' type='submit' name='logout' value='Logout'>";
+                            echo "</form>";
+                            $backend->logout();
+                        }
+                        else {
+                            echo '<a href="login.php">Login</a>';
+                        }
+                    ?>
+                </div>
     </div>
     
 </body>
