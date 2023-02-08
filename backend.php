@@ -42,6 +42,7 @@ session_start();
 
               if(password_verify($pw,$row['user_password'])){
                 $_SESSION['user'] = $uname;
+                $_SESSION['id'] = $row['user_id'];
                   if ($row['user_type'] == 'Seller') {
                     echo "<script>alert('Welcome Back!'); window.location.href = 'sellerdash.php'";
                     echo "</script>";
@@ -90,6 +91,20 @@ session_start();
             }
           }
       }//end of check user function
+
+      function listproduct(){
+        $sql = 'SELECT * FROM food_product';
+        $result = $this->con->query($sql);
+          if($result){
+            if($result->num_rows){
+              while($row = $result->fetch_assoc()){
+                echo "<tr>
+                <td>$row['</td>
+                </tr>";
+              }
+            }
+          }
+      }//end of list product function
 
     }//end of backend class
 ?>

@@ -24,6 +24,25 @@
                 <input type="submit" name="sales" value="Sales" >
             </form>
         </div>
+        <div class="result">
+            <?php
+            if(isset($_POST['product'])){
+                include 'product.php';
+            }
+            elseif (isset($_POST['order'])) {
+                include 'order.php';
+            }
+            elseif(isset($_POST['transaction'])){
+                include 'transaction.php';
+            }
+            elseif(isset($_POST['sales'])){
+                include 'sales.php';
+            }
+            else {
+                
+            }
+        ?>
+        </div>
     </div>
 </body>
 </html>
