@@ -48,10 +48,8 @@ input:hover{
     color: none;
     background-color: #4990b5;
 }
-.product-cont,th,td{
+.product-cont{
     border-collapse: collapse;
-    border:2px solid black;
-    padding:10px;
     font-family: 'Poppins';
     font-size: 2vmin;
     text-align: center;
@@ -59,6 +57,11 @@ input:hover{
 th{
     background-color: #4990b5;
     color:white;
+    border-bottom: 1px solid gray;
+}
+th, td{
+    border:2px solid black;
+    padding:20px;
 }
 table{
     width: 100%;

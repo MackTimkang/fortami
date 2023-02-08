@@ -11,16 +11,7 @@
 </head>
 <body>
     <div class="container">
-        <table class="product-cont">
-            <tr>
-                <th>Photo</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Creation</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
-        </table>
+        
     </div>
     <?php
 

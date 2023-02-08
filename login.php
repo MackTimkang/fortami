@@ -1,7 +1,6 @@
 <?php
     require_once 'backend.php';
     $backend = new Backend;
-    $backend->checksession();
 ?>
 <!DOCTYPE html>
 <html lang="en">

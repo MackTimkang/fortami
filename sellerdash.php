@@ -27,7 +27,7 @@
         <div class="result">
             <?php
             if(isset($_POST['product'])){
-                include 'product.php';
+                $backend->listproduct();
             }
             elseif (isset($_POST['order'])) {
                 include 'order.php';
