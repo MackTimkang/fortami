@@ -91,11 +91,18 @@ session_start();
             }
           }
       }//end of check user function
+      
+      function addproduct($foodid,$catId,$photo,$foodname,$fooddesc,$foodcreation,$fooddisc,$foodprice){
+        $query = "INSERT INTO food_product values('$id','$catId','$photo','$foodname','$fooddesc','$foodcreation','$fooddisc','$foodprice') WHERE user_id = $id";
+        $result = $this->con->query($query);
+         
+              }
 
       function listproduct(){
           $id = $_SESSION['id'];
           $sql = 'SELECT * FROM food_product WHERE user_id = '.$id.'';
           $result = $this->con->query($sql);
+
           echo "<table class = 'product-cont'>";
             echo "<tr>";
             echo "<th>Photo</th>";

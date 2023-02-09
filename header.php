@@ -1,6 +1,3 @@
-<?php
-    $backend = new Backend;
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

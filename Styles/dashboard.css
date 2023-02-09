@@ -57,12 +57,21 @@ input:hover{
 th{
     background-color: #4990b5;
     color:white;
-    border-bottom: 1px solid gray;
 }
 th, td{
-    border:2px solid black;
-    padding:20px;
+    padding:10px;
+    border-right: 2px solid rgb(225, 225, 225);
+}
+td{
+    background-color: rgb(217, 240, 248);
 }
 table{
     width: 100%;
+}
+#add,#edit,#view,#delete{
+    float: right;
+    background-color: white;
+    box-shadow: none;
+    max-width: 30px;
+    height: auto;
 }
