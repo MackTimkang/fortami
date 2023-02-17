@@ -2,7 +2,7 @@
     include('backend.php');
     $backend = new Backend;
     $backend->checksession();
-    include('header.php');
+    include('header1.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,5 +44,6 @@
         ?>
         </div>
     </div>
+    
 </body>
 </html>
