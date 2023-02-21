@@ -2,7 +2,14 @@
     include('backend.php');
     $backend = new Backend;
     $backend->checksession();
-    include('header.php');
+    if(isset($_SESSION['role'])){
+        if($_SESSION['role'] = 'Seller'){
+            include 'sellerheader.php';
+        }
+        else{
+            
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +34,7 @@
         <div class="result">
             <?php
             if(isset($_POST['product'])){
-                $backend->listproduct();
+                header('location:product.php');
             }
             elseif (isset($_POST['order'])) {
                 include 'order.php';

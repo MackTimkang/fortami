@@ -39,12 +39,12 @@ input{
     height: 6vmin;
     margin-bottom: 1vmin;
     border: none;
-    color:s
     font-family: 'Poppins';
 }
 .uname, .pw{
     border-bottom: 1px solid #4990b5;
     font-size: 2vmin;
+    padding: 10px;
 }
 .logbtn{
     border-radius: 30px;
