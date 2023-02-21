@@ -29,7 +29,7 @@
                             echo "<form action='' method='post'>";
                             echo "<input class='logout' type='submit' name='logout' value='Logout'>";
                             echo "</form>";
-                        
+                            $backend->logout();
                         }
                         else {
                             echo '<a href="login.php">Login</a>';
