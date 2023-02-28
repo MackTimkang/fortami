@@ -1,15 +1,6 @@
 <?php
-    include('backend.php');
-    $backend = new Backend;
-    $backend->checksession();
-    if(isset($_SESSION['role'])){
-        if($_SESSION['role'] = 'Seller'){
-            include 'sellerheader.php';
-        }
-        else{
-            
-        }
-    }
+    include 'backend.php';
+    include 'sellerheader.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,40 +8,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./Styles/dashboard.css">
- 
     <title>Dashboard</title>
 </head>
 <body>
-    <div class="main-cont">
-        <div class="btn-cont">
-            <form action="" method="post">
-                <input type="submit" name="product" value="Product" >
-                <input type="submit" name="order" value="Order" >
-                <input type="submit" name="transaction" value="Transaction" >
-                <input type="submit" name="sales" value="Sales" >
-            </form>
+    <div class="container-fluid ">
+        <br><br>
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-3">
+                <a href="product.php"><img src="./src/widget-food.png" alt="Product" class="img-fluid"></a>
+                <div class="row"><h1 style="text-align:center">Products</h1></div>
+            </div>
+            <div class="col-3">
+                <img src="./src/vector-checklist-icon.webp" class="img-fluid"style="border-radius:100%" alt="Orders">
+                <div class="row"><h1 style="text-align:center;">Orders</h1></div>
+            </div>
         </div>
-        <div class="result">
-            <?php
-            if(isset($_POST['product'])){
-                header('location:product.php');
-            }
-            elseif (isset($_POST['order'])) {
-                include 'order.php';
-            }
-            elseif(isset($_POST['transaction'])){
-                include 'transaction.php';
-            }
-            elseif(isset($_POST['sales'])){
-                include 'sales.php';
-            }
-            else {
-                
-            }
-        ?>
+        <br><br>
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-3">
+                <img src="./src/sales.png" class="img-fluid" alt="Sales">
+                <div class="row"><h1 style="text-align:center">Sales</h1></div>
+            </div>
+            <div class="col-3">
+                <img src="./src/transactions.png" class="img-fluid" alt="Transactions">
+                <div class="row"><h1 style="text-align:center">Transactions</h1></div>
+            </div>
         </div>
     </div>
-    
 </body>
 </html>

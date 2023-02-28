@@ -14,18 +14,6 @@ session_start();
         $this->con = new mysqli($this->host,$this->user,$this->pass,$this->db) or die("Connection Error!");
 
       }//end of db construct
-    
-      function logout(){
-        if (isset($_POST['logout'])) {
-          if (session_destroy()) {
-            header('location:index.php');
-          }
-          else{
-
-          }
-        }
-      }//end of __construct function
-
 
       //Account Management 
       function login($uname,$pw){
@@ -44,7 +32,7 @@ session_start();
                     echo "</script>";
                   }
                   elseif ($row['user_type'] == 'Buyer') {
-                    echo "<script>alert('Welcome Back!'); window.location.href = 'buyerdash.php'";
+                    echo "<script>alert('Welcome Back!'); window.location.href = 'menu.php'";
                     echo "</script>";
                   }
                   else{
@@ -95,7 +83,7 @@ session_start();
                 }
             }
           }
-      }//end of check user function
+      }//end of register user function
 
       //end of Account Management
 
@@ -111,7 +99,7 @@ session_start();
             }
           }
       }//end of category list function
-      
+
       function addproduct($catid,$pic,$foodname,$desc,$time,$discount,$price){
         $id = $_SESSION['id'];
         $query = "INSERT INTO food_product(user_id,category_id,food_pic,food_name,food_description
@@ -162,51 +150,44 @@ session_start();
           $sql = "SELECT food_id, food_pic,category.category_name,food_name,food_description,
           food_creation,food_discountedPrice FROM food_product JOIN category ON food_product.category_id = category.category_id WHERE user_id = ".$id." ORDER BY food_id";
           $result = $this->con->query($sql);
-
-          echo "<table class = 'product-cont'>";
-            echo "<tr>";
-            echo "<th>Photo</th>";
-            echo "<th>Category</th>";
-            echo "<th>Food</th>";
-            echo "<th>Description</th>";
-            echo "<th>Creation</th>";
-            echo "<th>Price</th>";
-            echo "<th>Action</th>";
-            echo "</tr>";
-          if($result){
-              if($result->num_rows > 0){
-                while($row = $result->fetch_assoc()){
-                  echo "<tr>";
-                  echo "<td><img src='".$row['food_pic']."'</td>";
-                  echo "<td>".$row['category_name']."</td>";
-                  echo "<td>".$row['food_name']."</td>";
-                  echo "<td>".$row['food_description']."</td>";
-                  echo "<td>".$row['food_creation']."</td>";
-                  echo "<td>".$row['food_discountedPrice']."</td>";
-                  echo "<td>
-                  <a class='editbtn' href='/fortami/edit.php?id=".$row['food_id']."'>Edit</a>
-                    <form action='product.php' method='post'>
-                      <input type='hidden' name='food_id' value='".$row['food_id']."'>
-                      <input type='submit' name='delbtn' class='delbtn' value='Delete' style='border:none;color:white; width:60px'>
-                    </form>
-                  </td>";
-                  echo "</tr>";
-                }  
-              }
-              else{
-                
-              }
-              
-          }
-          else{
-            echo "Error in $this->sql".$this->con->error;
-          }
-            echo "<tr>";
-            echo "<td><a href='/fortami/add.php' style='margin:0;background-color:green;
-            border-radius:30px;font-size:2vmin;padding:0 10px;font-weight:semi-bold;'>Add Food</a></td>";
-            echo "</tr>"; 
-            echo "</table>";
+          return $result;
       }//end of list product function
+      
+      function getproduct(){
+        $query = "SELECT * from food_product";
+        $result = $this->con->query($query);
+        if ($result->num_rows > 0) {
+            return $result;
+        }
+        else {
+          echo "No item found!";
+        }
+      }//end of get product function
+
+      function component($pic,$title,$desc,$disc,$orig,$date){
+        $element = "<div class='col'>
+                    <div class='card h-100'>
+                        <img src='./src/Food Menu/$pic' class='card-img-top' alt='...' style='max-width:100%;height:300px'>
+                      <div class='card-body'>
+                        <h5 class='card-title'>$title</h5>
+                        <h6>
+                          <small><s class='text-secondary'>$orig</s></small>
+                          <span class='price'>$disc</span>
+                        </h6>
+                        <p class='card-text'>$desc</p>
+                      </div>
+                      
+                      <div class='card-footer'>
+                      <div class ='text-center'>
+                        <button type='submit' name='addcart' class='btn btn-warning'>Add to cart<i class='bi bi-bag-heart'></i></button>
+                      </div>
+                      <br>
+                        <small class='text-muted'>Prepared on $date</small>
+                      </div>
+                    </div>
+                  </div>";
+          echo $element;
+      }//end of component function
 
       //end of food management
     

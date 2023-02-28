@@ -28,7 +28,7 @@
     <h1>Update Food Listing</h1>
     <div class="input-group" style="width:1000px;">
         <label class="input-group-text" for="inputGroupFile01">Upload Food Image</label>
-        <input type="file" class="form-control" id="inputGroupFile01" name="foodpic" required>
+        <input type="file" class="form-control" id="inputGroupFile01" name="foodpic" value="<?=$row['food_pic'];?>" required>
     </div>
     <div class="input-group" style="width:1000px;">
         <select class="form-select" aria-label="Default select example" name="category" required>
