@@ -77,8 +77,13 @@
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-2">
                       <?php
                         $backend = new Backend;
-                        $count = $backend->countcart($_SESSION['id']);
-                        echo $count;
+                        if (isset($_SESSION['id'])) {
+                          $count = $backend->countcart($_SESSION['id']);
+                          echo $count;
+                        }
+                        else {
+                          echo "0";
+                        }
                       ?>
                       <span class="visually-hidden">Cart</span>
                     </span>

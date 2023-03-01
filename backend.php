@@ -203,7 +203,35 @@ session_start();
         }
         
       }
+      function getcart(){
+        $user_id = $_SESSION['id'];
+        $query = "SELECT cart.food_id,food_product.food_pic,food_product.food_name,food_product.food_description,
+                        food_product.food_creation,food_product.food_discountedPrice,food_product.food_origPrice
+                  FROM cart 
+                  JOIN food_product 
+                  ON food_product.food_id = cart.food_id 
+                  WHERE cart.user_id = $user_id";
 
+        $result = $this->con->query($query);
+          if ($result) {
+            if ($result->num_rows > 0) {
+              return $result;
+            }
+          }
+      }//end of get cad function
+
+      function total(){
+        $user_id = $_SESSION['id'];
+        $query = "SELECT sum(food_product.food_discountedPrice) AS sum
+                  FROM cart
+                  JOIN food_product ON food_product.food_id = cart.food_id
+                  WHERE cart.user_id = $user_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }
+      
       function addtocart($food,$user){
           $query = "INSERT into cart values('$food','$user','1')";
           $result = $this->con->query($query);
