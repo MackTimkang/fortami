@@ -3,6 +3,20 @@
     include 'buyerheader.php';
     $backend = new Backend;
     $list= $backend->listproduct();
+
+    if(isset($_POST['addcart'])){
+        $food_id = $_POST['food_id'];
+        $user_id = $_SESSION['id'];
+
+        $check = $backend->checkcart($food_id,$user_id);
+        if ($check->num_rows>0) {
+            echo "<script>alert('Already in cart!');</script>";
+        }
+        else {
+            $backend->addtocart($food_id,$user_id);
+            echo "<meta http-equiv='refresh' content='0'>";
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,11 +63,11 @@
         </div>
     </div>
     <div class="container text-center">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
             <?php
                 $result = $backend->getproduct();
                     while($row=$result->fetch_assoc()){
-                        $backend->component($row['food_pic'],$row['food_name'],$row['food_description'],$row['food_discountedPrice'],$row['food_origPrice'],$row['food_creation']);
+                        $backend->component($row['food_id'],$row['food_pic'],$row['food_name'],$row['food_description'],$row['food_discountedPrice'],$row['food_origPrice'],$row['food_creation']);
                     }
             ?>
         </div>  

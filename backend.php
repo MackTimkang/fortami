@@ -164,23 +164,26 @@ session_start();
         }
       }//end of get product function
 
-      function component($pic,$title,$desc,$disc,$orig,$date){
+      function component($id,$pic,$title,$desc,$disc,$orig,$date){
         $element = "<div class='col'>
                     <div class='card h-100'>
-                        <img src='./src/Food Menu/$pic' class='card-img-top' alt='...' style='max-width:100%;height:300px'>
+                        <img src='./src/Food Menu/$pic' class='card-img-top' alt='...' style='max-width:100%;height:250px'>
                       <div class='card-body'>
                         <h5 class='card-title'>$title</h5>
                         <h6>
-                          <small><s class='text-secondary'>$orig</s></small>
-                          <span class='price'>$disc</span>
+                          <small><s class='text-secondary'>₱$orig</s></small>
+                          <span class='price'>₱$disc</span>
                         </h6>
                         <p class='card-text'>$desc</p>
                       </div>
                       
                       <div class='card-footer'>
                       <div class ='text-center'>
-                        <button type='submit' name='addcart' class='btn btn-warning'>Add to cart<i class='bi bi-bag-heart'></i></button>
-                      </div>
+                        <form action='menu.php' method='post'>
+                          <button type='submit' name='addcart' class='btn btn-warning'>Add to cart <i class='bi bi-bag-heart'></i></button>
+                          <input type='hidden' name='food_id' value='$id'>
+                          </form>
+                        </div>
                       <br>
                         <small class='text-muted'>Prepared on $date</small>
                       </div>
@@ -190,6 +193,40 @@ session_start();
       }//end of component function
 
       //end of food management
+
+      //cart management
+      function checkcart($food,$user){
+        $query = "SELECT * FROM cart WHERE food_id = $food AND user_id = $user";
+        $result = $this->con->query($query);
+        if ($result) {
+          return $result;
+        }
+        
+      }
+
+      function addtocart($food,$user){
+          $query = "INSERT into cart values('$food','$user','1')";
+          $result = $this->con->query($query);
+            if ($result) {
+              echo "<script>alert('Added Successfuly');</script>";
+            }
+      }
+      function countcart($user_id){
+        $query = "SELECT * FROM cart WHERE user_id = $user_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            if ($result->num_rows > 0) {
+              $count = $result->num_rows;
+            }
+            else {
+              $count = '0';
+            }
+          }
+          else{
+            
+          }
+          return $count;
+      }
     
 
     }//end of backend class

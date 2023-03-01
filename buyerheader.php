@@ -69,7 +69,26 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item">
+              <a href="cart.php" class="nav-link active position-relative" style="color:white;">
+                <h5><i class="bi bi-cart"></i></h5>
+                <h6>
+                  <small class="text-secondary">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-2">
+                      <?php
+                        $backend = new Backend;
+                        $count = $backend->countcart($_SESSION['id']);
+                        echo $count;
+                      ?>
+                      <span class="visually-hidden">Cart</span>
+                    </span>
+                  </small>
+                </h6>
+                  
+              </a>
+            </li>
           </ul>
+          
           <form class="d-flex" role="search">
             <input
               class="form-control me-2"
