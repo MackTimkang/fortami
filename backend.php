@@ -164,34 +164,6 @@ session_start();
         }
       }//end of get product function
 
-      function component($id,$pic,$title,$desc,$disc,$orig,$date){
-        $element = "<div class='col'>
-                    <div class='card h-100'>
-                        <img src='./src/Food Menu/$pic' class='card-img-top' alt='...' style='max-width:100%;height:250px'>
-                      <div class='card-body'>
-                        <h5 class='card-title'>$title</h5>
-                        <h6>
-                          <small><s class='text-secondary'>₱$orig</s></small>
-                          <span class='price'>₱$disc</span>
-                        </h6>
-                        <p class='card-text'>$desc</p>
-                      </div>
-                      
-                      <div class='card-footer'>
-                      <div class ='text-center'>
-                        <form action='menu.php' method='post'>
-                          <button type='submit' name='addcart' class='btn btn-warning'>Add to cart <i class='bi bi-bag-heart'></i></button>
-                          <input type='hidden' name='food_id' value='$id'>
-                          </form>
-                        </div>
-                      <br>
-                        <small class='text-muted'>Prepared on $date</small>
-                      </div>
-                    </div>
-                  </div>";
-          echo $element;
-      }//end of component function
-
       //end of food management
 
       //cart management
@@ -205,20 +177,19 @@ session_start();
       }
       function getcart(){
         $user_id = $_SESSION['id'];
-        $query = "SELECT cart.food_id,food_product.food_pic,food_product.food_name,food_product.food_description,
-                        food_product.food_creation,food_product.food_discountedPrice,food_product.food_origPrice
+        $query = "SELECT cart.food_id,food_product.food_pic,food_product.food_name,food_product.food_description,quantity,
+                        food_product.food_creation,food_product.food_discountedPrice,food_product.food_origPrice,user.user_userName
                   FROM cart 
                   JOIN food_product 
-                  ON food_product.food_id = cart.food_id 
+                  ON food_product.food_id = cart.food_id
+                  INNER JOIN user ON food_product.user_id = user.user_id
                   WHERE cart.user_id = $user_id";
 
         $result = $this->con->query($query);
           if ($result) {
-            if ($result->num_rows > 0) {
               return $result;
-            }
           }
-      }//end of get cad function
+      }//end of get cart function
 
       function total(){
         $user_id = $_SESSION['id'];
@@ -232,12 +203,36 @@ session_start();
           }
       }
       
-      function addtocart($food,$user){
-          $query = "INSERT into cart values('$food','$user','1')";
+      function addtocart($food,$user,$qty){
+          $query = "INSERT INTO cart VALUES('$food','$user','$qty')";
           $result = $this->con->query($query);
             if ($result) {
               echo "<script>alert('Added Successfuly');</script>";
             }
+      }//end of add to cart function
+
+      function editcart($food,$user,$qty){
+        $query = "UPDATE cart SET quantity = $qty WHERE food_id =$food AND user_id = $user";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Quantity Successfully Changed');</script>";
+        }
+        else {
+          echo "Error in $query".$this->con->error;
+        }
+        echo "<meta http-equiv='refresh' content='0'>";
+      }
+
+      function delcart($food,$user){
+        $query = "DELETE FROM cart WHERE food_id = $food AND user_id = $user";
+        $result = $this->con->query($query);
+        if ($result) {
+            echo "Deleted Successfully!";
+        }
+        else {
+          echo "Error in $query".$this->con->error;
+        }
       }
       function countcart($user_id){
         $query = "SELECT * FROM cart WHERE user_id = $user_id";

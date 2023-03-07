@@ -2,16 +2,31 @@
     include 'backend.php';
     include 'buyerheader.php';
     $backend = new Backend;
-    if (isset($_POST['delete'])) {
     
-    }
     $sum = $backend->total();
         foreach($sum as $row){
             $total = $row['sum'];
-            $_SESSION['total'] = $total;
         }
     //quantity
-    $qty = 1;
+
+    if (isset($_POST['delete'])) {
+        $food_id = $_POST['food_id'];
+        $buyer_id = $_SESSION['id'];
+        
+        $backend->delcart($food_id,$buyer_id);
+    }
+
+    if (isset($_POST['clearcart'])) {
+        $backend->clearcart();
+    }
+
+    if (isset($_POST['saveqty'])) {
+        $food= $_POST['food'];
+        $buyer = $_SESSION['id'];
+        $qty = $_POST['qty'];
+
+        $backend->editcart($food,$buyer,$qty);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,12 +44,14 @@
             </h1>
             <?php
                 $list = $backend->getcart();
+                if ($list->num_rows > 0) {
                     while($row = $list->fetch_assoc()){
             ?>
             <form method="post">
         </div>
             <div class="card mb-1 w-100  text-center">
-                    <div class="card-header">
+                    <div class="card-header text-start">
+                    <h5><i class="bi bi-shop"></i> <?=$row['user_userName'];?></h5>
                     </div>
                 <div class="row row-cols-1 row-cols-md-1 g-1 d-flex align-items-center">
                     <div class="col-md-2 text-center">
@@ -75,18 +92,26 @@
                     <div class="col-md-2">
                         <div class="card-body">
                             <p class="card-text">
-                                <div class="input-group mb-2">
-                                    <button class="btn btn-dark" type="submit" name="minus"><i class="bi bi-dash-lg"></i></button>
-                                    <input type="text" class="form-control text-center" placeholder="Qty" aria-label="Quantity" name="qty" value="<?=$qty;?>">
-                                    <button class="btn btn-dark" type="submit" name="add"><i class="bi bi-plus-lg"></i></button>
-                                </div>
+                                <h4>
+                                    <small class="text-secondary"><?=$row['quantity'];?> pc/s</small>
+                                        <button class="btn btn-outline-dark" type="button"  style="border:none;" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <div class="collapse" id="collapseExample">
+                                            <div class="card card-body">
+                                                <input type="hidden" name="food" value="<?=$row['food_id'];?>">
+                                                <input type="number" name="qty" class="form-control text-center" min="1" placeholder="Qty" style="margin:auto;" required>
+                                                <button type='submit' name='saveqty' class='btn btn-warning my-2'>Save</button>
+                                            </div>
+                                        </div>
+                                </h4>
                             </p>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="card-body">
                             <p class="card-text text-center">
-                                    <input type="hidden" name="cart_id" value="<?=$row['food_id'],$_SESSION['id'];?>">
+                                    <input type="hidden" name="food_id" value="<?=$row['food_id'];?>">
                                     <button class="btn btn-danger" type="submit" name="delete"><i class="bi bi-trash3"></i></button>
                             </p>
                         </div>
@@ -95,6 +120,10 @@
             </form> 
         <?php
             }
+        }
+        else {
+            echo "No Products added yet!";
+        }
         ?>
         </div>
 
@@ -127,7 +156,7 @@
                             <small clas="text-secondary">
                             <h3>
                                 <?php
-                                    echo "₱".number_format((float)$_SESSION['total'], 2, '.', '');
+                                    echo "₱".number_format((float)$total, 2, '.', '');
                                 ?>
                             </h3>
                             </small>
@@ -144,7 +173,9 @@
                 <div class="col-md-2">
                     <div class="card-body">
                         <p class="card-text" >
-                        <a href="" class="btn btn-danger" style="max-width:100%;height:auto"><i class="bi bi-bag-x"></i> Clear Cart</a>
+                        <form action="" method="post">
+                            <button type="submit" name="clearcart" class="btn btn-danger" style="max-width:100%;height:auto"><i class="bi bi-bag-x"></i> Clear Cart</button>
+                        </form>
                         </p>
                     </div>
                 </div>

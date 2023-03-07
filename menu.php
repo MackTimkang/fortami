@@ -7,13 +7,14 @@
     if(isset($_POST['addcart'])){
         $food_id = $_POST['food_id'];
         $user_id = $_SESSION['id'];
+        $qty = $_POST['qty'];
 
         $check = $backend->checkcart($food_id,$user_id);
         if ($check->num_rows>0) {
             echo "<script>alert('Already in cart!');</script>";
         }
         else {
-            $backend->addtocart($food_id,$user_id);
+            $backend->addtocart($food_id,$user_id,$qty);
             echo "<meta http-equiv='refresh' content='0'>";
         }
     }
@@ -63,12 +64,39 @@
         </div>
     </div>
     <div class="container text-center">
-        <div class="row row-cols-1 row-cols-md-4 g-4">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <?php
+            $list = $backend->getproduct();
+            if ($list->num_rows > 0) {
+                while($row= $list->fetch_assoc()){
+        ?>
+        <div class='col'>
+                    <div class='card h-100'>
+                        <img src='./src/Food Menu/<?=$row['food_pic'];?>' class='card-img-top' alt='...' style='max-width:100%;height:250px'>
+                      <div class='card-body'>
+                        <h5 class='card-title'><?=$row['food_name'];?></h5>
+                        <h6>
+                          <small><s class='text-secondary'>₱<?=$row['food_origPrice'];?></s></small>
+                          <span class='price'>₱<?=$row['food_discountedPrice'];?></span>
+                        </h6>
+                        <p class='card-text'><?=$row['food_description']?></p>
+                      </div>
+                      
+                      <div class='card-footer'>
+                      <div class ='text-center '>
+                        <form action='menu.php' method='post'>
+                          <input type="number" name="qty" class="form-control text-center" min="1" placeholder="Quantity" style="width:50%;margin:auto;" required>
+                          <button type='submit' name='addcart' class='btn btn-warning my-2'>Add to cart <i class='bi bi-bag-heart'></i></button>
+                          <input type='hidden' name='food_id' value='<?=$row['food_id'];?>'>
+                          </form>
+                        </div>
+                        <small class='text-muted'>Prepared on <?=$row['food_creation'];?></small>
+                      </div>
+                    </div>
+                  </div>
             <?php
-                $result = $backend->getproduct();
-                    while($row=$result->fetch_assoc()){
-                        $backend->component($row['food_id'],$row['food_pic'],$row['food_name'],$row['food_description'],$row['food_discountedPrice'],$row['food_origPrice'],$row['food_creation']);
                     }
+                }
             ?>
         </div>  
     </div>
