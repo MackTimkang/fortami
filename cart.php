@@ -10,7 +10,7 @@
     //quantity
 
     if (isset($_POST['delete'])) {
-        $food_id = $_POST['food_id'];
+        $food_id = $_POST['food'];
         $buyer_id = $_SESSION['id'];
         
         $backend->delcart($food_id,$buyer_id);
@@ -47,8 +47,8 @@
                 if ($list->num_rows > 0) {
                     while($row = $list->fetch_assoc()){
             ?>
-            <form method="post">
         </div>
+        <form action="cart.php" method="post">
             <div class="card mb-1 w-100  text-center">
                     <div class="card-header text-start">
                     <h5><i class="bi bi-shop"></i> <?=$row['user_userName'];?></h5>
@@ -107,17 +107,20 @@
                                 </h4>
                             </p>
                         </div>
+                    </form>
                     </div>
                     <div class="col-md-2">
                         <div class="card-body">
-                            <p class="card-text text-center">
-                                    <input type="hidden" name="food_id" value="<?=$row['food_id'];?>">
-                                    <button class="btn btn-danger" type="submit" name="delete"><i class="bi bi-trash3"></i></button>
-                            </p>
+                                <p class="card-text text-center">
+                                    <form action="cart.php" method="post">
+                                        <input type="hidden" name="food" value="<?=$row['food_id'];?>">
+                                        <button class="btn btn-danger" type="submit" name="delete"><i class="bi bi-trash3"></i></button>
+                                    </form> 
+                                </p>
                         </div>
                     </div>
-                </div>
-            </form> 
+                
+            </div>
         <?php
             }
         }
@@ -173,9 +176,9 @@
                 <div class="col-md-2">
                     <div class="card-body">
                         <p class="card-text" >
-                        <form action="" method="post">
-                            <button type="submit" name="clearcart" class="btn btn-danger" style="max-width:100%;height:auto"><i class="bi bi-bag-x"></i> Clear Cart</button>
-                        </form>
+                            <form action="" method="post">
+                                <button type="submit" name="clearcart" class="btn btn-danger" style="max-width:100%;height:auto"><i class="bi bi-bag-x"></i> Clear Cart</button>
+                            </form>
                         </p>
                     </div>
                 </div>

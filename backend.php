@@ -228,11 +228,22 @@ session_start();
         $query = "DELETE FROM cart WHERE food_id = $food AND user_id = $user";
         $result = $this->con->query($query);
         if ($result) {
-            echo "Deleted Successfully!";
+            echo "<script>alert('Deleted Successfully!');</script>";
         }
         else {
           echo "Error in $query".$this->con->error;
         }
+        echo "<meta http-equiv='refresh' content='0'>";
+      }
+
+      function clearcart(){
+        $query = "DELETE FROM cart";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            echo "<script>alert('Cart Cleared Successfully');</script>";
+          }
+          echo "<meta http-equiv='refresh' content='0'>";
       }
       function countcart($user_id){
         $query = "SELECT * FROM cart WHERE user_id = $user_id";
