@@ -3,10 +3,8 @@
     include 'buyerheader.php';
     $backend = new Backend;
     
-    $sum = $backend->total();
-        foreach($sum as $row){
-            $total = $row['sum'];
-        }
+        $sum = $backend->total();
+        $total = mysqli_fetch_assoc($sum);
     //quantity
 
     if (isset($_POST['delete'])) {
@@ -57,7 +55,7 @@
                     <div class="col-md-2 text-center">
                         <img src="./src/Food Menu/<?=$row['food_pic'];?>" class="img-fluid rounded-start" alt="..." style="max-width:50%; height:auto">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <div class="card-body ">
                             <p class="card-text">
                                 <h4 class="card-title"><?=$row['food_name'];?></h4>
@@ -72,6 +70,16 @@
                                 -webkit-line-clamp: 3;
                                 overflow: hidden;">
                                 <?=$row['food_description'];?>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <p class="card-text" style="display: -webkit-box;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 3;
+                                overflow: hidden;">
+                                <?=$row['preparation'];?>
                             </p>
                         </div>
                     </div>
@@ -159,7 +167,7 @@
                             <small clas="text-secondary">
                             <h3>
                                 <?php
-                                    echo "₱".number_format((float)$total, 2, '.', '');
+                                    echo "₱".number_format((float)$total['total'], 2, '.', '');
                                 ?>
                             </h3>
                             </small>
@@ -169,7 +177,7 @@
                 <div class="col-md-2">
                     <div class="card-body">
                         <p class="card-text" >
-                            <a href="" class="btn btn-dark" style="max-width:100%;height:auto"><i class="bi bi-bag-check"></i> Checkout</a>
+                            <a href="checkout.php" class="btn btn-dark" style="max-width:100%;height:auto"><i class="bi bi-bag-check"></i> Checkout</a>
                         </p>
                     </div>
                 </div>

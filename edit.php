@@ -1,17 +1,8 @@
 <?php
     include 'backend.php';
     $backend = new Backend;
-
-        $food_id = $_GET['id'];
-        $user_id = $_SESSION['id'];
-        $con = mysqli_connect("localhost","root","","fortami");
-        $query = "SELECT food_product.category_id,category.category_name,food_pic,food_name,food_description,
-        food_creation,food_discountedPrice,food_origPrice
-        FROM food_product 
-        JOIN category ON category.category_id = food_product.category_id
-        WHERE food_id = $food_id AND user_id = $user_id";
-        $result = mysqli_query($con,$query);
-        $row = mysqli_fetch_assoc($result);
+    $result = $backend->listproduct();
+    $row = mysqli_fetch_assoc($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +19,7 @@
     <h1>Update Food Listing</h1>
     <div class="input-group" style="width:1000px;">
         <label class="input-group-text" for="inputGroupFile01">Upload Food Image</label>
-        <input type="file" class="form-control" id="inputGroupFile01" name="foodpic" value="<?=$row['food_pic'];?>" required>
+        <input type="file" class="form-control" id="inputGroupFile01" name="foodpic" value="<?=$row['food_pic']?>" required>
     </div>
     <div class="input-group" style="width:1000px;">
         <select class="form-select" aria-label="Default select example" name="category" required>
@@ -36,25 +27,32 @@
             <?php $backend->categorylist();?>
         </select>
     </div>
-    <div class="col-md-10" >
+    <div class="col-md-6" >
             <label for="food name" class="form-label">Food Name</label>
             <input type="text" class="form-control" id="foodname" name="foodname" value="<?=$row['food_name'];?>" required>
     </div>
-    <div class="col-10">
-        <div class="form-floating">
+    <div class="col-md-6">
+        <label for="floatingTextarea">Food Details</label>
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required><?=$row['food_description'];?></textarea>
-            <label for="floatingTextarea">Food Details</label>
+    </div>
+    <div class="col-md-3">
+            <label for="preparation" class="form-label">Preparation</label>
+            <select name="prep" id="" class="form-select" required>
+                <option value="" selected disabled>Choose....</option>
+                <option value="Made to order">Made to order</option>
+                <option value="Fresh">Fresh</option>
+                <option value="Surplus">Surplus</option>
+            </select>
         </div>
-    </div>
-    <div class="col-md-10">
+    <div class="col-md-3">
         <label for="datetime" class="form-label">Date & Time of Creation</label>
-        <input type="datetime-local" class="form-control" id="inputAddress" name="creation" value="<?=$row['food_creation'];?>" required>
+        <input type="datetime-local" class="form-control" id="inputAddress" name="creation" value="<?=$row['food_creation'];?>">
     </div>
-    <div class="col-md-5">
+    <div class="col-md-3">
         <label for="inputState" class="form-label">Discounted Price</label>
         <input type="number" class="form-control" name="disprice" id="disprice" value="<?=$row['food_discountedPrice'];?>" required>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-3">
         <label for="inputZip" class="form-label">Original Price</label>
         <input type="number" class="form-control" name="origprice" id="origprice" value="<?=$row['food_origPrice'];?>" required>
     </div>
@@ -69,6 +67,7 @@
 <?php
     if(isset($_POST['editbtn'])){
         if (isset($_POST['category'])) {
+            $food_id = $_GET['id'];
             $food_pic = $_POST['foodpic'];
             $category = $_POST['category'];
             $foodname = $_POST['foodname'];
@@ -76,8 +75,9 @@
             $time = $_POST['creation'];
             $disc = $_POST['disprice'];
             $orig = $_POST['origprice'];
+            $prep = $_POST['prep'];
 
-            $backend->editproduct($food_id,$category,$food_pic,$foodname,$desc,$time,$disc,$orig);
+            $backend->editproduct($food_id,$category,$food_pic,$foodname,$desc,$prep,$time,$disc,$orig);
         }
         else{
             echo "Please select food category!";

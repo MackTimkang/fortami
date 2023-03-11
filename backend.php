@@ -61,7 +61,7 @@ session_start();
         }
       }//checksession end
 
-      function registerUser($role,$fn,$ln,$add,$em,$num,$un,$pass){
+      function registerUser($role,$fn,$ln,$em,$un,$pass){
         $sql = "SELECT * from user WHERE user_userName = '$un'";
         $result = mysqli_query($this->con,$sql);
           if($result){
@@ -70,8 +70,8 @@ session_start();
             }
             else {
               $hashpass = password_hash($pass,PASSWORD_DEFAULT);
-              $query = "INSERT INTO user(user_type,user_fName,user_lName,user_address,user_email,user_number,user_userName,user_password) 
-              values('$role','$fn','$ln','$add','$em','$num','$un','$hashpass')";
+              $query = "INSERT INTO user(user_type,user_fName,user_lName,user_email,user_userName,user_password) 
+              values('$role','$fn','$ln','$em','$un','$hashpass')";
               $reg = mysqli_query($this->con,$query);
                 if($reg){
                   echo "<script>alert('Registered Successfully!');";
@@ -84,6 +84,42 @@ session_start();
             }
           }
       }//end of register user function
+
+      function addAddress($id,$contact,$region,$province,$city,$brgy,$zip,$label,$street,$type){
+
+      }
+
+      function usersearch($id){
+        $query = "SELECT * FROM user WHERE user_id = $id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }
+
+      function address($id){
+        $query = "SELECT user.user_fName,user.user_lName,address_type,contact,region,province,city,barangay,street,zip,label FROM address
+                  JOIN user ON user.user_id = address.user_id WHERE user_id = $id";
+        $result = $this->con->query($query);
+        if ($result) {
+            if ($result->num_rows > 0) {
+              return $result;
+            }
+            else {
+              $addbtn = "<a href='address.php' class='btn btn-warning'></a>";
+
+              return $addbtn;
+            }
+        }
+      }//end of address function
+
+      function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$label){
+        $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$label')";
+        $result = $this->con->query($query);
+          if ($result) {
+              echo "<script>alert('Address saved successfully!');window.location.href = 'checkout.php';</script>";
+          }
+      }//end of addAddress
 
       //end of Account Management
 
@@ -100,10 +136,10 @@ session_start();
           }
       }//end of category list function
 
-      function addproduct($catid,$pic,$foodname,$desc,$time,$discount,$price){
+      function addproduct($catid,$pic,$foodname,$desc,$preparation,$time,$discount,$price){
         $id = $_SESSION['id'];
-        $query = "INSERT INTO food_product(user_id,category_id,food_pic,food_name,food_description
-        ,food_creation,food_discountedPrice,food_origPrice) values('$id','$catid','$pic','$foodname','$desc',
+        $query = "INSERT INTO food_product(user_id,category_id,food_pic,food_name,food_description,preparation
+        ,food_creation,food_discountedPrice,food_origPrice) values('$id','$catid','$pic','$foodname','$desc','$preparation',
         '$time','$discount','$price')";
 
         $result = $this->con->query($query);
@@ -119,9 +155,9 @@ session_start();
         echo "<meta http-equiv='refresh' content='0'>";
       }// end of add product function
 
-      function editproduct($food_id,$catid,$pic,$name,$desc,$date,$discprice,$origprice){
+      function editproduct($food_id,$catid,$pic,$name,$desc,$prep,$date,$discprice,$origprice){
         $id = $_SESSION['id'];//user_id
-        $query = "UPDATE food_product SET category_id ='$catid',food_pic = '$pic', food_name='$name',food_description='$desc',food_creation='$date',
+        $query = "UPDATE food_product SET category_id ='$catid',food_pic = '$pic', food_name='$name',food_description='$desc',preparation='$prep',food_creation='$date',
         food_discountedPrice = '$discprice', food_origPrice = '$origprice' WHERE user_id = '$id' AND food_id='$food_id'";
         $result = $this->con->query($query);
         if ($result) {
@@ -147,8 +183,8 @@ session_start();
 
       function listproduct(){
           $id = $_SESSION['id'];
-          $sql = "SELECT food_id, food_pic,category.category_name,food_name,food_description,
-          food_creation,food_discountedPrice FROM food_product JOIN category ON food_product.category_id = category.category_id WHERE user_id = ".$id." ORDER BY food_id";
+          $sql = "SELECT food_id, food_pic,category.category_name,food_name,food_description,preparation,
+          food_creation,food_discountedPrice,food_origPrice FROM food_product JOIN category ON food_product.category_id = category.category_id WHERE user_id = ".$id." ORDER BY food_id";
           $result = $this->con->query($sql);
           return $result;
       }//end of list product function
@@ -156,7 +192,7 @@ session_start();
       function getproduct(){
         $query = "SELECT * from food_product";
         $result = $this->con->query($query);
-        if ($result->num_rows > 0) {
+        if ($result) {
             return $result;
         }
         else {
@@ -177,7 +213,7 @@ session_start();
       }
       function getcart(){
         $user_id = $_SESSION['id'];
-        $query = "SELECT cart.food_id,food_product.food_pic,food_product.food_name,food_product.food_description,quantity,
+        $query = "SELECT cart.food_id,food_product.food_pic,food_product.food_name,food_product.food_description,food_product.preparation,quantity,
                         food_product.food_creation,food_product.food_discountedPrice,food_product.food_origPrice,user.user_userName
                   FROM cart 
                   JOIN food_product 
@@ -193,10 +229,8 @@ session_start();
 
       function total(){
         $user_id = $_SESSION['id'];
-        $query = "SELECT sum(food_product.food_discountedPrice) AS sum
-                  FROM cart
-                  JOIN food_product ON food_product.food_id = cart.food_id
-                  WHERE cart.user_id = $user_id";
+        $query = "SELECT sum(food_product.food_discountedPrice * cart.quantity) AS total FROM cart
+                  JOIN food_product ON food_product.food_id = cart.food_id WHERE cart.user_id = $user_id";
         $result = $this->con->query($query);
           if ($result) {
             return $result;

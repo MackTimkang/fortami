@@ -90,7 +90,16 @@
                           <input type='hidden' name='food_id' value='<?=$row['food_id'];?>'>
                           </form>
                         </div>
-                        <small class='text-muted'>Prepared on <?=$row['food_creation'];?></small>
+                        <small class='text-muted'>
+                            <?php 
+                                if($row['food_creation'] == '0000-00-00 00:00:00'){
+                                    echo $row['preparation'];
+                                }
+                                else {
+                                    echo "<small class='text-secondary'>(".$row['preparation'].") ".$row['food_creation']."</small>" ;
+                                }
+                            ?>
+                        </small>
                       </div>
                     </div>
                   </div>

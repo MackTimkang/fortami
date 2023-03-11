@@ -23,6 +23,7 @@ include 'sellerheader.php';
                 <th>Category</th>
                 <th>Food</th>
                 <th>Description</th>
+                <th>Preparation</th>
                 <th>Date Prepared</th>
                 <th>Price</th>
                 <th>Action</th>
@@ -35,8 +36,17 @@ include 'sellerheader.php';
                 <td><?=$data['category_name']?></td>
                 <td><?=$data['food_name']?></td>
                 <td><?=$data['food_description']?></td>
-                <td><?=$data['food_creation']?></td>
-                <td><?=$data['food_discountedPrice']?></td>
+                <td><?=$data['preparation']?></td>
+                <td><?php 
+                        if($data['food_creation'] == '0000-00-00 00:00:00'){
+                            echo "-";
+                        }
+                        else {
+                            echo $data['food_creation'];
+                        }
+                    ?>
+                </td>
+                <td><?="<small><s class='text-secondary'>".$data['food_origPrice']."</s></small>"." ".$data['food_discountedPrice'];?></td>
                 <td>
                     <div class="row d-flex align-items-center justify-content-center" >
                         <div class="col-4">
@@ -62,11 +72,12 @@ include 'sellerheader.php';
                     $pic=$_POST['foodpic'];
                     $foodname=$_POST['foodname'];
                     $desc=$_POST['fooddesc'];
+                    $prep = $_POST['prep'];
                     $time=$_POST['creation'];
                     $discount=$_POST['disprice'];
                     $price=$_POST['origprice'];
 
-                    $backend->addproduct($catid,$pic,$foodname,$desc,$time,$discount,$price);
+                    $backend->addproduct($catid,$pic,$foodname,$desc,$prep,$time,$discount,$price);
                 }
             ?>
             <tr>

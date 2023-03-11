@@ -19,7 +19,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand" style="background-color: #4990b5">
-      <div class="container-fluid">
+      <div class="container">
         <a
           class="navbar-brand"
           href="#"
@@ -40,10 +40,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.php" style="color: white">Home</a>
+              <a class="nav-link active" aria-current="page" href="" style="color: white">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#"style="color: white">Dashboard</a>
+              <a class="nav-link" href="profile.php"style="color: white">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="sellerdash.php"style="color: white">Dashboard</a>
             </li>
             <li class="nav-item dropdown">
               <a

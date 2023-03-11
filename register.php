@@ -1,5 +1,4 @@
 <?php
-include 'header.php';
 include 'backend.php';
 $backend = new Backend;
 ?>
@@ -9,29 +8,55 @@ $backend = new Backend;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">    
     <title>Register</title>
 </head>
 <body>
-    <div class="main-cont">
-        <div class="reg-cont">
-            <form action="register.php" method="post">
-                <label for="buyorsell">Please select your role:</label>
-                <input type="radio" name="role" value="Buyer" required>
-                <label for="buyer">Buyer</label>
-                <input type="radio" name="role" value="Seller" required>
-                <label for="seller">Seller</label>
-                <br><br>
-                <input type="text" name="Fname" placeholder="First Name" required >
-                <input type="text" name="Lname" placeholder="Last Name" required>
-                <input type="text" name="address" placeholder="Address" required>
-                <input type="text" name="email" placeholder="Email" required>
-                <input type="text" name="contact" placeholder="Contact Number" required>
-                <input type="text" name="uname" placeholder="Username" required>
-                <input type="password" name="pass" placeholder="Password" required>
-                <input type="password" name="cpass" placeholder="Confirm Password" required>
-                <input type="submit" name="regbtn" value="Register" >
-            </form>
+    <div class="container d-flex justify-content-center align-items-center">
+        <form action="" method="post">
+        <div class="row g-3 p-5 ">
+            <div class="col-12 text-center">
+                <h1><i class="bi bi-person-fill-up"></i> Register</h1>
+            </div>
+            <div class="col-3">
+                <label for="role" class="form-label">How do you intend to use Fortami?</label>
+                    <select class="form-select" aria-label="role" name="role" required>
+                        <option selected disabled>Click to choose...</option>
+                        <option value="Buyer">Buy</option>
+                        <option value="Seller">Sell</option>
+                    </select>
+            </div>
+            <div class="col-12">
+                <label for="fname" class="form-label">First Name</label>
+                <input type="text" class="form-control" name="Fname" required>
+            </div>
+            <div class="col-12">
+                <label for="lname" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="Lname" required>
+            </div>
+            <div class="col-12">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="col-12">
+                <label for="uname" class="form-label">Username</label>
+                <input type="text" class="form-control" name="uname" required>
+            </div>
+            <div class="col-12">
+                <label for="pass" class="form-label">Password</label>
+                <input type="password" class="form-control" name="pass" required>
+            </div>
+            <div class="col-12">
+                <label for="pass" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="cpass" required>
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" name="regbtn" class="btn btn-primary">Register</button>
+                <a class="btn btn-secondary" href="index.php" style="background-color:red;border:none">Cancel</a>
+            </div>
         </div>
+        </form>
     </div>
     <?php
        if(isset($_POST['regbtn'])){
@@ -45,12 +70,10 @@ $backend = new Backend;
             $role = $_POST['role'];
             $fn = $_POST['Fname'];
             $ln = $_POST['Lname'];
-            $ad = $_POST['address'];
             $email = $_POST['email'];
-            $cnum = $_POST['contact'];
             $uname = $_POST['uname'];
 
-            $backend->registerUser($role,$fn,$ln,$ad,$email,$cnum,$uname,$pass);
+            $backend->registerUser($role,$fn,$ln,$email,$uname,$pass);
 
             //call register function
            }
@@ -63,5 +86,6 @@ $backend = new Backend;
          }
        }
     ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
