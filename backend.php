@@ -85,10 +85,6 @@ session_start();
           }
       }//end of register user function
 
-      function addAddress($id,$contact,$region,$province,$city,$brgy,$zip,$label,$street,$type){
-
-      }
-
       function usersearch($id){
         $query = "SELECT * FROM user WHERE user_id = $id";
         $result = $this->con->query($query);
@@ -97,24 +93,61 @@ session_start();
           }
       }
 
-      function address($id){
-        $query = "SELECT user.user_fName,user.user_lName,address_type,contact,region,province,city,barangay,street,zip,label FROM address
-                  JOIN user ON user.user_id = address.user_id WHERE user_id = $id";
+      function address($id,$label){
+        $query = "SELECT * FROM address WHERE user_id = $id AND label= '$label'";
         $result = $this->con->query($query);
         if ($result) {
             if ($result->num_rows > 0) {
               return $result;
             }
             else {
-              $addbtn = "<a href='address.php' class='btn btn-warning'></a>";
-
-              return $addbtn;
             }
         }
+        echo "<meta http-equiv='refresh' content='0'>";
       }//end of address function
 
-      function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$label){
-        $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$label')";
+      function searchaddress($address_id){
+        $query = "SELECT * FROM address WHERE address_id = $address_id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of searchaddress function
+
+      function sellerAddress($seller_id){
+        $query = "SELECT * FROM address WHERE user_id = $seller_id";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }
+
+      function delAddress($id){
+        $query = "DELETE FROM address WHERE address_id = $id";
+        $result = $this->con->query($query);
+        
+        if ($result) {
+          echo "<script>alert('Address Deleted successfully!');window.location.href = 'checkout.php';</script>";
+        }
+      }
+
+      function editAddress($id,$name,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
+        $query = "UPDATE address SET full_name = '$name', contact = '$con' , region = '$reg' ,
+        province = '$province', city = '$city', barangay = '$brgy', street = '$street', zip = '$zip',note='$note',label='$label' 
+        WHERE address_id = $id";
+        $result = $this->con->query($query);
+        if ($result) {
+          echo "<script>alert('Address updated successfully!');window.location.href = 'checkout.php';</script>";
+        }
+        else {
+
+        }
+      }
+
+      function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
+        $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,note,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$note','$label')";
         $result = $this->con->query($query);
           if ($result) {
               echo "<script>alert('Address saved successfully!');window.location.href = 'checkout.php';</script>";
@@ -182,9 +215,8 @@ session_start();
       }//end of delete product function
 
       function listproduct(){
-          $id = $_SESSION['id'];
           $sql = "SELECT food_id, food_pic,category.category_name,food_name,food_description,preparation,
-          food_creation,food_discountedPrice,food_origPrice FROM food_product JOIN category ON food_product.category_id = category.category_id WHERE user_id = ".$id." ORDER BY food_id";
+          food_creation,food_discountedPrice,food_origPrice FROM food_product JOIN category ON food_product.category_id = category.category_id ORDER BY food_id";
           $result = $this->con->query($sql);
           return $result;
       }//end of list product function
@@ -214,7 +246,7 @@ session_start();
       function getcart(){
         $user_id = $_SESSION['id'];
         $query = "SELECT cart.food_id,food_product.food_pic,food_product.food_name,food_product.food_description,food_product.preparation,quantity,
-                        food_product.food_creation,food_product.food_discountedPrice,food_product.food_origPrice,user.user_userName
+                        food_product.food_creation,food_product.food_discountedPrice,food_product.food_origPrice,user.user_userName,food_product.user_id
                   FROM cart 
                   JOIN food_product 
                   ON food_product.food_id = cart.food_id
@@ -238,7 +270,7 @@ session_start();
       }
       
       function addtocart($food,$user,$qty){
-          $query = "INSERT INTO cart VALUES('$food','$user','$qty')";
+          $query = "INSERT INTO cart(food_id,user_id,quantity) VALUES('$food','$user','$qty')";
           $result = $this->con->query($query);
             if ($result) {
               echo "<script>alert('Added Successfuly');</script>";
@@ -275,7 +307,6 @@ session_start();
         $result = $this->con->query($query);
 
           if ($result) {
-            echo "<script>alert('Cart Cleared Successfully');</script>";
           }
           echo "<meta http-equiv='refresh' content='0'>";
       }
@@ -294,8 +325,87 @@ session_start();
             
           }
           return $count;
+      }//end of countcart
+
+      //end of cart management
+
+      //start of payment management
+
+      function payment($user,$method,$amount,$status){
+        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,trans_status) values($user,$method,'$amount','$status')";
+        $result = $this->con->query($query);
+          if ($result) {
+            echo "<script>alert('Payment Successful, Order is being processed');window.location.href='receipt.php';</script>";
+          }
+      }//end of payment
+
+      function transaction(){
+        $query = "SELECT payTrans_id,pay_amount,quantity,trans_status,pay_datetime,user.user_userName,address.full_name,address.contact,address.region,address.city,address.barangay,address.street,address.zip,address.label,
+                  payment_transaction.food_id,food_product.food_name,food_product.food_discountedPrice,payment_transaction.address_id,payment_method.paymethod_type FROM payment_transaction
+                  JOIN food_product ON payment_transaction.food_id = food_product.food_id
+                  INNER JOIN user ON food_product.user_id = user.user_id
+                  JOIN address ON payment_transaction.address_id = address.address_id
+                  JOIN payment_method ON payment_transaction.paymethod_id = payment_method.paymethod_id";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }// end of transaction
+
+      function getpayment($user,$time){
+        $query = "SELECT * FROM payment_transaction WHERE user_id = $user AND pay_datetime = '$time'";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of function getpayment
+
+      function paymentTotal($id){
+        $query = "SELECT sum(pay_amount) as total FROM payment_transaction WHERE user_id = $id ";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }// end of payment
+      
+      //end of payment management
+
+      //start of order management
+
+      function order($food,$user,$address,$payTrans_id,$status,$qty){
+        $query = "INSERT into food_order(food_id,user_id,address_id,payTrans_id,order_status,quantity) values($food,$user,$address,$payTrans_id,'$status','$qty')";
+        $result = $this->con->query($query);
+
+          if ($result) {
+
+          }
+      }//end of creating order function
+
+      function orderReceipt(){
+        $trans_id = $_SESSION['trans_id'];
+        $query = "SELECT * FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id
+                  JOIN user ON food_order.user_id = user.user_id
+                  JOIN address ON food_order.address_id = address.address_id
+                  JOIN payment_transaction on food_order.payTrans_id = payment_transaction.payTrans_id WHERE food_order.payTrans_id = $trans_id";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of function order reciept
+
+      function shopName(){
+        $trans_id = $_SESSION['trans_id'];
+        $query = "SELECT * FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id
+                  INNER JOIN user ON user.user_id = food_product.user_id WHERE food_order.payTrans_id = $trans_id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
       }
-    
 
     }//end of backend class
 ?>

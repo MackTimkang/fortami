@@ -13,9 +13,10 @@ $backend = new Backend;
         $brgy = $_POST['brgy'];
         $street = $_POST['street'];
         $zip = $_POST['zip'];
+        $note = $_POST['note'];
         $label = $_POST['label'];
 
-        $backend->createAddress($id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$label);
+        $backend->createAddress($id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label);
     }
 ?>
 <!DOCTYPE html>
@@ -66,6 +67,10 @@ $backend = new Backend;
             <div class="col-md-4">
                 <label for="zip" class="form-label">Zip</label>
                 <input type="number" class="form-control" name="zip" required>
+            </div>
+            <div class="col-12">
+                <label for="note" class="form-label">Note <small class="text-secondary"><i>(Optional)</i> </small></label>
+                <input type="text" class="form-control" name="note">
             </div>
             <div class="col-12">
                 <label for="label" class="form-label">Label Address as: </label>

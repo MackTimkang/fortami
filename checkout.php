@@ -2,7 +2,9 @@
     include 'backend.php';
     $backend = new Backend;
     $result= $backend->total();
-    $total = mysqli_fetch_assoc($result);
+    $subtotal = mysqli_fetch_assoc($result);
+    $total = number_format((float)$subtotal['total'], 2, '.', ',');
+    $_SESSION['total'] = $total;
 
 ?>
 <!DOCTYPE html>
@@ -16,77 +18,155 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">    
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row" style="gap:20px;padding: 10px;">
+    <div class="container">
+        <div class="row p-5 g-1">
             <?php
                 $user_id = $_SESSION['id'];
-                $list = $backend->address($user_id);
-                $row = mysqli_fetch_assoc($list);
+                    $name = "";
+                    $contact = "";
+                    $region = "";
+                    $province = "";
+                    $city = "";
+                    $brgy = "";
+                    $street = "";
+                    $zip = "";
+                    $label = "Home";
+                    $address_type = "";
+                    $home = "";
+                    $work = "";
+                    $note = "";
+                    
+                    $list = $backend->address($user_id,$label);
+                       
+                       //variables
+                        if (!(is_null($list))) {
+                            $row = mysqli_fetch_assoc($list);
+                            $name = $row['full_name'];
+                            $contact = $row['contact'];
+                            $region = $row['region'];
+                            $province = $row['province'];
+                            $city = $row['city'];
+                            $brgy = $row['barangay'];
+                            $street = $row['street'];
+                            $zip = $row['zip'];
+                            $address_type = $row['address_type'];
+                            $_SESSION['address_id'] = $row['address_id'];
+                        }
+
+                    if (isset($_POST['home'])) {
+                        $label = "Home";
+                       $list = $backend->address($user_id,$label);
+                       
+                       //variables
+                        if (!(is_null($list))) {
+                            $row = mysqli_fetch_assoc($list);
+                            $name = $row['full_name'];
+                            $contact = $row['contact'];
+                            $region = $row['region'];
+                            $province = $row['province'];
+                            $city = $row['city'];
+                            $brgy = $row['barangay'];
+                            $street = $row['street'];
+                            $zip = $row['zip'];
+                            $address_type = $row['address_type'];
+                            $_SESSION['address_id'] = $row['address_id'];
+                        }
+                    }
+                    elseif (isset($_POST['work'])) {
+                        $list = $backend->address($user_id,$_POST['work']);
+                        
+                        if (!(is_null($list))) {
+                            $row = mysqli_fetch_assoc($list);
+                        //variables
+                            $name = $row['full_name'];
+                            $contact = $row['contact'];
+                            $region = $row['region'];
+                            $province = $row['province'];
+                            $city = $row['city'];
+                            $brgy = $row['barangay'];
+                            $street = $row['street'];
+                            $zip = $row['zip'];
+                            $address_type = $row['address_type'];
+                            $_SESSION['address_id'] = $row['address_id'];
+                        }
+                    }
+
+                    if (isset($_POST['deletebtn'])) {
+                        $address_id = $_POST['address_id'];
+                        $backend->delAddress($address_id);
+                    }
             ?>
-                <div class="col">
-                    <div class="row g-3 p-5 ">
+                <div class="col-6" >
+                    <div class="row g-3 p-3 ">
                         <div class="col-12 text-center">
                             <h1><i class="bi bi-person-fill-up"></i> Delivery Address</h1>
                         </div>
+                        <div class="col-12">                           
+                                <form action="" method = "post">
+                                    <button class="btn btn-primary" type="submit" name="home" value="Home">Home</button>
+                                    <button class="btn btn-secondary" type="submit" name="work" value="Work">Work</button>
+                                    <a href="address.php" class="btn btn-success"><i class="bi bi-house-add-fill"></i> Address</a>
+                                </form>
+                        </div>
                         <div class="col-md-6">
                             <label for="fname" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" name="fullname" value="<?=$row['user_fName'].' '.$row['user_lName'];?>" required>
+                            <input type="text" class="form-control" name="fullname" value="<?=$name?>" disabled>
                         </div>
                         <div class="col-md-6">
                             <label for="contact" class="form-label">Contact Number</label>
-                            <input type="tel" class="form-control" name="telnum" required>
+                            <input type="tel" class="form-control" name="telnum" value="<?=$contact?>" disabled>
                         </div>
                         <div class="col-12">
                             <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" name="ad" placeholder="street, apartment, studio or floor" required>
+                            <input type="text" class="form-control" name="ad" placeholder="street, apartment, studio or floor" value="<?=$street?>"disabled>
                         </div>
                         <div class="col-md-4">
                             <label for="region" class="form-label">Region</label>
-                            <input type="text" class="form-control" name="region" required>
+                            <input type="text" class="form-control" name="region" value="<?=$region?>"disabled>
                         </div>
                         <div class="col-md-4">
                             <label for="province" class="form-label">Province</label>
-                            <input type="text" class="form-control" name="province" required>
+                            <input type="text" class="form-control" name="province" value="<?=$province?>"disabled>
                         </div>
                         <div class="col-md-4">
                             <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" name="city" required>
+                            <input type="text" class="form-control" name="city" value="<?=$city?>"disabled>
                         </div>
                         <div class="col-md-4">
                             <label for="brgy" class="form-label">Barangay</label>
-                            <input type="text" class="form-control" name="brgy" required>
+                            <input type="text" class="form-control" name="brgy" value="<?=$brgy?>"disabled>
                         </div>
                         <div class="col-md-4">
                             <label for="zip" class="form-label">Zip</label>
-                            <input type="number" class="form-control" name="zip" required>
+                            <input type="number" class="form-control" name="zip" value="<?=$zip?>"disabled>
                         </div>
                         <div class="col-12">
-                            <label for="label" class="form-label">Label Address as: </label>
-                                <input class="form-check-input" type="radio" name="label" value="Home" id="flexRadioDefault1"checked>
-                                <label class="form-check-label" for="flexRadioDefault1" >
-                                    Home
-                                </label>
-                                <input class="form-check-input" type="radio" value="Work" name="label" id="flexRadioDefault2">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    Work
-                            </label>
+                            <label for="note" class="form-label">Note <small class="text-secondary"><i>(Optional)</i> </small></label>
+                            <input type="text" class="form-control" name="note" value="<?=$note?>"disabled>
                         </div>
                         <div class="col-12">
-                        <label for="type" class="form-label">Save as: </label>
-                                <input class="form-check-input" type="radio" name="address_type" value="Default" id="flexRadioDefault1"checked>
+                            <label for="type" class="form-label">Save as: </label>
+                                <input class="form-check-input" type="radio" name="address_type" value="Default" id="flexRadioDefault1" value = "<?=$address_type?>" checked>
                                 <label class="form-check-label" for="flexRadioDefault1" >
                                     Default
                                 </label>
-                                <input class="form-check-input" type="radio" name="address_type" id="flexRadioDefault2" disabled >
+                                <input class="form-check-input" type="radio" name="address_type"  id="flexRadioDefault2" disabled >
                                 <label class="form-check-label" for="flexRadioDefault2">
                                     Pick-up address
                                 </label>
                         </div>
+                        <div class="col-12">
+                            <form action="" method="post">
+                                <a href="address-edit.php?id=<?=$_SESSION['address_id']?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                                <input type="hidden" name="address_id" value="<?=$_SESSION['address_id']?>">
+                                <button class="btn btn-danger" type="submit" name="deletebtn"><i class="bi bi-trash3"></i> Delete</button>
+                            </form>
+                        </div>
                     </div>
                     
                 </div>
-                <div class="col " style="background-color: whitesmoke;">
-                    <h4 class="text-primary p-1">Your Order</h4>
+                <div class="col-6 p-3 bg-light">
+                    <h3 class="text-secondary">Your Order</h3>
                     <table class="table table-dark table-striped ">
                         
                         <tr>
@@ -97,6 +177,7 @@
                         </tr>
                         <?php
                             $list = $backend->getcart();
+                            if (!is_null($list)) {
                                 if ($list->num_rows > 0) {
                                     foreach ($list as $row) {
                         ?>
@@ -109,39 +190,84 @@
                         <?php
                             }
                         }
+                        }
                         ?>
                         <tr >
-                            <td class="text-warning">Total Payment: </td>
+                            <td class="text-warning">Total: </td>
                             <td></td>
                             <td></td>
-                            <td class="text-warning text-center">₱ <?=number_format((float)$total['total'], 2, '.', ',')?></td>
+                            <td class="text-warning text-center">₱  <?=$total?></td>
                         </tr>
                     </table>
                     <br>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"checked>
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Credit Card
-                            <img src="./src/creditcard.png" class="img-fluid" alt="creditcard" style="max-width:30%;">
-                        </label>
-                        </div>
-                        <br><br>
-                        <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Paypal
-                            <img src="./src/paypal.png" class="img-fluid" alt="paypal" style="max-width:20%; height:auto;">
-                        </label>
-                        
+                    <div class="col-12">
+                        <a class="btn btn-warning p-2 w-100" href="">
+                            <img src="./src/paypal.png" alt="paypal" class="img-fluid" style="max-width:100px">
+                        </a>
                     </div>
-                        <br>
-                        <div class="col-12 p-2" style="text-align:center;">
-                            <button type="submit" class="btn btn-primary">Check out</button>
-                            <a class="btn btn-secondary" href="index.php" style="background-color:red;">Cancel</a>
+                    <div class="col-12">
+                        <p>
+                            <button class="btn btn-dark p-2 w-100 my-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                <img src="./src/creditcard.png" alt="Credit Card" class="img-fluid" style="max-width:200px">
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                               <form action="" method="post">
+                               <input type="hidden" name="method" value="2">
+                                    <div class="row g-2">
+                                        <div class="col-sm-12">
+                                            <input class="form-control" type="text" name="cardowner" placeholder="Name on Card" required>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input class="form-control" type="text" name="cardnum" placeholder="Card Number" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input class="form-control" type="text" name="exp" placeholder="01/23" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input class="form-control" type="password" name="cvv" placeholder="CVV" required>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <button class="form-control btn btn-success" type="submit" name="paybtn">Pay Now</button>
+                                        </div>
+                                    </div>     
+                               </form>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-12">
+                        <a href="cart.php" class="btn btn-danger w-100 p-2"><i class="bi bi-pencil-fill"></i> Edit Cart</a>
+                    </div>
                 </div>
             </div>
         </div>
+        <?php
+            if (isset($_POST['paybtn'])) {
+              $time = date('Y-m-d H:i:s');
+              $method = $_POST['method'];
+              $user = $_SESSION['id'];
+              $status = 'Successful';
+              $address = $_SESSION['address_id'];
+
+              $backend->payment($user,$method,$total,$status);//inserting the payment to payment db
+                
+                $getpayment = $backend->getpayment($user,$time);//get trans_id
+                    if ($getpayment->num_rows > 0) {
+                        $paymentList = mysqli_fetch_assoc($getpayment);
+                        $trans_id = $paymentList['payTrans_id'];//declaration of variable that holds paytrans Id
+                        $_SESSION['trans_id'] = $trans_id;
+
+                        $cart = $backend->getcart();//getting cart to insert every foods in order table
+                            if ($cart->num_rows > 0) {
+                                    foreach ($cart as $cartRow) {
+                                        $backend->order($cartRow['food_id'],$user,$address,$trans_id,'Pending',$cartRow['quantity']);
+                                    }
+                                    $backend->clearcart();
+                            }
+                    }
+            }
+        ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

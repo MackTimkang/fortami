@@ -9,6 +9,7 @@ include 'sellerheader.php';
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <title>Product</title>
 </head>
 <body>
@@ -48,14 +49,14 @@ include 'sellerheader.php';
                 </td>
                 <td><?="<small><s class='text-secondary'>".$data['food_origPrice']."</s></small>"." ".$data['food_discountedPrice'];?></td>
                 <td>
-                    <div class="row d-flex align-items-center justify-content-center" >
-                        <div class="col-4">
-                        <a class="btn btn-primary" href="./edit.php?id=<?=$data['food_id']?>">Edit</a>
+                    <div class="row" >
+                        <div class="col-md-6">
+                            <a class="btn btn-warning" href="./edit.php?id=<?=$data['food_id']?>" >Edit</a>
                         </div>
-                        <div class="col-4">
+                        <div class="col-md-6">
                             <form action="" method="post">
                                 <input type="hidden" name="food_id" value="<?=$data['food_id']?>">
-                                <input type="submit" value="Delete" name="delbtn" class="btn btn-secondary">
+                                <input type="submit" value="Delete" name="delbtn" class="btn btn-danger">
                             </form>
                         </div>
                     </div>
@@ -81,7 +82,7 @@ include 'sellerheader.php';
                 }
             ?>
             <tr>
-                <td><a class="btn btn-primary" href="./add.php" >Add Product</a></td>
+                <td><a class="btn btn-success text-center" href="./add.php"><i class="bi bi-plus-square-dotted"></i> Product</a></td>
             </tr>
         </table>
     </div>

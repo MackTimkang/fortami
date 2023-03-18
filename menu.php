@@ -6,17 +6,23 @@
 
     if(isset($_POST['addcart'])){
         $food_id = $_POST['food_id'];
-        $user_id = $_SESSION['id'];
-        $qty = $_POST['qty'];
+            if (isset($_SESSION['id'])) {
+                $user_id = $_SESSION['id'];
+                $qty = $_POST['qty'];
 
-        $check = $backend->checkcart($food_id,$user_id);
-        if ($check->num_rows>0) {
-            echo "<script>alert('Already in cart!');</script>";
-        }
-        else {
-            $backend->addtocart($food_id,$user_id,$qty);
-            echo "<meta http-equiv='refresh' content='0'>";
-        }
+            $check = $backend->checkcart($food_id,$user_id);
+                if ($check->num_rows>0) {
+                    echo "<script>alert('Already in cart!');</script>";
+                }
+                else {
+                    $backend->addtocart($food_id,$user_id,$qty);
+                    echo "<meta http-equiv='refresh' content='0'>";
+                }
+            }
+            else {
+                echo "<script>alert('Please Login First!');window.location.href='login.php';</script>";
+            }
+        
     }
 ?>
 <!DOCTYPE html>

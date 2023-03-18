@@ -1,3 +1,6 @@
+<?php
+  $disabled = (isset($_SESSION['id'])) ?: 'disabled';
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -70,7 +73,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a href="cart.php" class="nav-link active position-relative" style="color:white;">
+              <a href="cart.php" class="nav-link active position-relative <?=$disabled?>" style="color:white;">
                 <h5><i class="bi bi-cart"></i></h5>
                 <h6>
                   <small class="text-secondary">
