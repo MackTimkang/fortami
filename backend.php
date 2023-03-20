@@ -396,6 +396,15 @@ session_start();
           }
       }//end of function order reciept
 
+      function orderStatus($id,$status){
+        $query = "UPDATE food_order SET order_status = '$status' WHERE order_id='$id'";
+        $result = $this->con->query($query);
+          if ($result) {
+            echo "<script>alert('Order was $status');</script>";
+          }
+          echo "<meta http-equiv='refresh' content='0'>";
+      }//end of order status function
+
       function shopName(){
         $trans_id = $_SESSION['trans_id'];
         $query = "SELECT * FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id
@@ -405,7 +414,18 @@ session_start();
         if ($result) {
           return $result;
         }
+      }//end of shop details function
+
+      function transactHis($order,$rate,$status){
+        $query = "INSERT INTO transaction_history(order_id,trans_rating,trans_status) values($order,'$rate','$status')";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          
+        }
       }
 
     }//end of backend class
+
+
 ?>

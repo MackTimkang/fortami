@@ -50,7 +50,7 @@
               <a class="nav-link" href="menu.php"style="color: white">Menu</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="shop.php"style="color: white">Food Shops</a>
+              <a class="nav-link" href="activeorders.php"style="color: white">Orders</a>
             </li>
             <li class="nav-item dropdown">
               <a
@@ -97,17 +97,7 @@
             </li>
           </ul>
           
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-success" type="submit"style="color: white;background-color: black;">
-              Search
-            </button>
-          </form>
+          <a href="support.php" class="btn btn-outline-light"><i class="bi bi-headset"></i>Help</a>
           
         </div>
         

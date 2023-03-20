@@ -60,7 +60,7 @@
           <tr>
             <td><?=$row['food_name']?></td>
             <td><?=$row['quantity']?></td>
-            <td>₱ <?=$row['food_discountedPrice']?></td>
+            <td> <?=$row['food_discountedPrice']?></td>
             <td>₱ <?=$row['food_discountedPrice']*$row['quantity']?></td>
           </tr>
           <?php
@@ -74,7 +74,7 @@
         </tbody>
       </table>
       <div class="col-12 text-center">
-        <h1><a href="orderstatus.php" class="btn btn-info">View Order Status here</a></h1>
+        <h1><a href="activeorders.php" class="btn btn-info">View Order Status here</a></h1>
       </div>
     </div>
   </body>
