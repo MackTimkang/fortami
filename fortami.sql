@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2023 at 04:44 PM
+-- Generation Time: Mar 23, 2023 at 09:32 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -24,6 +24,49 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `address`
+--
+
+CREATE TABLE `address` (
+  `address_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `full_name` varchar(50) NOT NULL,
+  `address_type` varchar(50) NOT NULL,
+  `contact` varchar(50) NOT NULL,
+  `region` varchar(50) NOT NULL,
+  `province` varchar(50) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `barangay` varchar(50) NOT NULL,
+  `street` varchar(50) NOT NULL,
+  `zip` varchar(50) NOT NULL,
+  `label` varchar(50) NOT NULL,
+  `note` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `address`
+--
+
+INSERT INTO `address` (`address_id`, `user_id`, `full_name`, `address_type`, `contact`, `region`, `province`, `city`, `barangay`, `street`, `zip`, `label`, `note`) VALUES
+(16, 24, 'Reymark Timkang', 'Default', '1234567890', '8', 'Cebu', 'Central', 'Kuan', 'Eskina unahan, sa kuan ngadto, Room boy', '2023', 'Work', NULL),
+(18, 24, 'Reymark Enot Timkang', 'Default', '09991551659', '7', 'Cebu', 'Talisay', 'Linao', 'Maghaway St., RMT Apartment, San Antonio', '6045', 'Home', NULL),
+(19, 23, 'Justin Carenderia', 'Shop Address', '09789879877', '7', 'Cebu', 'Cebu', 'Kalubihan', 'Leon Kilat, Block 5 Lot 8', '6000', 'Pickup', 'Red theme store with a big tarpaulin in front');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `food_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `quantity` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `category`
 --
 
@@ -39,7 +82,9 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_name`, `category_description`) VALUES
 (1, 'Fast Food', 'Foods that takes lesser time to prepare.'),
-(2, 'vegetables', 'Foods that are 100% organic and meat free.');
+(2, 'vegetables', 'Foods that are 100% organic and meat free.'),
+(3, 'Baked', 'Foods that are baked'),
+(4, 'Beverages', 'Drinks and more');
 
 -- --------------------------------------------------------
 
@@ -50,12 +95,20 @@ INSERT INTO `category` (`category_id`, `category_name`, `category_description`) 
 CREATE TABLE `food_order` (
   `order_id` int(20) NOT NULL,
   `food_id` int(20) NOT NULL,
-  `user_id` int(20) NOT NULL,
-  `offer_id` int(20) NOT NULL,
+  `address_id` int(20) NOT NULL,
+  `payTrans_id` int(20) NOT NULL,
   `order_status` varchar(50) NOT NULL,
-  `order_datetime` datetime NOT NULL,
-  `order_price` varchar(50) NOT NULL
+  `quantity` varchar(50) NOT NULL,
+  `order_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `received_datetime` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `food_order`
+--
+
+INSERT INTO `food_order` (`order_id`, `food_id`, `address_id`, `payTrans_id`, `order_status`, `quantity`, `order_datetime`, `received_datetime`) VALUES
+(71, 67, 18, 116, 'Received', '2', '2023-03-23 01:02:37', '2023-03-23 09:02:36');
 
 -- --------------------------------------------------------
 
@@ -67,11 +120,12 @@ CREATE TABLE `food_product` (
   `food_id` int(20) NOT NULL,
   `user_id` int(20) NOT NULL,
   `category_id` int(20) NOT NULL,
-  `food_pic` longblob NOT NULL,
+  `food_pic` varchar(255) NOT NULL,
   `food_name` varchar(50) NOT NULL,
   `food_description` varchar(100) NOT NULL,
-  `food_creation` datetime NOT NULL,
-  `food_discountedPrice` varchar(50) NOT NULL,
+  `preparation` varchar(50) NOT NULL,
+  `food_creation` datetime DEFAULT NULL,
+  `food_discountedPrice` varchar(50) DEFAULT NULL,
   `food_origPrice` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -79,13 +133,10 @@ CREATE TABLE `food_product` (
 -- Dumping data for table `food_product`
 --
 
-INSERT INTO `food_product` (`food_id`, `user_id`, `category_id`, `food_pic`, `food_name`, `food_description`, `food_creation`, `food_discountedPrice`, `food_origPrice`) VALUES
-(26, 20, 1, 0x616d65726963616e2e6a7067, 'Burger', 'Famous BBC (Big Burger in Cebu)', '2023-02-21 23:10:00', '580', '980'),
-(27, 20, 1, 0x6d696c6b7465612e6a7067, 'Milktea', 'Beat The Heat with Milktea sa Tag-init', '2023-02-21 23:11:00', '110', '250'),
-(28, 20, 1, 0x70697a7a612e6a7067, 'Pizza', 'Hawaiian Pizza with a hint of vanilla extract and cheddar cheese', '2023-02-21 23:12:00', '210', '530'),
-(29, 20, 1, 0x6a6170616e65736520646973682e6a7067, 'Sushi', 'Very fresh and yummy sushi ni Tami', '2023-02-21 23:13:00', '500', '950'),
-(30, 20, 1, 0x46696c6970696e6f2e77656270, 'Sisig', 'Sisig very yami my Tami', '2023-02-21 23:15:00', '150', '200'),
-(31, 20, 1, 0x6974616c69616e2e6a7067, 'Lasagna', 'Fresh from Italy', '2023-02-17 23:17:00', '3000', '5000');
+INSERT INTO `food_product` (`food_id`, `user_id`, `category_id`, `food_pic`, `food_name`, `food_description`, `preparation`, `food_creation`, `food_discountedPrice`, `food_origPrice`) VALUES
+(66, 23, 1, 'american.jpg', 'Big Burger in Cebu', 'The famous BBC is here! Order now                \r\n            ', 'Made to order', '0000-00-00 00:00:00', '299', '350'),
+(67, 23, 3, 'baked.jpg', 'Toasted Bread', 'Butter toasted bread so yummy                \r\n            ', 'Surplus', '2023-03-18 11:31:00', '99', '199'),
+(68, 23, 1, 'Filipino.webp', 'Sisig', 'Pinoy style yummy sisig                \r\n            ', 'Made to order', '0000-00-00 00:00:00', '150', '200');
 
 -- --------------------------------------------------------
 
@@ -118,22 +169,6 @@ CREATE TABLE `notification` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `offer`
---
-
-CREATE TABLE `offer` (
-  `offer_id` int(20) NOT NULL,
-  `food_id` int(20) NOT NULL,
-  `user_id` int(20) NOT NULL,
-  `offer_datetime` datetime NOT NULL,
-  `offer_details` varchar(50) NOT NULL,
-  `offer_price` varchar(50) NOT NULL,
-  `offer_status` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `payment_method`
 --
 
@@ -141,6 +176,14 @@ CREATE TABLE `payment_method` (
   `paymethod_id` int(20) NOT NULL,
   `paymethod_type` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `payment_method`
+--
+
+INSERT INTO `payment_method` (`paymethod_id`, `paymethod_type`) VALUES
+(1, 'Paypal'),
+(2, 'Credit Card');
 
 -- --------------------------------------------------------
 
@@ -150,42 +193,19 @@ CREATE TABLE `payment_method` (
 
 CREATE TABLE `payment_transaction` (
   `payTrans_id` int(20) NOT NULL,
-  `food_id` int(20) NOT NULL,
   `user_id` int(20) NOT NULL,
   `paymethod_id` int(20) NOT NULL,
-  `pay_amount` int(12) NOT NULL,
+  `pay_amount` varchar(50) NOT NULL,
   `trans_status` varchar(50) NOT NULL,
-  `pay_datetime` datetime NOT NULL
+  `pay_datetime` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `receipt`
+-- Dumping data for table `payment_transaction`
 --
 
-CREATE TABLE `receipt` (
-  `receipt_id` int(20) NOT NULL,
-  `payTrans_id` int(20) NOT NULL,
-  `pay_datetime` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `transaction_history`
---
-
-CREATE TABLE `transaction_history` (
-  `trans_his` int(20) NOT NULL,
-  `user_id` int(20) NOT NULL,
-  `payTrans_id` int(20) NOT NULL,
-  `receipt_id` int(20) NOT NULL,
-  `trans_description` varchar(50) NOT NULL,
-  `trans_price` varchar(50) NOT NULL,
-  `trans_datetime` datetime NOT NULL,
-  `trans_status` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `payment_transaction` (`payTrans_id`, `user_id`, `paymethod_id`, `pay_amount`, `trans_status`, `pay_datetime`) VALUES
+(116, 24, 2, '198.00', 'Successful', '2023-03-23 01:01:57');
 
 -- --------------------------------------------------------
 
@@ -196,11 +216,10 @@ CREATE TABLE `transaction_history` (
 CREATE TABLE `user` (
   `user_id` int(20) NOT NULL,
   `user_type` varchar(6) NOT NULL,
+  `profile_pic` varchar(50) DEFAULT NULL,
   `user_fName` varchar(50) NOT NULL,
   `user_lName` varchar(50) NOT NULL,
-  `user_address` varchar(50) NOT NULL,
   `user_email` varchar(50) NOT NULL,
-  `user_number` int(15) NOT NULL,
   `user_userName` varchar(50) NOT NULL,
   `user_password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -209,13 +228,27 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `user_type`, `user_fName`, `user_lName`, `user_address`, `user_email`, `user_number`, `user_userName`, `user_password`) VALUES
-(19, 'Buyer', 'Mack', 'Timkang', 'wala ko kahibalo', 'macktimkang@gmail.com', 123456789, 'Mack', '$2y$10$P4lRaqk9IVlUkxrT0QidounaKFfHB6INTNAqRuRvW5DhKC1OFJ6D6'),
-(20, 'Seller', 'Justin', 'Conje', 'Cebu', 'justinconje@gmail.com', 123456789, 'justin', '$2y$10$ky0qqWkWt.5UF7UEZ2itJe4DSMsqqLa4mzHaHlWAymjjMdSlJIEe2');
+INSERT INTO `user` (`user_id`, `user_type`, `profile_pic`, `user_fName`, `user_lName`, `user_email`, `user_userName`, `user_password`) VALUES
+(23, 'Seller', NULL, 'Justin', 'Conje', 'justinconje@gmail.com', 'justin', '$2y$10$nnEhDBl.o8B9zfqvKCX5DuCqIIwRNsXNRuLltO7gtrrhrU2HAGl.q'),
+(24, 'Buyer', NULL, 'Reymark', 'Timkang', 'reymarktimkang@gmail.com', 'reymark', '$2y$10$HQVqV20viq0Qa8ftXxuHTu/aitkI90/JS2rvzT8qjJE1tP7548fSu');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`address_id`),
+  ADD KEY `address_ibfk_1` (`user_id`);
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`food_id`,`user_id`),
+  ADD KEY `cart_ibfk_2` (`user_id`);
 
 --
 -- Indexes for table `category`
@@ -228,9 +261,9 @@ ALTER TABLE `category`
 --
 ALTER TABLE `food_order`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `offer_id` (`offer_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `food_order_ibfk_5` (`food_id`);
+  ADD KEY `food_order_ibfk_2` (`food_id`),
+  ADD KEY `food_order_ibfk_4` (`address_id`),
+  ADD KEY `food_order_ibfk_1` (`payTrans_id`);
 
 --
 -- Indexes for table `food_product`
@@ -255,14 +288,6 @@ ALTER TABLE `notification`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `offer`
---
-ALTER TABLE `offer`
-  ADD PRIMARY KEY (`offer_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `offer_ibfk_4` (`food_id`);
-
---
 -- Indexes for table `payment_method`
 --
 ALTER TABLE `payment_method`
@@ -274,24 +299,7 @@ ALTER TABLE `payment_method`
 ALTER TABLE `payment_transaction`
   ADD PRIMARY KEY (`payTrans_id`),
   ADD KEY `paymethod_id` (`paymethod_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `payment_transaction_ibfk_4` (`food_id`);
-
---
--- Indexes for table `receipt`
---
-ALTER TABLE `receipt`
-  ADD PRIMARY KEY (`receipt_id`),
-  ADD KEY `receipt_ibfk_1` (`payTrans_id`);
-
---
--- Indexes for table `transaction_history`
---
-ALTER TABLE `transaction_history`
-  ADD PRIMARY KEY (`trans_his`),
-  ADD KEY `payTrans_id` (`payTrans_id`),
-  ADD KEY `receipt_id` (`receipt_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `payment_transaction_ibfk_4` (`user_id`);
 
 --
 -- Indexes for table `user`
@@ -304,22 +312,28 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `address`
+--
+ALTER TABLE `address`
+  MODIFY `address_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `category_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `food_order`
 --
 ALTER TABLE `food_order`
-  MODIFY `order_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `food_product`
 --
 ALTER TABLE `food_product`
-  MODIFY `food_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `food_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `message`
@@ -334,52 +348,47 @@ ALTER TABLE `notification`
   MODIFY `notification_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `offer`
---
-ALTER TABLE `offer`
-  MODIFY `offer_id` int(20) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `payment_method`
 --
 ALTER TABLE `payment_method`
-  MODIFY `paymethod_id` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `paymethod_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `payment_transaction`
 --
 ALTER TABLE `payment_transaction`
-  MODIFY `payTrans_id` int(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `receipt`
---
-ALTER TABLE `receipt`
-  MODIFY `receipt_id` int(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `transaction_history`
---
-ALTER TABLE `transaction_history`
-  MODIFY `trans_his` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `payTrans_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `address`
+--
+ALTER TABLE `address`
+  ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`food_id`) REFERENCES `food_product` (`food_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `food_order`
 --
 ALTER TABLE `food_order`
-  ADD CONSTRAINT `food_order_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `food_order_ibfk_5` FOREIGN KEY (`food_id`) REFERENCES `food_product` (`food_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `food_order_ibfk_6` FOREIGN KEY (`offer_id`) REFERENCES `offer` (`offer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `food_order_ibfk_1` FOREIGN KEY (`payTrans_id`) REFERENCES `payment_transaction` (`payTrans_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `food_order_ibfk_2` FOREIGN KEY (`food_id`) REFERENCES `food_product` (`food_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `food_order_ibfk_4` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `food_product`
@@ -392,42 +401,20 @@ ALTER TABLE `food_product`
 -- Constraints for table `message`
 --
 ALTER TABLE `message`
-  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `notification`
 --
 ALTER TABLE `notification`
-  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
---
--- Constraints for table `offer`
---
-ALTER TABLE `offer`
-  ADD CONSTRAINT `offer_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `offer_ibfk_4` FOREIGN KEY (`food_id`) REFERENCES `food_product` (`food_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `payment_transaction`
 --
 ALTER TABLE `payment_transaction`
-  ADD CONSTRAINT `payment_transaction_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `payment_transaction_ibfk_4` FOREIGN KEY (`food_id`) REFERENCES `food_product` (`food_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `payment_transaction_ibfk_5` FOREIGN KEY (`paymethod_id`) REFERENCES `payment_method` (`paymethod_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `receipt`
---
-ALTER TABLE `receipt`
-  ADD CONSTRAINT `receipt_ibfk_1` FOREIGN KEY (`payTrans_id`) REFERENCES `payment_transaction` (`payTrans_id`);
-
---
--- Constraints for table `transaction_history`
---
-ALTER TABLE `transaction_history`
-  ADD CONSTRAINT `transaction_history_ibfk_5` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_history_ibfk_6` FOREIGN KEY (`payTrans_id`) REFERENCES `payment_transaction` (`payTrans_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_history_ibfk_7` FOREIGN KEY (`receipt_id`) REFERENCES `receipt` (`receipt_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `payment_transaction_ibfk_1` FOREIGN KEY (`paymethod_id`) REFERENCES `payment_method` (`paymethod_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `payment_transaction_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
