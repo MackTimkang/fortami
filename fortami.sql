@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2023 at 09:32 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.10
+-- Generation Time: Mar 23, 2023 at 03:36 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 7.3.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,7 +50,8 @@ CREATE TABLE `address` (
 INSERT INTO `address` (`address_id`, `user_id`, `full_name`, `address_type`, `contact`, `region`, `province`, `city`, `barangay`, `street`, `zip`, `label`, `note`) VALUES
 (16, 24, 'Reymark Timkang', 'Default', '1234567890', '8', 'Cebu', 'Central', 'Kuan', 'Eskina unahan, sa kuan ngadto, Room boy', '2023', 'Work', NULL),
 (18, 24, 'Reymark Enot Timkang', 'Default', '09991551659', '7', 'Cebu', 'Talisay', 'Linao', 'Maghaway St., RMT Apartment, San Antonio', '6045', 'Home', NULL),
-(19, 23, 'Justin Carenderia', 'Shop Address', '09789879877', '7', 'Cebu', 'Cebu', 'Kalubihan', 'Leon Kilat, Block 5 Lot 8', '6000', 'Pickup', 'Red theme store with a big tarpaulin in front');
+(19, 23, 'Justin Carenderia', 'Shop Address', '09789879877', '7', 'Cebu', 'Cebu', 'Kalubihan', 'Leon Kilat, Block 5 Lot 8', '6000', 'Pickup', 'Red theme store with a big tarpaulin in front'),
+(20, 26, 'Romeo Chavez', 'Default', '09123456678', '7', 'Bantayan', 'Cebu City', 'Subangdako', 'Sanciangko St, Cebu City, 6000 Cebu', '6014', 'Home', 'ASAP');
 
 -- --------------------------------------------------------
 
@@ -63,6 +64,17 @@ CREATE TABLE `cart` (
   `user_id` int(20) NOT NULL,
   `quantity` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`food_id`, `user_id`, `quantity`) VALUES
+(66, 26, '1'),
+(67, 26, '1'),
+(68, 26, '1'),
+(73, 26, '1'),
+(74, 26, '1');
 
 -- --------------------------------------------------------
 
@@ -136,7 +148,10 @@ CREATE TABLE `food_product` (
 INSERT INTO `food_product` (`food_id`, `user_id`, `category_id`, `food_pic`, `food_name`, `food_description`, `preparation`, `food_creation`, `food_discountedPrice`, `food_origPrice`) VALUES
 (66, 23, 1, 'american.jpg', 'Big Burger in Cebu', 'The famous BBC is here! Order now                \r\n            ', 'Made to order', '0000-00-00 00:00:00', '299', '350'),
 (67, 23, 3, 'baked.jpg', 'Toasted Bread', 'Butter toasted bread so yummy                \r\n            ', 'Surplus', '2023-03-18 11:31:00', '99', '199'),
-(68, 23, 1, 'Filipino.webp', 'Sisig', 'Pinoy style yummy sisig                \r\n            ', 'Made to order', '0000-00-00 00:00:00', '150', '200');
+(68, 23, 1, 'Filipino.webp', 'Sisig', 'Pinoy style yummy sisig                \r\n            ', 'Made to order', '0000-00-00 00:00:00', '150', '200'),
+(69, 25, 1, 'Bulalo-Ramen.jpg', 'Bulalo Ramen', '    Bulaloo            \r\n            ', 'Made to order', '2023-03-23 09:44:00', '50', '200'),
+(73, 29, 1, 'pancit-bihon.jpg', 'Pancit Bihon', '                Pancit Bihon\r\n            ', 'Fresh', '2023-03-23 22:25:00', '50', '100'),
+(74, 27, 4, 'flave_beer.jpg', 'Flavored Beer (Apple)', '        Flavored Beer for all but not for kids        \r\n            ', 'Fresh', '2023-03-23 22:27:00', '12', '42');
 
 -- --------------------------------------------------------
 
@@ -230,7 +245,11 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`user_id`, `user_type`, `profile_pic`, `user_fName`, `user_lName`, `user_email`, `user_userName`, `user_password`) VALUES
 (23, 'Seller', NULL, 'Justin', 'Conje', 'justinconje@gmail.com', 'justin', '$2y$10$nnEhDBl.o8B9zfqvKCX5DuCqIIwRNsXNRuLltO7gtrrhrU2HAGl.q'),
-(24, 'Buyer', NULL, 'Reymark', 'Timkang', 'reymarktimkang@gmail.com', 'reymark', '$2y$10$HQVqV20viq0Qa8ftXxuHTu/aitkI90/JS2rvzT8qjJE1tP7548fSu');
+(24, 'Buyer', NULL, 'Reymark', 'Timkang', 'reymarktimkang@gmail.com', 'reymark', '$2y$10$HQVqV20viq0Qa8ftXxuHTu/aitkI90/JS2rvzT8qjJE1tP7548fSu'),
+(25, 'Seller', NULL, 'Joseph', 'Banzon', 'joseph.banzon15@gmail.com', 'joseph', '$2y$10$NqCUeC9A4YZkiLuSUJj2LOz3ZdoymdhN77tY.1srOfZED5JQws77q'),
+(26, 'Buyer', NULL, 'Romeo', 'Chavez', 'romeochavez@gmail.com', 'meo', '$2y$10$.rf9naUO2ZIUVIyeub.84.AuZAAaLPyMYpjYECqKsuJaISUwMik5m'),
+(27, 'Seller', NULL, 'Jude', 'Banggabangga', 'judebanggabangga@gmail.com', 'jude', '$2y$10$Id03WiV6c6JPTorItld1AO2cKPl71uxZOZSZsI4q6ADcZMbOj6V/W'),
+(29, 'Seller', NULL, 'Jerson', 'Aurelio', 'jersonaurelio@gmail.com', 'jerson', '$2y$10$XznSDNCIOKkENVmpRm94/eY35n8tIXU2ZHwZq4qy6cY0Pw9fkGvXC');
 
 --
 -- Indexes for dumped tables
@@ -315,7 +334,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `address_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `address_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -333,7 +352,7 @@ ALTER TABLE `food_order`
 -- AUTO_INCREMENT for table `food_product`
 --
 ALTER TABLE `food_product`
-  MODIFY `food_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `food_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `message`
@@ -363,7 +382,7 @@ ALTER TABLE `payment_transaction`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Constraints for dumped tables
