@@ -17,8 +17,10 @@ include 'sellerheader.php';
         $backend = new Backend;
         $list = $backend->listproduct();
     ?>
+    
     <div class="container-fluid p-5" >
-        <table class="table table-dark table-striped text-center">
+        <div class="col-12"><h1 class=" text-center "><i class="bi bi-egg-fill ">Your Food Listing</i></h1></div>
+        <table class="table table-dark shadow table-striped text-center">
             <tr>
                 <th>Photo</th>
                 <th>Category</th>

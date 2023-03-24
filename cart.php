@@ -48,9 +48,6 @@
         </div>
         <form action="cart.php" method="post">
             <div class="card mb-1 w-100  text-center">
-                    <div class="card-header text-start">
-                    <h5><i class="bi bi-shop"></i> <?=$row['user_userName'];?></h5>
-                    </div>
                 <div class="row row-cols-1 row-cols-md-1 g-1 d-flex align-items-center">
                     <div class="col-md-2 text-center">
                         <img src="./src/Food Menu/<?=$row['food_pic'];?>" class="img-fluid rounded-start" alt="..." style="max-width:50%; height:auto">

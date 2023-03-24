@@ -105,7 +105,8 @@
                                 <form action="" method = "post">
                                     <button class="btn btn-primary" type="submit" name="home" value="Home">Home</button>
                                     <button class="btn btn-secondary" type="submit" name="work" value="Work">Work</button>
-                                    <a href="address.php" class="btn btn-success"><i class="bi bi-house-add-fill"></i> Address</a>
+                                    <button class="btn btn-warning" type="submit" name="pickup" value="Pick-up">Pick-up</button>
+                                    <a href="address.php" class="btn btn-success"><i class="bi bi-house-add-fill"> Add Address</i></a>
                                 </form>
                         </div>
                         <div class="col-md-6">
@@ -150,10 +151,6 @@
                                 <label class="form-check-label" for="flexRadioDefault1" >
                                     Default
                                 </label>
-                                <input class="form-check-input" type="radio" name="address_type"  id="flexRadioDefault2" disabled >
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    Pick-up address
-                                </label>
                         </div>
                         <div class="col-12">
                             <form action="" method="post">
@@ -165,7 +162,7 @@
                     </div>
                     
                 </div>
-                <div class="col-6 p-3 bg-light">
+                <div class="col-6 p-3 bg-light rounded-lg">
                     <h3 class="text-secondary">Your Order</h3>
                     <table class="table table-dark table-striped ">
                         
@@ -261,7 +258,7 @@
                         $cart = $backend->getcart();//getting cart to insert every foods in order table
                             if ($cart->num_rows > 0) {
                                     foreach ($cart as $cartRow) {
-                                        $backend->order($cartRow['food_id'],$user,$address,$trans_id,'Pending',$cartRow['quantity']);
+                                        $backend->order($cartRow['food_id'],$address,$trans_id,'Pending',$cartRow['quantity']);
                                     }
                                     $backend->clearcart();
                             }

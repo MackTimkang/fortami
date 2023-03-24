@@ -28,7 +28,7 @@ session_start();
                 $_SESSION['id'] = $row['user_id'];
                 $_SESSION['role'] = $row['user_type'];
                   if ($row['user_type'] == 'Seller') {
-                    echo "<script>alert('Welcome Back!'); window.location.href = 'sellerdash.php'";
+                    echo "<script>alert('Welcome Back!'); window.location.href = 'product.php'";
                     echo "</script>";
                   }
                   elseif ($row['user_type'] == 'Buyer') {
@@ -57,7 +57,7 @@ session_start();
           //Validate session
         }
         else{
-          echo "<script>alert('Please Login First!');window.location.href='index.php';</script>";
+          echo "<script>alert('Please Login First!');window.location.href='login.php';</script>";
         }
       }//checksession end
 
@@ -273,7 +273,7 @@ session_start();
           $query = "INSERT INTO cart(food_id,user_id,quantity) VALUES('$food','$user','$qty')";
           $result = $this->con->query($query);
             if ($result) {
-              echo "<script>alert('Added Successfuly');</script>";
+              echo "<script>alert('Added Successfully');</script>";
             }
       }//end of add to cart function
 
@@ -335,7 +335,7 @@ session_start();
         $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,trans_status) values($user,$method,'$amount','$status')";
         $result = $this->con->query($query);
           if ($result) {
-            echo "<script>alert('Payment Successful, Order is being processed');window.location.href='receipt.php';</script>";
+            echo "<script>alert('Payment Successful, Order is being processed');window.location.href='activeorders.php';</script>";
           }
       }//end of payment
 
@@ -354,6 +354,7 @@ session_start();
       }// end of transaction
 
       function getpayment($user,$time){
+        $user = $_SESSION['id'];
         $query = "SELECT * FROM payment_transaction WHERE user_id = $user AND pay_datetime = '$time'";
         $result = $this->con->query($query);
 
@@ -374,8 +375,8 @@ session_start();
 
       //start of order management
 
-      function order($food,$user,$address,$payTrans_id,$status,$qty){
-        $query = "INSERT into food_order(food_id,user_id,address_id,payTrans_id,order_status,quantity) values($food,$user,$address,$payTrans_id,'$status','$qty')";
+      function order($food,$address,$payTrans_id,$status,$qty){
+        $query = "INSERT into food_order(food_id,address_id,payTrans_id,order_status,quantity) values($food,$address,$payTrans_id,'$status','$qty')";
         $result = $this->con->query($query);
 
           if ($result) {
@@ -383,32 +384,50 @@ session_start();
           }
       }//end of creating order function
 
-      function orderReceipt(){
-        $trans_id = $_SESSION['trans_id'];
-        $query = "SELECT * FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id
-                  JOIN user ON food_order.user_id = user.user_id
-                  JOIN address ON food_order.address_id = address.address_id
-                  JOIN payment_transaction on food_order.payTrans_id = payment_transaction.payTrans_id WHERE food_order.payTrans_id = $trans_id";
+      function countOrder($trans){
+        $query = "SELECT sum(quantity) AS count FROM food_order WHERE payTrans_id = $trans AND order_status = 'Pending' OR order_status= 'Preparing'";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of count order function
+
+      function activeOrders(){
+        $user = $_SESSION['id'];
+        $query = "SELECT * FROM food_order
+                  JOIN food_product ON food_product.food_id = food_order.food_id
+                  INNER JOIN user ON user.user_id = food_product.user_id
+                  JOIN payment_transaction ON food_order.payTrans_id = payment_transaction.payTrans_id
+                  WHERE payment_transaction.user_id = $user AND order_status = 'Pending' OR order_status = 'Preparing' OR order_status = 'On The Way' GROUP BY user.user_userName";
         $result = $this->con->query($query);
 
           if ($result) {
             return $result;
           }
-      }//end of function order reciept
+
+      }//end of buyer view active orders
 
       function orderStatus($id,$status){
-        $query = "UPDATE food_order SET order_status = '$status' WHERE order_id='$id'";
+        $query = "UPDATE food_order SET order_status = '$status' WHERE payTrans_id = $id";
         $result = $this->con->query($query);
           if ($result) {
-            echo "<script>alert('Order was $status');</script>";
+            echo "<script>alert('Order $status');</script>";
           }
-          echo "<meta http-equiv='refresh' content='0'>";
       }//end of order status function
 
-      function shopName(){
-        $trans_id = $_SESSION['trans_id'];
+      function receivedTime($time,$id){
+        $query = "UPDATE food_order SET received_datetime = '$time' WHERE payTrans_id=$id";
+        $return = $this->con->query($query);
+
+        if ($return) {
+          # code...
+        }
+      }
+
+      function foodBought($id){
         $query = "SELECT * FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id
-                  INNER JOIN user ON user.user_id = food_product.user_id WHERE food_order.payTrans_id = $trans_id";
+                  WHERE food_order.payTrans_id = $id";
         $result = $this->con->query($query);
 
         if ($result) {
@@ -416,14 +435,49 @@ session_start();
         }
       }//end of shop details function
 
-      function transactHis($order,$rate,$status){
-        $query = "INSERT INTO transaction_history(order_id,trans_rating,trans_status) values($order,'$rate','$status')";
+      function viewHistory(){
+        $user = $_SESSION['id'];
+        $query = "SELECT * FROM food_order
+                  JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id
+                  JOIN food_product ON food_product.food_id=food_order.food_id
+                  INNER JOIN user ON user.user_id = food_product.user_id 
+                  INNER JOIN payment_method ON payment_method.paymethod_id = payment_transaction.paymethod_id 
+                  WHERE payment_transaction.user_id = $user 
+                  AND order_status = 'Received' OR order_status='Cancelled' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
         $result = $this->con->query($query);
 
-        if ($result) {
-          
+          if ($result) {
+            return $result;
+          }
+        }//end of list transaction history function
+
+        function sellerOrders(){
+          $seller_id = $_SESSION['id'];
+          $query = "SELECT * FROM food_order 
+                    JOIN food_product ON food_product.food_id = food_order.food_id 
+                    JOIN address ON food_order.address_id = address.address_id 
+                    JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
+                    WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status != 'Preparing' GROUP BY food_order.payTrans_id";
+          $result = $this->con->query($query);
+            if ($result) {
+              return $result;
+            }
+        }//end of seller order list
+
+        function waitingList(){
+          $seller_id = $_SESSION['id'];
+          $query = "SELECT * FROM food_order 
+                    JOIN food_product ON food_product.food_id = food_order.food_id 
+                    JOIN address ON food_order.address_id = address.address_id 
+                    JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
+                    WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Preparing' OR order_status = 'On The Way' OR order_status= 'Received' GROUP BY food_order.address_id";
+          $result = $this->con->query($query);
+            if ($result) {
+              return $result;
+            }
         }
-      }
 
     }//end of backend class
 

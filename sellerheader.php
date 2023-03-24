@@ -10,6 +10,7 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600&display=swap"
@@ -43,10 +44,13 @@
               <a class="nav-link active" aria-current="page" href="" style="color: white">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="profile.php"style="color: white">Profile</a>
+              <a class="nav-link" href="product.php"style="color: white">Product</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="sellerdash.php"style="color: white">Dashboard</a>
+              <a class="nav-link" href="order.php"style="color: white">Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="delivery.php"style="color: white">Delivery</a>
             </li>
             <li class="nav-item dropdown">
               <a
