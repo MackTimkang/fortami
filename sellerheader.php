@@ -10,13 +10,14 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
+    <link rel="shortcut icon" type="image" href="./src/FortamiLogo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600&display=swap"
       rel="stylesheet"
     />
-    <title></title>
+    
   </head>
   <body>
     <nav class="navbar navbar-expand" style="background-color: #4990b5">
