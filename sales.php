@@ -27,7 +27,6 @@
                         <th>Recepient</th>
                         <th>Delivery Option</th>
                         <th>Status</th>
-                        <th>Rating</th>
                         <th>Confirm</th>
                     </tr>
                     <?php
@@ -42,7 +41,6 @@
                         <td><?=$row['full_name']?></td>
                         <td><?=$row['delivery_option']?></td>
                         <td><i><?=$row['order_status']?></i></td>
-                        <td><?=$row['rating']?></td>
                         <td>
                             <form action="confirmation.php" method="post">
                                 <input type="hidden" name="buyer" value="<?=$row['full_name']?>">

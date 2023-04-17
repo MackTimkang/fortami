@@ -1,20 +1,33 @@
 <?php
 session_start();
-    class Backend{
+    class Database{
       public $host = 'localhost';
       public $user = 'root';
       public $pass = '';
       public $db = 'fortami';
-      public $con;
+      public $conn;
 
       //database connection
 
       function __construct(){
         
-        $this->con = new mysqli($this->host,$this->user,$this->pass,$this->db) or die("Connection Error!");
+        $this->conn = new mysqli($this->host,$this->user,$this->pass,$this->db);
+
+        if ($this->conn->connect_error) {
+          die("Connection Failed:".$this->conn->connect_error);
+        }
 
       }//end of db construct
 
+      function getConnection(){
+        return $this->conn;
+      }
+      function closeConnection(){
+        return $this->conn->close();
+      }
+    }//end of Class Database
+    
+    class Account{
       //Account Management 
       function login($uname,$pw){
         $sql = "SELECT * from user WHERE user_userName = '$uname'";
@@ -110,86 +123,97 @@ session_start();
           }
       }
 
-      function userAddress(){
-        $id = $_SESSION['id'];
-        $query = "SELECT * FROM address WHERE user_id = $id";
-        $result = $this->con->query($query);
-        if ($result) {
-            if ($result->num_rows > 0) {
+
+    }//end of class Account
+
+    class Address extends Account{
+        function userAddress(){
+          $id = $_SESSION['id'];
+          $query = "SELECT * FROM address WHERE user_id = $id";
+          $result = $this->con->query($query);
+          if ($result) {
+              if ($result->num_rows > 0) {
+                return $result;
+              }
+              else {
+                echo "<script>alert('Please add an address first!');window.location.href='address.php?user=$id';</script>";
+              }
+          }//end of search userAddress function
+          
+        }//end of address function
+
+        function searchaddress($address_id){
+          $query = "SELECT * FROM address WHERE address_id = $address_id";
+          $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+        }//end of searchaddress function
+
+        function findAddress($user_id){
+          $query = "SELECT * FROM address WHERE user_id = $user_id";
+          $result = $this->con->query($query);
+            if ($result) {
               return $result;
             }
-            else {
-              echo "<script>alert('Please add an address first!');window.location.href='address.php?user=$id';</script>";
-            }
-        }//end of search userAddress function
-        
-      }//end of address function
-
-      function searchaddress($address_id){
-        $query = "SELECT * FROM address WHERE address_id = $address_id";
-        $result = $this->con->query($query);
-
-        if ($result) {
-          return $result;
         }
-      }//end of searchaddress function
 
-      function findAddress($user_id){
-        $query = "SELECT * FROM address WHERE user_id = $user_id";
-        $result = $this->con->query($query);
+        function sellerAddress($seller_id){
+          $query = "SELECT * FROM address WHERE user_id = $seller_id";
+          $result = $this->con->query($query);
+
+            if ($result) {
+              return $result;
+            }
+        }
+
+        function delAddress($id){
+          $query = "DELETE FROM address WHERE address_id = $id";
+          $result = $this->con->query($query);
+          
           if ($result) {
-            return $result;
+            echo "<script>alert('Address Deleted successfully!');window.location.href = 'checkout.php';</script>";
           }
-      }
+        }
 
-      function sellerAddress($seller_id){
-        $query = "SELECT * FROM address WHERE user_id = $seller_id";
-        $result = $this->con->query($query);
-
+        function editAddress($id,$name,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
+          $query = "UPDATE address SET full_name = '$name', contact = '$con' , region = '$reg' ,
+          province = '$province', city = '$city', barangay = '$brgy', street = '$street', zip = '$zip',note='$note',label='$label' 
+          WHERE address_id = $id";
+          $result = $this->con->query($query);
           if ($result) {
-            return $result;
+            echo "<script>alert('Address updated successfully!');window.location.href = 'checkout.php';</script>";
           }
-      }
+          else {
 
-      function delAddress($id){
-        $query = "DELETE FROM address WHERE address_id = $id";
-        $result = $this->con->query($query);
-        
-        if ($result) {
-          echo "<script>alert('Address Deleted successfully!');window.location.href = 'checkout.php';</script>";
+          }
         }
+
+        function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
+          $userSearch = $this->userSearch($user_id);
+          $user = mysqli_fetch_assoc($userSearch);
+          $role = $user['user_type'];
+          $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,note,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$note','$label')";
+          $result = $this->con->query($query);
+            if ($result) {
+              if ($role === 'Seller') {
+                echo "<script>alert('Address saved successfully!');window.location.href = 'product.php';</script>";
+              }
+              else {
+                echo "<script>alert('Address saved successfully!');window.location.href = 'menu.php';</script>";
+              }
+              }
+        }//end of addAddress
+    }//end of class Address
+    
+    class Backend extends Address{
+      public $con;
+
+      function __construct(){
+        $database = new Database;
+        $this->con = $database->getConnection();
       }
-
-      function editAddress($id,$name,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
-        $query = "UPDATE address SET full_name = '$name', contact = '$con' , region = '$reg' ,
-        province = '$province', city = '$city', barangay = '$brgy', street = '$street', zip = '$zip',note='$note',label='$label' 
-        WHERE address_id = $id";
-        $result = $this->con->query($query);
-        if ($result) {
-          echo "<script>alert('Address updated successfully!');window.location.href = 'checkout.php';</script>";
-        }
-        else {
-
-        }
-      }
-
-      function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
-        $userSearch = $this->userSearch($user_id);
-        $user = mysqli_fetch_assoc($userSearch);
-        $role = $user['user_type'];
-        $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,note,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$note','$label')";
-        $result = $this->con->query($query);
-          if ($result) {
-            if ($role === 'Seller') {
-              echo "<script>alert('Address saved successfully!');window.location.href = 'product.php';</script>";
-            }
-            else {
-              echo "<script>alert('Address saved successfully!');window.location.href = 'menu.php';</script>";
-            }
-            }
-      }//end of addAddress
-
-      //end of Account Management
 
       //Food Management
       function categorylist(){
@@ -546,11 +570,10 @@ session_start();
           $seller_id = $_SESSION['id'];
           $query = "SELECT * FROM food_order 
                     JOIN food_product ON food_product.food_id = food_order.food_id 
-                    JOIN rating ON rating.order_id = food_order.order_id
                     JOIN address ON food_order.address_id = address.address_id 
                     JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
                     WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
-                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Received' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Received' OR order_status = 'Cancelled' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Received' AND food_product.user_id = $seller_id GROUP BY food_product.user_id) = $seller_id AND order_status = 'Received' OR order_status = 'Cancelled' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
@@ -610,18 +633,16 @@ session_start();
         }
 
 
-        function doneRate($order){
-          $query = "SELECT * FROM food_order WHERE order_id = $order AND rating = '' ";
+        function viewRating($food_id){
+          $query = "SELECT AVG(rating) AS rate FROM rating JOIN food_order ON food_order.order_id = rating.order_id
+                    INNER JOIN food_product ON food_product.food_id = food_order.food_id WHERE food_order.food_id = $food_id";
           $return = $this->con->query();
             if ($return) {
-              if (empty($result)) {
-                echo "";
-              }
+              return $result;
             }
-        }
+        }//end of done rating
 
 
-    }//end of backend class
-
+    }//end of class backend
 
 ?>

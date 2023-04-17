@@ -47,7 +47,7 @@
                                 <form class="text-center" action="" method="post">
                                     <input type="hidden" name="trans" value="<?=$row['payTrans_id']?>">
                                     <button type="submit" name="cancelbtn" class="btn btn-danger" <?=($row['order_status'] == 'Pending')? '':'disabled'?>>Cancel</button>
-                                    <button type="submit" name="rcvbtn" class="btn btn-success"  <?=($row['order_status'] == 'Pending' || $row['order_status'] == 'Preparing')? 'disabled':''?>>Receive</button>
+                                    <button type="submit" name="rcvbtn" class="btn btn-success"  <?=($row['order_status'] == 'Pending' || $row['order_status'] == 'Preparing' )? 'disabled':''?>>Receive</button>
                                 </form>
                             </td>
                         </tr>
