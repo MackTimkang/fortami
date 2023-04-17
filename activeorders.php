@@ -69,7 +69,8 @@
             $status = 'Received';
             $backend->orderStatus($trans,$status);
             $backend->receivedTime($time,$trans);
-        }
+            echo "<meta http-equiv='refresh' content='0'>";
+        }   
         else {
             
         }

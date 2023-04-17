@@ -19,7 +19,7 @@ include 'sellerheader.php';
     ?>
     
     <div class="container-fluid p-5" >
-        <div class="col-12"><h1 class=" text-center "><i class="bi bi-egg-fill ">Your Food Listing</i></h1></div>
+        <div class="col-12"><h1 class=" text-center "><i>Your Food Listing</i></h1></div>
         <table class="table table-dark shadow table-striped text-center">
             <tr>
                 <th>Photo</th>

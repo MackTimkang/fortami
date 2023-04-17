@@ -458,7 +458,7 @@ session_start();
                     JOIN address ON food_order.address_id = address.address_id 
                     JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
                     WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
-                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status != 'Preparing' GROUP BY food_order.payTrans_id";
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Pending' GROUP BY food_order.payTrans_id";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
@@ -472,7 +472,7 @@ session_start();
                     JOIN address ON food_order.address_id = address.address_id 
                     JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
                     WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
-                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Preparing' OR order_status = 'On The Way' OR order_status= 'Received' GROUP BY food_order.address_id";
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Preparing' OR order_status = 'On The Way' OR order_status= 'Received' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
