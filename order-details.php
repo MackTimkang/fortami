@@ -3,7 +3,13 @@
     include 'sellerheader.php';
     $backend = new Backend;
 
-    if (isset($_POST['accept'])) {
+        $status = "";
+        $address= "";
+        $buyer = "";
+        $trans_id = "";
+        $total ="";
+
+    if (isset($_POST['info'])) {
         $status = "Preparing";
         $address= $_POST['address'];
         $buyer = $_POST['buyer'];
@@ -11,6 +17,10 @@
         $total = $_POST['total'];
 
         $backend->orderStatus($trans_id,$status);
+    }
+    else {
+        header('location: delivery.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +55,7 @@
                                 if (!is_null($foods)) {
                                     foreach ($foods as $row) {    
                         ?>
-                        <td><img src="./src/Food Menu/<?=$row['food_pic']?>" class="img-thumbnail" style="max-width:100px"></td>
+                        <td><img src="./src/uploads/food_picture/<?=$row['food_pic']?>" class="img-thumbnail" style="max-width:100px"></td>
                         <td><?=$row['food_name']?></td>
                         <td><?=$row['quantity']?></td>
                     </tr>
@@ -63,8 +73,5 @@
             </div>
         </div>
     </div>
-    <?php
-        }
-    ?>
 </body>
 </html>

@@ -3,7 +3,12 @@ include 'backend.php';
 $backend = new Backend;
 
     if (isset($_POST['regbtn'])) {
-        $id = $_SESSION['id'];
+        if (isset($_GET['user'])) {
+            $id = $_GET['user'];
+        }
+        else {
+            $id = $_SESSION['id'];
+        }
         $name = $_POST['fullname'];
         $type = $_POST['address_type'];
         $con = $_POST['telnum'];
@@ -32,12 +37,12 @@ $backend = new Backend;
 <body>
     <div class="container d-flex justify-content-center align-items-center">
         <form action="" method="post">
-        <div class="row g-3 p-5 ">
+        <div class="row g-3 ">
             <div class="col-12 text-center">
-                <h1><i class="bi bi-person-fill-up"></i> Delivery Address</h1>
+                <h1><i class="bi bi-person-fill-up"></i>Address</h1>
             </div>
             <div class="col-md-6">
-                <label for="fname" class="form-label" value="">Full Name</label>
+                <label for="fname" class="form-label" value="">Full Name (<i>Shop name if seller</i>)</label>
                 <input type="text" class="form-control" name="fullname" required>
             </div>
             <div class="col-md-6">

@@ -45,7 +45,7 @@
               <a class="nav-link active" aria-current="page" href="" style="color: white">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="product.php"style="color: white">Product</a>
+              <a class="nav-link" href="product.php"style="color: white">Products</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="order.php"style="color: white">Orders</a>

@@ -8,7 +8,9 @@
 		$shopname =  $_POST['shop'];
 		$trans = $_POST['trans_id'];
 		$shopID = $_POST['shop_id'];
-		$date = $_POST['date'];
+		$datetime = $_POST['date'];
+		$date = date("M d, Y h:i a",strtotime($datetime));
+		$option = $_POST['delivery'];
 		$status = $_POST['status'];
 		$total = $_POST['total'];
 		$paystats = $_POST['paystats'];
@@ -36,53 +38,81 @@
 	
 </head>
 <body>
-<div class="container">
-	<div class="row mb-4">
-		<div class="col-md-6">
-			<h1>Receipt</h1>
-			<p class="font-weight-bold mb-0">Date: <?=$date?> </p>
-			<p class="font-weight-bold mb-0">Receipt #:2023<?=$trans?> </p>
-			<p class="font-weight-bold mb-0">Order Status: <?=$status?> </p>
-			<p class="font-weight-bold">Payment Status: <?=$paystats?> </p>
+	<div class="container">
+		<div class="row mb-4">
+			<div class="col-md-6">
+				<h1>Receipt</h1>
+				<p class="font-weight-bold mb-0"><small class="text-secondary">Date:</small>  <?=$date?> </p>
+				<p class="font-weight-bold mb-0"><small class="text-secondary">Receipt #:</small> 2023<?=$trans?> </p>
+				<p class="font-weight-bold mb-0"><small class="text-secondary">Delivery Option:</small> <?=$option?> </p>
+				<p class="font-weight-bold mb-0"><small class="text-secondary">Order Status:</small> <?=$status?> </p>
+				<p class="font-weight-bold"><small class="text-secondary">Payment Status:</small> <?=$paystats?> </p>
+			</div>
+			<div class="col-md-6 text-md-right">
+				<h2 class="mb-0"><i class="bi bi-shop"></i> <?=$shopname?></h2>
+				<p class="mb-0"><?=$address['street']?></p>
+				<p class="mb-0"><?=$address['barangay'].', '.$address['city'].' City, '.$address['zip'];?></p>
+				<p class="mb-0">Contact #: <?=$address['contact']?></p>
+			</div>
 		</div>
-		<div class="col-md-6 text-md-right">
-			<h2 class="mb-0"><i class="bi bi-shop"></i> <?=$shopname?></h2>
-			<p class="mb-0"><?=$address['street']?></p>
-			<p class="mb-0"><?=$address['barangay'].', '.$address['city'].' City, '.$address['zip'];?></p>
-			<p class="mb-0">Contact #: <?=$address['contact']?></p>
-		</div>
-	</div>
-	<hr>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Food</th>
-				<th>Qty</th>
-				<th>Price</th>
-				<th>Total</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php
-				if (!is_null($result)) {
-					foreach ($result as $row) {
-			?>
-			<tr>
-				<td><?=$row['food_name']?></td>
-				<td><?=$row['quantity']?></td>
-				<td><?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
-				<td><?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
-			</tr>
-			<?php
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Food</th>
+					<th>Qty</th>
+					<th>Price</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					if (!is_null($result)) {
+						foreach ($result as $row) {
+				?>
+				<tr>
+					<td><?=$row['food_name']?></td>
+					<td><?=$row['quantity']?></td>
+					<td><?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
+					<td><?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
+				</tr>
+				<?php
+						}
+					}
+				?>
+				<tr>
+					<td colspan="3">Total Payment</td>
+					<td>₱ <?=$total?></td>
+				</tr>
+				<tr>
+				<td colspan="3">Payment Method</td>
+				<td><?=$method?></td>
+				</tr>
+			</tbody>
+		</table>
+		<?php
+				if ($status == 'Received') {
+					if ($option == 'Delivery') {
+						echo "<div class='col-12 bg-success p-3 text-center rounded'>
+						    	<h2 class='text-light'>Successfully Delivered</h2>
+							  </div>";
+					}
+					else{
+						echo "<div class='col-12 bg-success p-3 text-center rounded'>
+						    	<h2 class='text-light'>Successful Pick-up</h2>
+							  </div>";
 					}
 				}
+				else {
+					echo "<div class='col-12 bg-danger p-3 text-center rounded'>
+						    	<h2 class='text-light'>Cancelled</h2>
+							  </div>";
+				}
 			?>
-			<tr>
-				<td colspan="3">Total Payment</td>
-				<td>₱ <?=$total?></td>
-			</tr>
-			<tr>
-			<td colspan="3">Payment Method</td>
-			<td><?=$method?></td>
-			</tr>
+		<br>
+			<h4><a href="checkout.php?trans_id=<?=$trans?>" class="text-center"><i class="bi bi-repeat"> Order Again</i> </a></h4>
+		<h4><a href="transactions.php"><i class="bi bi-arrow-return-left">Back</i></a></h4>
+	</div>
+</body>
+</html>
+
 			

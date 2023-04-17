@@ -19,21 +19,13 @@
 		$trans_id = $_POST['trans_id'];
 		$address = $_POST['address'];
 		$total = $_POST['total_payment'];
-		$received = $_POST['received_date'];
+		$received = $_POST['order_date'];
 		$status = $_POST['status'];
+		$option = $_POST['option'];
         $paystats = $_POST['paystats'];
         $contact = $_POST['contact'];
 		$result = $backend->foodBought($trans_id);
 	}
-    if (isset($_POST['confirm'])) {
-        $status = "On The Way";
-
-        $address = $_POST['address'];
-        $buyer = $_POST['buyer'];
-        $payment =  $_POST['payment'];
-
-        $backend->orderStatus($payment,$status);
-    }
 
 ?>
 <!DOCTYPE html>
@@ -55,10 +47,11 @@
 	<div class="row mb-4">
 		<div class="col-md-6">
 			<h1>Receipt</h1>
-			<p class="font-weight-bold mb-0">Date Received: <?=$received?></p>
-			<p class="font-weight-bold mb-0">Receipt #:2023<?=$trans_id?> </p>
-			<p class="font-weight-bold mb-0">Order Status: <?=$status?> </p>
-			<p class="font-weight-bold">Payment Status: <?=$paystats?> </p>
+			<p class="font-weight-bold mb-0"><small class="text-secondary">Date:</small> <?=date("M d, Y h:i:s a",strtotime($received))?></p>
+			<p class="font-weight-bold mb-0"><small class="text-secondary">Receipt #:</small> 2023<?=$trans_id?> </p>
+			<p class="font-weight-bold mb-0"><small class="text-secondary">Delivery Option:</small> <?=$option?> </p>
+			<p class="font-weight-bold mb-0"><small class="text-secondary">Order Status:</small> <?=$status?> </p>
+			<p class="font-weight-bold"><small class="text-secondary">Payment Status:</small>  <?=$paystats?> </p>
 		</div>
 		<div class="col-md-6 text-md-right">
 			<h2 class="mb-0"><i class="bi bi-person-square"></i> <?=$buyer?></h2>
@@ -98,11 +91,29 @@
 			</tr>
         </tbody>
     </table>
-    <div class="col-12 bg-success p-3 text-center rounded">
-            <h2 class="text-light">Successfully Delivered</h2>
-    </div>
-    <div class="col-12 my-2 text-center">
-        <a href="delivery.php">Back to order lounge</a>
+    
+            <?php
+				if ($status == 'Received') {
+					if ($option == 'Delivery') {
+						echo "<div class='col-12 bg-success p-3 text-center rounded'>
+						    	<h2 class='text-light'>Successfully Delivered</h2>
+							  </div>";
+					}
+					else{
+						echo "<div class='col-12 bg-success p-3 text-center rounded'>
+						    	<h2 class='text-light'>Successful Pick-up</h2>
+							  </div>";
+					}
+				}
+				else {
+					echo "<div class='col-12 bg-danger p-3 text-center rounded'>
+						    	<h2 class='text-light'>Cancelled</h2>
+							  </div>";
+				}
+			?>
+
+    <div class="col-12 my-2">
+		<h4><a href="sales.php"><i class="bi bi-arrow-return-left">Back</i></a></h4>
     </div>
 
 </body>

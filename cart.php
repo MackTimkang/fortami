@@ -25,6 +25,7 @@
 
         $backend->editcart($food,$buyer,$qty);
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,19 +39,32 @@
     <div class="container-fluid p-2 ">
         <div class="text-secondary text-center">
             <h1>
-                <i class="bi bi-cart-fill"></i>Cart
+                <i class="bi bi-cart-fill">Cart</i>
             </h1>
+        </div>
+        <div>
             <?php
+                $sell = $backend->getSellerId();
+                if ($sell->num_rows > 0) {
+                    $seller_id = mysqli_fetch_assoc($sell);
+                    $address = $backend->sellerAddress($seller_id['user_id']);
+                        if ($address->num_rows > 0) {
+                            $info = mysqli_fetch_assoc($address);
+                            echo "<h2><i class='bi bi-shop'> ".$info['full_name']."</i></h2>";
+                        }
+                }
+            ?>
+        </div>
+        <?php
                 $list = $backend->getcart();
                 if ($list->num_rows > 0) {
                     while($row = $list->fetch_assoc()){
             ?>
-        </div>
         <form action="cart.php" method="post">
             <div class="card mb-1 w-100  text-center">
                 <div class="row row-cols-1 row-cols-md-1 g-1 d-flex align-items-center">
                     <div class="col-md-2 text-center">
-                        <img src="./src/Food Menu/<?=$row['food_pic'];?>" class="img-fluid rounded-start" alt="..." style="max-width:50%; height:auto">
+                        <img src="./src/uploads/food_picture/<?=$row['food_pic'];?>" class="img-fluid rounded-start" alt="..." style="max-width:50%; height:auto">
                     </div>
                     <div class="col-md-1">
                         <div class="card-body ">
@@ -130,7 +144,7 @@
             }
         }
         else {
-            echo "No Products added yet!";
+            echo "<h1 class='text-dark text-center p-5'><i class='bi bi-cart-x'>No Products added yet!</i> </h1>";
         }
         ?>
         </div>
@@ -174,7 +188,7 @@
                 <div class="col-md-2">
                     <div class="card-body">
                         <p class="card-text" >
-                            <a href="checkout.php" class="btn btn-dark" style="max-width:100%;height:auto"><i class="bi bi-bag-check"></i> Checkout</a>
+                            <a href="checkout.php?shop_id=<?=$seller_id['user_id']?>" class="btn btn-dark" style="max-width:100%;height:auto"><i class="bi bi-bag-check"></i> Checkout</a>
                         </p>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ include 'buyerheader.php';
     <title>Home</title>
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container">
       <br><br>
       <div class="row">
         <div class="col d-flex justify-content-end align-items-center" >
@@ -19,7 +19,7 @@ include 'buyerheader.php';
               Don't Starve
               <div class="row">
               <small class="text-muted">Just Order</small>
-              <a href="" class="btn btn-primary" style="background-color:#4990b5">Order Now</a>
+              <a href="" class="btn btn-primary" style="background-color:#4990b5;border:none">Order Now</a>
               </div>
             </h1>
         </div>
@@ -27,7 +27,14 @@ include 'buyerheader.php';
             <img src="./src/Food-Delivery-Service-PNG-Photo.png" class="round float-start" alt="">
         </div>
       </div>
-      <br><br>
+      <hr class="text-info">
+      <div class="row g-3 p-2">
+        <div class="col-12 text-center">
+          <h1 style="font-family: 'Montserrat Alternates', sans-serif;color:#4990b5;">Fortami</h1>
+            <h3 class="text-secondary"><i>Food for your tummy</i></h3>
+        </div>
+      </div>
+      <hr class="text-info">
       <div class="row">
         <div class="col"><img src="./src/foodshop.png" class="round float-end" alt=""></div>
         <div class="col d-flex justify-content-start align-items-center" >
@@ -35,7 +42,7 @@ include 'buyerheader.php';
               More Customers
               <div class="row">
               <small class="text-muted">More Sales</small>
-              <a href="" class="btn btn-primary" style="background-color:green;">Sell Now</a>
+              <a href="" class="btn btn-success">Sell Now</a>
               </div>
             </h1>
         </div>

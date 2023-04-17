@@ -4,7 +4,13 @@
     $result= $backend->total();
     $subtotal = mysqli_fetch_assoc($result);
     $total = number_format((float)$subtotal['total'], 2, '.', ',');
-    $_SESSION['total'] = $total;
+
+    if (isset($_GET['trans_id'])) {
+        $transaction = $_GET['trans_id'];
+
+        $backend->orderAgain($transaction);
+        
+    }
 
 ?>
 <!DOCTYPE html>
@@ -19,25 +25,9 @@
 </head>
 <body>
     <div class="container">
-        <div class="row p-5 g-1">
-            <?php
-                $user_id = $_SESSION['id'];
-                    $name = "";
-                    $contact = "";
-                    $region = "";
-                    $province = "";
-                    $city = "";
-                    $brgy = "";
-                    $street = "";
-                    $zip = "";
-                    $label = "Home";
-                    $address_type = "";
-                    $home = "";
-                    $work = "";
-                    $note = "";
-                    
-                    $list = $backend->address($user_id,$label);
-                       
+        <div class="row p-3 g-1">
+            <?php   
+                    $list = $backend->userAddress();
                        //variables
                         if (!(is_null($list))) {
                             $row = mysqli_fetch_assoc($list);
@@ -50,54 +40,73 @@
                             $street = $row['street'];
                             $zip = $row['zip'];
                             $address_type = $row['address_type'];
+                            $note = $row['note'];
                             $_SESSION['address_id'] = $row['address_id'];
+                            
                         }
-
-                    if (isset($_POST['home'])) {
-                        $label = "Home";
-                       $list = $backend->address($user_id,$label);
-                       
-                       //variables
-                        if (!(is_null($list))) {
+                        if (isset($_POST['home'])) {
+                            $_SESSION['option'] = "Delivery";
                             $row = mysqli_fetch_assoc($list);
-                            $name = $row['full_name'];
-                            $contact = $row['contact'];
-                            $region = $row['region'];
-                            $province = $row['province'];
-                            $city = $row['city'];
-                            $brgy = $row['barangay'];
-                            $street = $row['street'];
-                            $zip = $row['zip'];
-                            $address_type = $row['address_type'];
-                            $_SESSION['address_id'] = $row['address_id'];
+                            if ($row['label'] === 'Home' ) {
+                                $name = $row['full_name'];
+                                $contact = $row['contact'];
+                                $region = $row['region'];
+                                $province = $row['province'];
+                                $city = $row['city'];
+                                $brgy = $row['barangay'];
+                                $street = $row['street'];
+                                $zip = $row['zip'];
+                                $address_type = $row['address_type'];
+                                $note = $row['note'];
+                                $_SESSION['address_id'] = $row['address_id'];
+                            }
+                            
                         }
-                    }
-                    elseif (isset($_POST['work'])) {
-                        $list = $backend->address($user_id,$_POST['work']);
-                        
-                        if (!(is_null($list))) {
+                        if(isset($_POST['work'])) {
+                            $_SESSION['option'] = "Delivery";
                             $row = mysqli_fetch_assoc($list);
-                        //variables
-                            $name = $row['full_name'];
-                            $contact = $row['contact'];
-                            $region = $row['region'];
-                            $province = $row['province'];
-                            $city = $row['city'];
-                            $brgy = $row['barangay'];
-                            $street = $row['street'];
-                            $zip = $row['zip'];
-                            $address_type = $row['address_type'];
-                            $_SESSION['address_id'] = $row['address_id'];
+                            if ($row['label'] === 'Work'){
+                                $name = $row['full_name'];
+                                $contact = $row['contact'];
+                                $region = $row['region'];
+                                $province = $row['province'];
+                                $city = $row['city'];
+                                $brgy = $row['barangay'];
+                                $street = $row['street'];
+                                $zip = $row['zip'];
+                                $address_type = $row['address_type'];
+                                $note = $row['note'];
+                                $_SESSION['address_id'] = $row['address_id'];
+                            }
                         }
-                    }
 
                     if (isset($_POST['deletebtn'])) {
                         $address_id = $_POST['address_id'];
                         $backend->delAddress($address_id);
                     }
+                    
+                    if (isset($_POST['pickup'])) {
+                        $_SESSION['option'] = "Pick-up";
+                        if (isset($_GET['shop_id'])) {
+                            $shopId = $_GET['shop_id'];
+                            $sellAd = $backend->sellerAddress($shopId);
+                            $address = mysqli_fetch_assoc($sellAd);
+                                if (!is_null($address)) {
+                                    $name = $address['full_name'];
+                                    $contact = $address['contact'];
+                                    $region = $address['region'];
+                                    $province = $address['province'];
+                                    $city = $address['city'];
+                                    $brgy = $address['barangay'];
+                                    $street = $address['street'];
+                                    $zip = $address['zip'];
+                                    $note = $address['note'];
+                                }
+                        }
+                    }
             ?>
-                <div class="col-6" >
-                    <div class="row g-3 p-3 ">
+                <div class="col-6 p-2  rounded-start" >
+                    <div class="row g-3 ">
                         <div class="col-12 text-center">
                             <h1><i class="bi bi-person-fill-up"></i> Delivery Address</h1>
                         </div>
@@ -154,16 +163,16 @@
                         </div>
                         <div class="col-12">
                             <form action="" method="post">
-                                <a href="address-edit.php?id=<?=$_SESSION['address_id']?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                                <a href="address-edit.php?id=<?=$_SESSION['address_id']?>" class="btn btn-warning <?=($_POST['pickup'])?'disabled':''?>"><i class="bi bi-pencil-square"></i> Edit</a>
                                 <input type="hidden" name="address_id" value="<?=$_SESSION['address_id']?>">
-                                <button class="btn btn-danger" type="submit" name="deletebtn"><i class="bi bi-trash3"></i> Delete</button>
+                                <button class="btn btn-danger <?=($_POST['pickup'])?'disabled':''?>" type="submit" name="deletebtn"><i class="bi bi-trash3"></i> Delete</button>
                             </form>
                         </div>
                     </div>
                     
                 </div>
-                <div class="col-6 p-3 bg-light rounded-lg">
-                    <h3 class="text-secondary">Your Order</h3>
+                <div class="col-6 p-2 bg-light rounded-end">
+                    <i><h3>Your Order</h3></i>
                     <table class="table table-dark table-striped ">
                         
                         <tr>
@@ -185,8 +194,8 @@
                             <td class="text-center"><?=$row['food_discountedPrice']*$row['quantity']?></td>
                         </tr>
                         <?php
+                                }
                             }
-                        }
                         }
                         ?>
                         <tr >
@@ -198,8 +207,8 @@
                     </table>
                     <br>
                     <div class="col-12">
-                        <a class="btn btn-warning p-2 w-100" href="">
-                            <img src="./src/paypal.png" alt="paypal" class="img-fluid" style="max-width:100px">
+                        <a class="btn btn-warning p-2 w-100" href="payment.php?shop_id=&trans_id=">
+                            <img src="./src/epay.png" style="max-width:300px;" class="img-fluid">
                         </a>
                     </div>
                     <div class="col-12">
@@ -211,7 +220,7 @@
                         <div class="collapse" id="collapseExample">
                             <div class="card card-body">
                                <form action="" method="post">
-                               <input type="hidden" name="method" value="2">
+                               <input type="hidden" name="method" value="4">
                                     <div class="row g-2">
                                         <div class="col-sm-12">
                                             <input class="form-control" type="text" name="cardowner" placeholder="Name on Card" required>
@@ -245,25 +254,31 @@
               $method = $_POST['method'];
               $user = $_SESSION['id'];
               $status = 'Successful';
-              $address = $_SESSION['address_id'];
-
-              $backend->payment($user,$method,$total,$status);//inserting the payment to payment db
+              $option = $_SESSION['option'];
+                if (isset($_SESSION['address_id'])) {
+                    $address = $_SESSION['address_id'];
+                    $backend->payment($user,$method,$total,$option,$status);//inserting the payment to payment db
                 
-                $getpayment = $backend->getpayment($user,$time);//get trans_id
-                    if ($getpayment->num_rows > 0) {
-                        $paymentList = mysqli_fetch_assoc($getpayment);
-                        $trans_id = $paymentList['payTrans_id'];//declaration of variable that holds paytrans Id
-                        $_SESSION['trans_id'] = $trans_id;
+                    $getpayment = $backend->getpayment($user,$time);//get trans_id
+                        if ($getpayment->num_rows > 0) {
+                            $paymentList = mysqli_fetch_assoc($getpayment);
+                            $trans_id = $paymentList['payTrans_id'];//declaration of variable that holds paytrans Id
+                            $_SESSION['trans_id'] = $trans_id;
 
-                        $cart = $backend->getcart();//getting cart to insert every foods in order table
-                            if ($cart->num_rows > 0) {
-                                    foreach ($cart as $cartRow) {
-                                        $backend->order($cartRow['food_id'],$address,$trans_id,'Pending',$cartRow['quantity']);
-                                    }
-                                    $backend->clearcart();
-                            }
+                            $cart = $backend->getcart();//getting cart to insert every foods in order table
+                                if ($cart->num_rows > 0) {
+                                        foreach ($cart as $cartRow) {
+                                            $backend->order($cartRow['food_id'],$address,$trans_id,'Pending',$cartRow['quantity']);
+                                        }
+                                        $backend->clearcart();
+                                }
                     }
+                }
+                else {
+                    echo "<script>alert('Please input delivery address first!');</script>";
+                }
             }
+
         ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>

@@ -11,49 +11,47 @@ $backend = new Backend;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">    
     <title>Register</title>
+    <style>
+        body{
+            background-image:linear-gradient(#4990b5,skyblue);
+        }
+    </style>
 </head>
 <body>
-    <div class="container d-flex justify-content-center align-items-center">
-        <form action="" method="post">
-        <div class="row g-3 p-5 ">
-            <div class="col-12 text-center">
+    <div class="container  min-vh-100 d-flex justify-content-center align-items-center">
+        <form action="" method="post" enctype="multipart/form-data" class="rounded-5 shadow p-5 bg-dark bg-gradient">
+        <div class="row g-3 text-light">
+            <div class="col-12 text-center ">
                 <h1><i class="bi bi-person-fill-up"></i> Register</h1>
             </div>
-            <div class="col-3">
-                <label for="role" class="form-label">How do you intend to use Fortami?</label>
+            <div class="col-md-5">
+                <label for="role" class="form-label"><i>How do you intend to use Fortami?</i> </label>
                     <select class="form-select" aria-label="role" name="role" required>
                         <option selected disabled>Click to choose...</option>
                         <option value="Buyer">Buy</option>
                         <option value="Seller">Sell</option>
                     </select>
-            </div>
-            <div class="col-12">
-                <label for="fname" class="form-label">First Name</label>
+                <label for="profile" class="form-label my-1"><i>Profile Picture</i> </label>
+                <input type="file" class="form-control" name="profile" required>
+                <label for="Fname" class="form-label my-1"><i>First Name</i> </label>
                 <input type="text" class="form-control" name="Fname" required>
-            </div>
-            <div class="col-12">
-                <label for="lname" class="form-label">Last Name</label>
+                <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
                 <input type="text" class="form-control" name="Lname" required>
             </div>
-            <div class="col-12">
-                <label for="email" class="form-label">Email</label>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <label for="email" class="form-label my-1"><i> Email</i></label>
                 <input type="email" class="form-control" name="email" required>
-            </div>
-            <div class="col-12">
-                <label for="uname" class="form-label">Username</label>
+                <label for="uname" class="form-label my-1"><i>Username</i> </label>
                 <input type="text" class="form-control" name="uname" required>
-            </div>
-            <div class="col-12">
-                <label for="pass" class="form-label">Password</label>
+                <label for="pass" class="form-label my-1"><i>Password</i> </label>
                 <input type="password" class="form-control" name="pass" required>
-            </div>
-            <div class="col-12">
-                <label for="pass" class="form-label">Confirm Password</label>
+                <label for="pass" class="form-label my-1"><i>Confirm Password</i> </label>
                 <input type="password" class="form-control" name="cpass" required>
             </div>
-            <div class="col-12 text-center">
-                <button type="submit" name="regbtn" class="btn btn-primary">Register</button>
-                <a class="btn btn-secondary" href="index.php" style="background-color:red;border:none">Cancel</a>
+            <div class="col-12">
+                <button type="submit" name="regbtn" class="btn btn-success">Register</button>
+                <a class="btn btn-danger" href="index.php">Cancel</a>
             </div>
         </div>
         </form>
@@ -67,14 +65,44 @@ $backend = new Backend;
          if ($len >= 8 ) {
             //check if password and confirm password is equal
            if ( $pass == $cpass) {
-            $role = $_POST['role'];
-            $fn = $_POST['Fname'];
-            $ln = $_POST['Lname'];
-            $email = $_POST['email'];
-            $uname = $_POST['uname'];
+            if (isset($_POST['role'])&& isset($_FILES['profile'])) {
+                $role = $_POST['role'];
+                $profile_img = $_FILES['profile'];
+                $fn = $_POST['Fname'];
+                $ln = $_POST['Lname'];
+                $email = $_POST['email'];
+                $uname = $_POST['uname'];
 
-            $backend->registerUser($role,$fn,$ln,$email,$uname,$pass);
+                $img_name = $_FILES['profile']['name'];
+                $img_size = $_FILES['profile']['size'];
+                $img_tmp = $_FILES['profile']['tmp_name'];
+                $error = $_FILES['profile']['error'];
 
+                    if ($error === 0) {
+                        if ($img_size > 1000000) {
+                            echo "Please upload an image not more than 1mb";
+                        }
+                        else {
+                            $img_ext = pathinfo($img_name,PATHINFO_EXTENSION);
+                            $img_ext_lower = strtolower($img_ext);//conversion of the extension to lowercase
+                            $allowed_ext = array("jpg","jpeg","png");
+                            
+                            if (in_array($img_ext_lower,$allowed_ext)) {
+                                $new_Name = uniqid("FORTAMI-",true).'.'.$img_ext_lower;
+                                $upload_path = './src/uploads/profile/'.$new_Name;
+                                move_uploaded_file($img_tmp,$upload_path);
+                            }
+                            else {
+                                echo "File type not supported";
+                            }
+                        }
+                    }
+            }
+            else {
+                echo "<script>alert('Please check the form and fill all inputs.')</script>";
+            }
+            
+            $backend->registerUser($role,$new_Name,$fn,$ln,$email,$uname,$pass);
             //call register function
            }
            else{

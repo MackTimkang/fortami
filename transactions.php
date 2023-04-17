@@ -19,9 +19,8 @@
                     <tr>
                         <th>Transaction Id</th>
                         <th>Shop</th>
-                        <th>Rating</th>
                         <th>Status</th>
-                        <th>Received Date</th>
+                        <th>Order Date</th>
                         <th>Receipt</th>
                     </tr>
                     <?php
@@ -30,23 +29,33 @@
                                 if ($result->num_rows > 0) {
                                     foreach ($result as $row) {
                     ?>
-                    <tr>
+                    <tr 
+                        <?php   
+                            if(isset($_GET['trans'])){
+                                $trans = $_GET['trans'];
+                                
+                                if($trans == $row['payTrans_id']){
+                                    echo "class='text-primary'";
+                                }
+                            } 
+                        ?>
+                    >
                         <td>2023<?=$row['payTrans_id']?></td>
                         <td><?=$row['user_userName']?></td>
-                        <td>N/A</td>
                         <td><?=$row['order_status']?></td>
-                        <td><?=$row['received_datetime']?></td>
+                        <td><?=date("M d, Y h:i a",strtotime($row['order_datetime']))?></td>
                         <td>
                             <form action="receipt.php" method="post">
                                 <input type="hidden" name="trans_id" value="<?=$row['payTrans_id']?>">
                                 <input type="hidden" name="shop" value="<?=$row['user_userName']?>">
                                 <input type="hidden" name="shop_id" value="<?=$row['user_id']?>">
-                                <input type="hidden" name="date" value="<?=$row['received_datetime']?>">
+                                <input type="hidden" name="date" value="<?=$row['order_datetime']?>">
                                 <input type="hidden" name="status" value="<?=$row['order_status']?>">
+                                <input type="hidden" name="delivery" value="<?=$row['delivery_option']?>">
                                 <input type="hidden" name="total" value="<?=$row['pay_amount']?>">
                                 <input type="hidden" name="paystats" value="<?=$row['trans_status']?>">
                                 <input type="hidden" name="method" value="<?=$row['paymethod_type']?>">
-                                <button type="submit" name="receiptbtn" class="btn btn-outline-dark text-center"><i class="bi bi-receipt"></i></button>
+                                <button type="submit" name="receiptbtn" class="<?=($trans == $row['payTrans_id'])?'btn btn-outline-primary':'btn btn-outline-dark'?> text-center"><i class="bi bi-receipt"></i></button>
                             </form>
                         </td>
                     </tr>

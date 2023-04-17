@@ -1,29 +1,15 @@
 <?php
     include 'backend.php';
     include 'buyerheader.php';
-    $backend = new Backend;
-    $backend->checksession();
-    $list= $backend->listproduct();
+    $backend = new Backend();
+    
+    if (isset($_GET['shop_id'])) {
+        $id = $_GET['shop_id'];
 
-    if(isset($_POST['addcart'])){
-        $food_id = $_POST['food_id'];
-            if (isset($_SESSION['id'])) {
-                $user_id = $_SESSION['id'];
-                $qty = $_POST['qty'];
-
-            $check = $backend->checkcart($food_id,$user_id);
-                if ($check->num_rows>0) {
-                    echo "<script>alert('Already in cart!');</script>";
-                }
-                else {
-                    $backend->addtocart($food_id,$user_id,$qty);
-                    echo "<meta http-equiv='refresh' content='0'>";
-                }
-            }
-            else {
-                echo "<script>alert('Please Login First!');window.location.href='login.php';</script>";
-            }
-        
+        $result = $backend->usersearch($id);
+        $user = mysqli_fetch_assoc($result);
+        $address =$backend->sellerAddress($id);
+        $add = mysqli_fetch_assoc($address);
     }
 ?>
 <!DOCTYPE html>
@@ -32,35 +18,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image" href="./src/FortamiLogo.png">
-    <title>Fortami | Menu</title>
+    <title>Food Shop</title>
 </head>
 <body>
-    <div class="container p-3">
-        <div class="row g-3">
-            <div class="col-12 p-2">
-                <form class="d-flex justify-content-center align-items-center" role="search">
-                    <a class="btn btn-outline-dark" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                        <i class="bi bi-funnel"></i>
-                    </a>
-                    <input class="form-control mx-2 w-50" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-            </div>
-            <div class="col-12">
-                <!-- <div class="ratio" style="--bs-aspect-ratio: 10%;">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d251170.46572903!2d123.70620748661054!3d10.378734102357448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a999258dcd2dfd%3A0x4c34030cdbd33507!2sCebu%20City%2C%20Cebu!5e0!3m2!1sen!2sph!4v1681223016091!5m2!1sen!2sph" width="600" height="450" style="border:1px solid black;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div> -->
-            </div>
-            <div class="col-md-3 ">
+<div class="container my-4">
+    <form class="d-flex justify-content-center align-items-center" role="search">
+        <a class="btn btn-outline-dark" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+            <i class="bi bi-funnel"></i>
+        </a>
+            <input class="form-control mx-2 w-50" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    <!-- FILTER -->
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Filter Setting</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
-                        <form action="menu.php">
+                        <form action="">
                                 <h6>Select filters below:</h6><br>
+                                <input type="hidden" name="shop_id" value="<?=$id?>">
                                 <select class="form-select" name="food_category" >
                                     <option selected Disabled>Food Category</option>
                                     <option value="any">Any</option>
@@ -105,56 +83,33 @@
                                     <option value="pickup">Pick-up</option>
                                     <option value="deliver">Deliver</option>
                                 </select>
-                            <input type="submit" class="btn btn-warning form-control" name="savebtn" value="Apply">
+                            <input type="submit" class="btn btn-warning form-control" name="filterbtn" value="Apply">
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- END OF FILTERING FUNCTION -->
-    <div class="container text-center ">
-        <h4 class="p-3 bg-warning bg-gradient rounded shadow"><i>Food Shops</i> </h4>
-        <br>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <?php
-                $list = $backend->listSellers();
-                    foreach ($list as $row) {
-            ?>
-            
-            <div class="col-md-3">
-                <div class="card h-100">
-                <a href="foodshop.php?shop_id=<?=$row['user_id']?>"><img src="./src/uploads/profile/<?=$row['profile_pic']?>" class="card-img-top" style='max-width:100%;height:250px'></a>
-                        <div class="card-body ">
-                            <h5 class="card-title"><b><?=$row['user_userName']?></b></h5>
-                            <p class="card-text"><i><?=$row['tagline']?></i></p>
-                            <?php
-                                $seller = $backend->findAddress($row['user_id']);
-                                $find = mysqli_fetch_assoc($seller);
-                            ?>
-                            <p class="card-text"><?=$find['street'].', '.$find['barangay'].', '.$find['city'].' City'?></i></p>
-                        </div>
-                    <div class="card-footer">
-                    <small class="text-body-secondary">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-            </div>
-            
-            <?php
-                }            
-            ?>
-        </div>
-    </div>
-    
-    <!-- END OF FOOD SHOPS -->
-    <br>
-    <div class="container text-center">
-    <h4 class="p-3 bg-warning bg-gradient rounded shadow"> <i>Find Your Favorites</i></h4>
-    <div class="row row-cols-1 row-cols-md-4 g-4 p-2">
+    <!--END OF FILTER-->
+    <h3 class="p-2 bg-warning rounded text-center shadow my-4"><i class="bi bi-shop"> <?=$user['user_userName']?></i></h6>
+    <h6><small class="text-secondary">Address:</small><i> <?=$add['street'].''.$add['barangay'].''.$add['city']?></i></h6>
+    <h6><small class="text-secondary">Contact #:</small> <i><?=$add['contact']?></i></h5>
+    <hr>
+    <div class="row row-cols-1 row-cols-md-4 g-4 p-2 text-center">
         <?php
-            $list = $backend->getproduct();
-            if ($list->num_rows > 0) {
-                while($row= $list->fetch_assoc()){
+            if (isset($_GET['shop_id'])) {
+                $id = $_GET['shop_id'];
+                if (isset($_GET['filterbtn'])) {
+                    if (isset($_GET['food_category']) && isset($_GET['rating']) && isset($_GET['location']) && isset($_GET['price']) && isset($_GET['preparation']) && isset($_GET['delivery']) && isset($_GET['shop_id'])) {
+                        $query = "SELECT * FROM food_product WHERE user_id = $id AND food_category";
+                    }
+                    else {
+                        echo "Please fill all filter";
+                        $list = $backend->viewProduct($id);
+                    }
+                }
+                else {
+                    $list = $backend->viewProduct($id);
+                }
+                    if ($list->num_rows > 0) {
+                        while($row= $list->fetch_assoc()){
         ?>
         <div class='col'>
                     <div class='card h-100'>
@@ -170,7 +125,7 @@
                       
                       <div class='card-footer'>
                       <div class ='text-center '>
-                        <form action='menu.php' method='post'>  
+                        <form action='' method='post'>
                           <input type="number" name="qty" class="form-control text-center" min="1" placeholder="Quantity" style="width:50%;margin:auto;" required>
                           <button type='submit' name='addcart' class='btn btn-warning my-2'>Add to cart <i class='bi bi-bag-heart'></i></button>
                           <input type='hidden' name='food_id' value='<?=$row['food_id'];?>'>
@@ -190,7 +145,28 @@
                     </div>
                   </div>
             <?php
+                        }
                     }
+                }
+                if(isset($_POST['addcart'])){
+                    $food_id = $_POST['food_id'];
+                        if (isset($_SESSION['id'])) {
+                            $user_id = $_SESSION['id'];
+                            $qty = $_POST['qty'];
+            
+                        $check = $backend->checkcart($food_id,$user_id);
+                            if ($check->num_rows>0) {
+                                echo "<script>alert('Already in cart!');</script>";
+                            }
+                            else {
+                                $backend->addtocart($food_id,$user_id,$qty);
+                                echo "<meta http-equiv='refresh' content='0'>";
+                            }
+                        }
+                        else {
+                            echo "<script>alert('Please Login First!');window.location.href='login.php';</script>";
+                        }
+                    
                 }
             ?>
         </div>  

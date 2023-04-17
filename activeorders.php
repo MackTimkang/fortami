@@ -3,6 +3,8 @@
     include 'buyerheader.php';
     $backend = new Backend;
 
+    $backend->checksession();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,13 +21,14 @@
                 <h2 class="text-light text-center">Ongoing Orders</h2>
             </div>
             <div class="col-12  text-end">
-                <a href="transactions.php" style="text-decoration:none;"><i class="bi bi-clock-history"></i> History</a>
+                <a href="transactions.php" class="btn btn-outline-dark"><i class="bi bi-clock-history"> Transaction History</i></a>
             </div>
-                <table class="table  table-striped">
+                <table class="table text-center table-striped">
                     <tr>
                         <th>Shop</th>
                         <th>Total Amount</th>
-                        <th>Status</th>
+                        <th>Delivery Option</th>
+                        <th>Order Status</th>
                         <th class="text-center">Action</th>
                     </tr>
                     <?php
@@ -38,12 +41,13 @@
                         <tr>
                             <td style="font-weight:bold;font-style:italic;"><?=$row['user_userName']?></td>
                             <td><?=$row['pay_amount']?></td>
+                            <td><?=$row['delivery_option']?></td>
                             <td><?=$row['order_status']?></td>
                             <td>
                                 <form class="text-center" action="" method="post">
                                     <input type="hidden" name="trans" value="<?=$row['payTrans_id']?>">
-                                    <button type="submit" name="cancelbtn" class="btn btn-danger" <?=($row['order_status'] == 'Preparing')? 'disabled':''?>>Cancel</button>
-                                    <button type="submit" name="rcvbtn" class="btn btn-success">Received</button>
+                                    <button type="submit" name="cancelbtn" class="btn btn-danger" <?=($row['order_status'] == 'Pending')? '':'disabled'?>>Cancel</button>
+                                    <button type="submit" name="rcvbtn" class="btn btn-success"  <?=($row['order_status'] == 'Pending' || $row['order_status'] == 'Preparing')? 'disabled':''?>>Receive</button>
                                 </form>
                             </td>
                         </tr>
@@ -69,10 +73,21 @@
             $status = 'Received';
             $backend->orderStatus($trans,$status);
             $backend->receivedTime($time,$trans);
-            echo "<meta http-equiv='refresh' content='0'>";
+            echo "<script>window.location.href='rate.php?trans=$trans';</script>";
         }   
         else {
             
+        }
+        
+        if (isset($_POST['cancelbtn'])) {
+            $trans= $_POST['trans'];
+            $status = 'Cancelled';
+            $backend->orderStatus($trans,$status);
+            $backend->tranStatus($trans,$status);
+            echo "<script>window.location.href='transactions.php?trans=$trans';</script>";
+        }
+        if (isset($_POST['ratebtn'])) {
+            echo "tidert";
         }
     ?>
 </body>

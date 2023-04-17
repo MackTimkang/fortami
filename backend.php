@@ -54,14 +54,14 @@ session_start();
 
       function checksession(){
         if(isset($_SESSION['user'])){
-          //Validate session
+          $this->userAddress();
         }
         else{
           echo "<script>alert('Please Login First!');window.location.href='login.php';</script>";
         }
       }//checksession end
 
-      function registerUser($role,$fn,$ln,$em,$un,$pass){
+      function registerUser($role,$pic,$fn,$ln,$em,$un,$pass){
         $sql = "SELECT * from user WHERE user_userName = '$un'";
         $result = mysqli_query($this->con,$sql);
           if($result){
@@ -70,8 +70,8 @@ session_start();
             }
             else {
               $hashpass = password_hash($pass,PASSWORD_DEFAULT);
-              $query = "INSERT INTO user(user_type,user_fName,user_lName,user_email,user_userName,user_password) 
-              values('$role','$fn','$ln','$em','$un','$hashpass')";
+              $query = "INSERT INTO user(user_type,profile_pic,user_fName,user_lName,user_email,user_userName,user_password) 
+              values('$role','$pic','$fn','$ln','$em','$un','$hashpass')";
               $reg = mysqli_query($this->con,$query);
                 if($reg){
                   echo "<script>alert('Registered Successfully!');";
@@ -91,19 +91,38 @@ session_start();
           if ($result) {
             return $result;
           }
+      }//end of search user function
+
+      function listSellers(){
+        $query = "SELECT * FROM user WHERE user_type = 'Seller'";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of list seller function
+
+      function getSellerId(){
+        $user = $_SESSION['id'];
+        $query = "SELECT food_product.user_id FROM cart JOIN food_product ON food_product.food_id = cart.food_id INNER JOIN user ON user.user_id = food_product.user_id WHERE cart.user_id = $user GROUP BY user_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
       }
 
-      function address($id,$label){
-        $query = "SELECT * FROM address WHERE user_id = $id AND label= '$label'";
+      function userAddress(){
+        $id = $_SESSION['id'];
+        $query = "SELECT * FROM address WHERE user_id = $id";
         $result = $this->con->query($query);
         if ($result) {
             if ($result->num_rows > 0) {
               return $result;
             }
             else {
+              echo "<script>alert('Please add an address first!');window.location.href='address.php?user=$id';</script>";
             }
-        }
-        echo "<meta http-equiv='refresh' content='0'>";
+        }//end of search userAddress function
+        
       }//end of address function
 
       function searchaddress($address_id){
@@ -114,6 +133,14 @@ session_start();
           return $result;
         }
       }//end of searchaddress function
+
+      function findAddress($user_id){
+        $query = "SELECT * FROM address WHERE user_id = $user_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }
 
       function sellerAddress($seller_id){
         $query = "SELECT * FROM address WHERE user_id = $seller_id";
@@ -147,11 +174,19 @@ session_start();
       }
 
       function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
+        $userSearch = $this->userSearch($user_id);
+        $user = mysqli_fetch_assoc($userSearch);
+        $role = $user['user_type'];
         $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,note,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$note','$label')";
         $result = $this->con->query($query);
           if ($result) {
-              echo "<script>alert('Address saved successfully!');window.location.href = 'checkout.php';</script>";
-          }
+            if ($role === 'Seller') {
+              echo "<script>alert('Address saved successfully!');window.location.href = 'product.php';</script>";
+            }
+            else {
+              echo "<script>alert('Address saved successfully!');window.location.href = 'menu.php';</script>";
+            }
+            }
       }//end of addAddress
 
       //end of Account Management
@@ -179,7 +214,7 @@ session_start();
 
         if ($result) {
           if ($result) {
-            echo "<script>alert('Successfuly Saved!');</script>";
+            echo "<script>alert('Successfuly Saved!');window.location.href='product.php'</script>";
           }
           else{
             echo "error in $db".$this->con->error;
@@ -215,14 +250,15 @@ session_start();
       }//end of delete product function
 
       function listproduct(){
+          $user = $_SESSION['id'];
           $sql = "SELECT food_id, food_pic,category.category_name,food_name,food_description,preparation,
-          food_creation,food_discountedPrice,food_origPrice FROM food_product JOIN category ON food_product.category_id = category.category_id ORDER BY food_id";
+          food_creation,food_discountedPrice,food_origPrice FROM food_product JOIN category ON food_product.category_id = category.category_id WHERE food_product.user_id = $user ORDER BY food_id";
           $result = $this->con->query($sql);
           return $result;
       }//end of list product function
       
       function getproduct(){
-        $query = "SELECT * from food_product";
+        $query = "SELECT * FROM food_product";
         $result = $this->con->query($query);
         if ($result) {
             return $result;
@@ -231,6 +267,24 @@ session_start();
           echo "No item found!";
         }
       }//end of get product function
+
+      function productFilter($query){
+        $result = $this->con->query($query);
+        if ($result) {
+            return $result;
+        }
+        else {
+          echo "No item found!";
+        }
+      }
+
+      function viewProduct($id){
+        $query = "SELECT * FROM food_product WHERE user_id = $id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }
 
       //end of food management
 
@@ -309,7 +363,8 @@ session_start();
           if ($result) {
           }
           echo "<meta http-equiv='refresh' content='0'>";
-      }
+      }//end of clear cart function
+
       function countcart($user_id){
         $query = "SELECT * FROM cart WHERE user_id = $user_id";
         $result = $this->con->query($query);
@@ -331,8 +386,8 @@ session_start();
 
       //start of payment management
 
-      function payment($user,$method,$amount,$status){
-        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,trans_status) values($user,$method,'$amount','$status')";
+      function payment($user,$method,$amount,$opt,$status){
+        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,delivery_option,trans_status) values($user,$method,'$amount','$opt','$status')";
         $result = $this->con->query($query);
           if ($result) {
             echo "<script>alert('Payment Successful, Order is being processed');window.location.href='activeorders.php';</script>";
@@ -398,8 +453,8 @@ session_start();
         $query = "SELECT * FROM food_order
                   JOIN food_product ON food_product.food_id = food_order.food_id
                   INNER JOIN user ON user.user_id = food_product.user_id
-                  JOIN payment_transaction ON food_order.payTrans_id = payment_transaction.payTrans_id
-                  WHERE payment_transaction.user_id = $user AND order_status = 'Pending' OR order_status = 'Preparing' OR order_status = 'On The Way' GROUP BY user.user_userName";
+                  JOIN payment_transaction ON food_order.payTrans_id = payment_transaction.payTrans_id 
+                  WHERE payment_transaction.user_id = $user AND order_status = 'Pending' OR order_status = 'Preparing' OR order_status = 'On The Way' OR order_status = 'Ready' GROUP BY user.user_userName";
         $result = $this->con->query($query);
 
           if ($result) {
@@ -415,6 +470,14 @@ session_start();
             echo "<script>alert('Order $status');</script>";
           }
       }//end of order status function
+
+      function tranStatus($id,$status){
+        $query = "UPDATE payment_transaction SET trans_status = '$status' WHERE payTrans_id = $id";
+        $result = $this->con->query($query);
+          if ($result) {
+            echo "<script>alert('Payment $status');</script>";
+          }
+      }
 
       function receivedTime($time,$id){
         $query = "UPDATE food_order SET received_datetime = '$time' WHERE payTrans_id=$id";
@@ -443,7 +506,7 @@ session_start();
                   INNER JOIN user ON user.user_id = food_product.user_id 
                   INNER JOIN payment_method ON payment_method.paymethod_id = payment_transaction.paymethod_id 
                   WHERE payment_transaction.user_id = $user 
-                  AND order_status = 'Received' OR order_status='Cancelled' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
+                  AND order_status = 'Received' OR order_status = 'Cancelled' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
         $result = $this->con->query($query);
 
           if ($result) {
@@ -458,7 +521,7 @@ session_start();
                     JOIN address ON food_order.address_id = address.address_id 
                     JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
                     WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
-                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Pending' GROUP BY food_order.payTrans_id";
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Pending' OR order_status = 'Preparing' GROUP BY food_order.payTrans_id";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
@@ -472,12 +535,91 @@ session_start();
                     JOIN address ON food_order.address_id = address.address_id 
                     JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
                     WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
-                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Preparing' OR order_status = 'On The Way' OR order_status= 'Received' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Preparing' OR order_status = 'On The Way' OR order_status = 'Ready' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
             }
+        }//end of order waiting list function
+
+        function saleHistory(){
+          $seller_id = $_SESSION['id'];
+          $query = "SELECT * FROM food_order 
+                    JOIN food_product ON food_product.food_id = food_order.food_id 
+                    JOIN rating ON rating.order_id = food_order.order_id
+                    JOIN address ON food_order.address_id = address.address_id 
+                    JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
+                    WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Received' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Received' OR order_status = 'Cancelled' GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
+          $result = $this->con->query($query);
+            if ($result) {
+              return $result;
+            }
+        }// end of saleHistory
+
+
+        function orderAgain($trans_id){
+          $foods = $this->foodBought($trans_id);
+          $user = $_SESSION['id'];
+            foreach ($foods as $row) {
+              $food = $row['food_id'];
+              $qty = $row['quantity'];
+              $total = $row['food_discountedPrice'] * $row['quantity'];
+              $query = "INSERT INTO cart values($food,$user,$qty)";
+              $result = $this->con->query($query);
+
+              if ($result) {
+                echo "<meta http-equiv='refresh' content='0'>";
+              }
+            }
+        }//end of order again function
+
+        function rateOrder($order,$rate,$comment,$trans){
+          $query = "INSERT INTO rating(order_id,rating,comment) VALUES($order,'$rate','$comment')";
+          $result = $this->con->query($query);
+            if ($result) {
+              echo "<script>alert('Rated Successfully!');window.location.href='rate.php?trans=$trans';</script>";
+            }
+        }//end of function Order Rating
+
+        function toRate($trans){
+          $query = "SELECT * FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id
+                  WHERE food_order.payTrans_id = $trans AND rating_status IS NULL";
+          $result = $this->con->query($query);
+
+          if ($result) {
+            if ($result->num_rows > 0) {
+              return $result;
+            }
+            else {
+              echo "<h1 class='text-center'><i class='bi bi-check-circle-fill'>Done Rating! <br><br> <h3><a class='btn btn-outline-info' href='transactions.php?trans=$trans'>View Receipt</a></h3></i></h1>";
+            }
+          }
+        }//end of function toRate
+
+        function ratingStatus($order){
+          $query = "UPDATE food_order SET rating_status = 'Done' WHERE order_id = $order";
+          $result = $this->con->query($query);
+
+            if ($result) {
+              
+            }
+            else{
+              echo "Error in changing rating status";
+            }
         }
+
+
+        function doneRate($order){
+          $query = "SELECT * FROM food_order WHERE order_id = $order AND rating = '' ";
+          $return = $this->con->query();
+            if ($return) {
+              if (empty($result)) {
+                echo "";
+              }
+            }
+        }
+
 
     }//end of backend class
 

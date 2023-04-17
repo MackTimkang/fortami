@@ -1,7 +1,9 @@
 <?php
 include 'backend.php';
 include 'sellerheader.php';
-    
+
+$backend = new Backend;
+$backend->checksession();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +16,6 @@ include 'sellerheader.php';
 </head>
 <body>
     <?php
-        $backend = new Backend;
         $list = $backend->listproduct();
     ?>
     
@@ -35,7 +36,7 @@ include 'sellerheader.php';
                 foreach($list as $data){
             ?>
             <tr>
-                <td><img src="./src/Food Menu/<?=$data['food_pic']?>" class="img-fluid" alt="Food Image" style="max-width:100px"></td>
+                <td><img src="./src/uploads/food_picture/<?=$data['food_pic']?>" class="img-fluid" alt="Food Image" style="max-width:100px"></td>
                 <td><?=$data['category_name']?></td>
                 <td><?=$data['food_name']?></td>
                 <td><?=$data['food_description']?></td>
@@ -45,7 +46,7 @@ include 'sellerheader.php';
                             echo "-";
                         }
                         else {
-                            echo $data['food_creation'];
+                            echo date("M d, Y | h:i a",strtotime($data['food_creation']));
                         }
                     ?>
                 </td>
@@ -70,21 +71,10 @@ include 'sellerheader.php';
                     $food_id = $_POST['food_id'];
                     $backend->deleteproduct($food_id);
                 }
-                if (isset($_POST['savebtn'])) {
-                    $catid =$_POST['category'];
-                    $pic=$_POST['foodpic'];
-                    $foodname=$_POST['foodname'];
-                    $desc=$_POST['fooddesc'];
-                    $prep = $_POST['prep'];
-                    $time=$_POST['creation'];
-                    $discount=$_POST['disprice'];
-                    $price=$_POST['origprice'];
-
-                    $backend->addproduct($catid,$pic,$foodname,$desc,$prep,$time,$discount,$price);
-                }
+                
             ?>
             <tr>
-                <td><a class="btn btn-success text-center" href="./add.php"><i class="bi bi-plus-square-dotted"></i> Product</a></td>
+                <td><a class="btn btn-success text-center" href="./addfood.php"><i class="bi bi-plus-square-dotted"> Food</i> </a></td>
             </tr>
         </table>
     </div>
