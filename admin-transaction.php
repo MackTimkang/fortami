@@ -1,6 +1,8 @@
 <?php
     include 'backend.php';
-    include 'buyerheader.php';
+    include 'admin-header.php';
+
+    $backend = new Admin;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,36 +15,28 @@
 <body>
     <div class="container">
         <div class="row g-3 p-5">
-            <div class="col bg-dark text-center p-2"><h2 class="text-light"><i class="bi bi-clock-history"></i> Transaction History</h2></div>
+            <div class="col bg-dark text-center p-2"><h2 class="text-light"><i class="bi bi-clock-history"></i> Transactions</h2></div>
             <div class="col-12">
                 <table class="table table-striped">
                     <tr>
                         <th>Transaction Id</th>
                         <th>Shop</th>
+                        <th>Recipient</th>
                         <th>Status</th>
                         <th>Order Date</th>
                         <th>Receipt</th>
                         <th>Rating</th>
                     </tr>
                     <?php
-                        $result = $backend->viewHistory();
+                        $result = $backend->allTransaction();
                             if (!is_null($result)) {
-                                if ($result->num_rows > 0) {
                                     foreach ($result as $row) {
                     ?>
                     <tr 
-                        <?php   
-                            if(isset($_GET['trans'])){
-                                $trans = $_GET['trans'];
-                                
-                                if($trans == $row['payTrans_id']){
-                                    echo "class='text-primary'";
-                                }
-                            } 
-                        ?>
                     >
                         <td>2023<?=$row['payTrans_id']?></td>
                         <td><?=$row['user_userName']?></td>
+                        <td><?=$row['full_name']?></td>
                         <td><?=$row['order_status']?></td>
                         <td><?=date("M d, Y h:i a",strtotime($row['order_datetime']))?></td>
                         <td>
@@ -66,7 +60,6 @@
                     <?php
                             }
                         }
-                    }
                     ?>
                 </table>
             </div>

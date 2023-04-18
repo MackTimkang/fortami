@@ -109,8 +109,8 @@
 				}
 			?>
 		<br>
-			<h4><a href="checkout.php?trans_id=<?=$trans?>" class="text-center"><i class="bi bi-repeat"> Order Again</i> </a></h4>
-		<h4><a href="transactions.php"><i class="bi bi-arrow-return-left">Back</i></a></h4>
+			<?=($_SESSION['role'] == 'Buyer') ? "<h4><a href='checkout.php?trans_id=<?=$trans?>' class='text-center'><i class='bi bi-repeat'> Order Again</i> </a></h4>":"";?>
+		<h4><a href="<?=($_SESSION['role'] == 'Buyer')? 'transactions.php' : 'admin-transaction.php' ?>"><i class="bi bi-arrow-return-left">Back</i></a></h4>
 	</div>
 </body>
 </html>

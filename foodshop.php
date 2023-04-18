@@ -91,6 +91,7 @@
     <h3 class="p-2 bg-warning rounded text-center shadow my-4"><i class="bi bi-shop"> <?=$user['user_userName']?></i></h6>
     <h6><small class="text-secondary">Address:</small><i> <?=$add['street'].''.$add['barangay'].''.$add['city']?></i></h6>
     <h6><small class="text-secondary">Contact #:</small> <i><?=$add['contact']?></i></h5>
+    <h5><a href="chat-create.php?receiver=<?=$_GET['shop_id']?>&name=<?=$user['user_userName']?>&pic=<?=$user['profile_pic']?>" class="btn btn-dark"><i class="bi bi-envelope-plus-fill"> Message</i></a></h5>
     <hr>
     <div class="row row-cols-1 row-cols-md-4 g-4 p-2 text-center">
         <?php

@@ -59,7 +59,7 @@
                     ?>
                 </table>
             </div>
-                <?=(mysqli_num_rows($result) == 0)?'<h3 class="text-dark text-center"><i class="bi bi-bag-x">No Pending Orders Yet</i></h3>':''?>
+                <?=(is_null($result))?'<h3 class="text-dark text-center"><i class="bi bi-bag-x">No Pending Orders Yet</i></h3>':''?>
         </div>
     </div>
         

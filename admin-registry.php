@@ -22,14 +22,12 @@ $backend = new Backend;
         <form action="" method="post" enctype="multipart/form-data" class="rounded-5 shadow p-5 bg-dark bg-gradient">
         <div class="row g-3 text-light">
             <div class="col-12 text-center ">
-                <h1><i class="bi bi-person-fill-up"></i> Register</h1>
+                <h1><i class="bi bi-person-fill-up"></i> Admin Registery</h1>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <label for="role" class="form-label"><i>How do you intend to use Fortami?</i> </label>
                     <select class="form-select" aria-label="role" name="role" required>
-                        <option selected disabled>Click to choose...</option>
-                        <option value="Buyer">Buy</option>
-                        <option value="Seller">Sell</option>
+                        <option value="Admin" selected>Manage</option>
                     </select>
                 <label for="profile" class="form-label my-1"><i>Profile Picture</i> </label>
                 <input type="file" class="form-control" name="profile" required>
@@ -38,8 +36,7 @@ $backend = new Backend;
                 <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
                 <input type="text" class="form-control" name="Lname" required>
             </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <label for="email" class="form-label my-1"><i> Email</i></label>
                 <input type="email" class="form-control" name="email" required>
                 <label for="uname" class="form-label my-1"><i>Username</i> </label>

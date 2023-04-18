@@ -45,16 +45,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#" style="color: white">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="menu.php"style="color: white">Menu</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="activeorders.php"style="color: white">Orders</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="profile.php"style="color: white">Profile</a>
+              <a class="nav-link active" aria-current="page" href="admin.php" style="color: white">Dashboard</a>
             </li>
             <li class="nav-item dropdown">
               <a
@@ -65,39 +56,17 @@
                 aria-expanded="false"
                 style="color: white"
               >
-                Account
+                <?=$_SESSION['user']?>
               </a>
               <ul class="dropdown-menu">
                 <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="login.php">Login</a></li>
                 <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item"':'class="dropdown-item disabled"'?> href="./logout.php" >Logout</a></li>
                 <li><hr class="dropdown-divider" /></li>
+                <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item "':'class="dropdown-item disabled"'?> href="profile.php">Profile</a></li>
                 <li>
                   <a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="./register.php">Create Account</a>
                 </li>
               </ul>
-            </li>
-            <li class="nav-item">
-              <a href="cart.php" class="nav-link active position-relative <?=$disabled?>" style="color:white;">
-                <h5><i class="bi bi-cart"></i></h5>
-                <h6>
-                  <small class="text-secondary">
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-2">
-                      <?php
-                        $backend = new Backend;
-                        if (isset($_SESSION['id'])) {
-                          $count = $backend->countcart($_SESSION['id']);
-                          echo $count;
-                        }
-                        else {
-                          echo "0";
-                        }
-                      ?>
-                      <span class="visually-hidden">Cart</span>
-                    </span>
-                  </small>
-                </h6>
-                  
-              </a>
             </li>
             <li class="nav-item">
               <a href="chat.php" class="nav-link active position-relative <?=$disabled?> mx-2" style="color:white;">
@@ -116,7 +85,7 @@
                           echo "0";
                         }
                       ?>
-                      <span class="visually-hidden">Message</span>
+                      <span class="visually-hidden">Cart</span>
                     </span>
                   </small>
                 </h6>
@@ -125,7 +94,6 @@
             </li>
           </ul>
           
-          <a href="support.php" class="btn btn-outline-light"><i class="bi bi-headset"></i>Help</a>
           
         </div>
         

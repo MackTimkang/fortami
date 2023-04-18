@@ -30,6 +30,9 @@
                     $list = $backend->userAddress();
                        //variables
                         if (!(is_null($list))) {
+                            if (!isset($_SESSION['option'])) {
+                                $_SESSION['option'] = "Delivery";
+                            }
                             $row = mysqli_fetch_assoc($list);
                             $name = $row['full_name'];
                             $contact = $row['contact'];

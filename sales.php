@@ -28,6 +28,7 @@
                         <th>Delivery Option</th>
                         <th>Status</th>
                         <th>Confirm</th>
+                        <th>Rating</th>
                     </tr>
                     <?php
                         $list = $backend->saleHistory();
@@ -55,6 +56,9 @@
                                 <input type="hidden" name="paystats" value="<?=$row['trans_status']?>">
                                 <button type="submit" name="receipt" class="btn btn-outline-light"><i class="bi bi-receipt"></i></button>
                             </form>
+                        </td>
+                        <td>
+                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
                         </td>
                     </tr>
                     <?php

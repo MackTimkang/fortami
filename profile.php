@@ -1,21 +1,9 @@
 <?php
     include 'backend.php';
     
-    if (isset( $_SESSION['role'])) {
-        if ($_SESSION['role'] == 'Seller') {
-            include 'sellerheader.php';
-        }
-        else {
-            include 'buyerheader.php';
-        }
-    }
-    else {
-        echo "<script>alert('Please Login First!');
-        window.location.href = 'login.php';
-        </script>";
-    }
     $backend = new Backend;
     $list = $backend->usersearch($_SESSION['id']);
+    $row = mysqli_fetch_assoc($list);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,33 +11,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">    
     <title>Profile</title>
 </head>
 <body>
-<div class="container d-flex justify-content-center align-items-center">
-        <div class="row g-3 p-5 w-50 text-center">
-            <?php   
-                if ($list->num_rows > 0) {
-                    foreach($list as $row){
-            ?>
-            <div class="col-12">
-            <img src="./src/userlogoblue.png" class="rounded mx-auto d-block" alt="...">
+<div class="container  min-vh-100 d-flex justify-content-center align-items-center">
+        <form action="profile-edit.php" class="rounded-5 shadow p-5 bg-dark bg-gradient">
+        <h1><i class="bi bi-person-fill-up text-light"> Profile</i></h1>
+        <div class="row g-3 text-light">
+            <div class="col-12 text-center ">
+                <img src="./src/uploads/profile/<?=$row['profile_pic']?>" class="img-thumbnail" alt="profile-picture" style="max-width:200px;border-radius:50px;border:4px solid #4990b5;">
             </div>
-            <div class="col-12">
-                <h3><?=$row['user_type'];?></h3>
+            <div class="col-md-5">
+                <label for="role" class="form-label"><i>Role</i> </label>
+                    <input type="text" class="form-control" value="<?=$row['user_type']?>" disabled>
+                <label for="Fname" class="form-label my-1"><i>First Name</i> </label>
+                <input type="text" class="form-control" value="<?=$row['user_fName']?>" disabled>
+                <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
+                <input type="text" class="form-control" value="<?=$row['user_lName']?>" disabled>
             </div>
-            <div class="col-12">
-                <h3><?=$row['user_fName']." ".$row['user_lName'];?></h3>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <label for="email" class="form-label my-1"><i> Email</i></label>
+                <input type="text" class="form-control" value="<?=$row['user_email']?>" disabled>
+                <label for="uname" class="form-label my-1"><i>Username</i> </label>
+                <input type="text" class="form-control" value="<?=$row['user_userName']?>" disabled>
             </div>
-            <div class="col-12">
-                <h3><?=$row['user_userName'];?></h3>
+            <div class="col-12 text-center">
+                <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
+                <button type="submit" name="editbtn" class="btn btn-warning form-control p-2" value="true">Edit Profile</button>
+                <a class="btn btn-danger form-control my-2" href="deactivate.php?id=<?=$row['user_id']?>">Deactivate</a>
+                <?php
+                    $role = $row['user_type'];
+                    if ($role === 'Admin') {
+                        echo "<a href='admin.php' style='text-decoration:none;font-size:3vmin'><i class='bi bi-arrow-return-left'>Back</i></a>";
+                    }
+                    elseif ($role === 'Buyer') {
+                        echo "<a href='menu.php' style='text-decoration:none;font-size:3vmin'><i class='bi bi-arrow-return-left'>Back</i></a>";
+                    }
+                    elseif ($role === 'Seller') {
+                        echo "<a href='product.php' style='text-decoration:none;font-size:3vmin'><i class='bi bi-arrow-return-left'>Back</i></a>";
+                    }
+                ?>
             </div>
-            
-            <?php
-                }
-            }
-            ?>
         </div>
+        </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

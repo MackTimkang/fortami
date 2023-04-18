@@ -48,6 +48,10 @@ session_start();
                     echo "<script>alert('Welcome Back!'); window.location.href = 'menu.php'";
                     echo "</script>";
                   }
+                  elseif ($row['user_type'] == 'Admin'){
+                    echo "<script>alert('Welcome Back!'); window.location.href = 'admin.php'";
+                    echo "</script>";
+                  }
                   else{
                     echo "Error in ".$this->con->error;
                   }
@@ -98,6 +102,28 @@ session_start();
           }
       }//end of register user function
 
+      function editProfile($id,$role,$new_Name,$fn,$ln,$email,$uname){
+        $query = "UPDATE user SET user_type='$role', profile_pic= '$new_Name', 
+                  user_fName='$fn', user_lName='$ln', user_email = '$email', 
+                  user_userName = '$uname' WHERE user_id = $id";
+        $result = $this->con->query($query);
+
+          if ($result) {
+           echo "<script>alert('Profile Successfully Updated!');</script>";
+          }
+      }// end of edit profile
+
+      function delUser($id){
+        $query = "DELETE FROM user WHERE user_id = $id";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            echo "<script>alert('Profile Successfully Deleted!');</script>";
+            session_unset();
+            echo "<script>window.location.href='login.php';</script>";
+          }
+      }
+
       function usersearch($id){
         $query = "SELECT * FROM user WHERE user_id = $id";
         $result = $this->con->query($query);
@@ -126,6 +152,94 @@ session_start();
 
     }//end of class Account
 
+    class Admin extends Account{
+      public $con;
+
+      function __construct(){
+        $db = new Database;
+        $this->con = $db->getConnection();
+      }
+
+      function totalUser(){
+        $query  = "SELECT COUNT(user_id) AS users FROM user";
+        $result =  $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of total user function
+      
+      function totalSeller(){
+        $query = "SELECT COUNT(user_id) AS sellers FROM user WHERE user_type = 'Seller'";
+        $result = $this->con->query($query);
+        
+        if ($result) {
+          return $result;
+        }
+      }//end of total seller function
+
+      function totalBuyer(){
+        $query = "SELECT COUNT(user_id) AS buyers FROM user WHERE user_type = 'Buyer'";
+        $result = $this->con->query($query);
+        
+        if ($result) {
+          return $result;
+        }
+      }//end of total buyer function
+
+      function listBuyer(){
+        $query = "SELECT * FROM user WHERE user_type = 'Buyer'";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of function list all buyers
+
+      function listUser($sort){
+        $query = "SELECT * FROM user WHERE user_type != 'Admin' ORDER BY $sort";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of list User function
+
+      function listSeller(){
+        $query = "SELECT * FROM user WHERE user_type = 'Seller'";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//End of function list all sellers
+
+      function totalFood(){
+        $query = "SELECT COUNT(food_id) AS foods FROM food_product";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of function totalFood
+
+      function allTransaction(){
+          $query = "SELECT * FROM food_order
+                    JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id
+                    JOIN food_product ON food_product.food_id = food_order.food_id
+                    JOIN address ON address.address_id = food_order.address_id
+                    INNER JOIN user ON user.user_id = food_product.user_id 
+                    INNER JOIN payment_method ON payment_method.paymethod_id = payment_transaction.paymethod_id 
+                    GROUP BY food_order.payTrans_id ORDER BY food_order.payTrans_id DESC";
+          $result = $this->con->query($query);
+  
+            if ($result) {
+              return $result;
+            }
+      }//end of all transaction function
+
+    }//end of class Admin
+
     class Address extends Account{
         function userAddress(){
           $id = $_SESSION['id'];
@@ -136,7 +250,14 @@ session_start();
                 return $result;
               }
               else {
-                echo "<script>alert('Please add an address first!');window.location.href='address.php?user=$id';</script>";
+                $info = $this->usersearch($id);
+                $data = mysqli_fetch_assoc($info);
+
+                if ($data['user_type'] == 'Admin') {
+                  # do nothing
+                }else{
+                  echo "<script>alert('Please add an address first!');window.location.href='address.php?user=$id';</script>";
+                }
               }
           }//end of search userAddress function
           
@@ -261,6 +382,19 @@ session_start();
         echo "<meta http-equiv='refresh' content='0'>";
       }// end of edit product function
 
+      function pendingProduct($food_id){
+        $query = "SELECT * FROM food_order WHERE food_id = $food_id AND order_status = 'Pending' OR order_status = 'Ready' OR order_status = 'Preparing' OR order_status = 'On The Way'";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          if ($result->num_rows > 0) {
+            echo "<script>alert('Cannot delete a product with a pending transaction');</script>";
+          }else{
+            $this->deleteproduct($food_id);
+          }
+        }
+
+      }
       function deleteproduct($food_id){
         $query = "DELETE FROM food_product WHERE food_id = $food_id";
         $result = $this->con->query($query);
@@ -268,9 +402,8 @@ session_start();
               echo "<script>alert('Deleted Successfully');</script>";
             }
             else {
-              echo "error in $this->db".$this->con->error;
+              echo "error ".$this->con->error;
             }
-            echo "<meta http-equiv='refresh' content='0'>";
       }//end of delete product function
 
       function listproduct(){
@@ -282,7 +415,7 @@ session_start();
       }//end of list product function
       
       function getproduct(){
-        $query = "SELECT * FROM food_product";
+        $query = "SELECT * FROM food_product JOIN user ON food_product.user_id = user.user_id";
         $result = $this->con->query($query);
         if ($result) {
             return $result;
@@ -417,6 +550,78 @@ session_start();
             echo "<script>alert('Payment Successful, Order is being processed');window.location.href='activeorders.php';</script>";
           }
       }//end of payment
+
+      function listMethod(){
+        $query = "SELECT * FROM payment_method";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of list method function
+
+      function addMethod($name){
+        $query = "INSERT INTO payment_method(paymethod_type) VALUES('$name')";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Payment Method Added Successfully!');window.location.href='settings-other.php';</script>";
+        }
+      }//end of function add payment method
+
+      function editMethod($name,$id){
+        $query = "UPDATE payment_method SET paymethod_type = '$name' WHERE paymethod_id = $id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Method Edited Successfully');window.location.href='settings-other.php';</script>";
+        }
+      }//end of edit method function
+
+      function delMethod($id){
+        $query = "DELETE FROM payment_method WHERE paymethod_id = $id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Method Deleted Successfully');window.location.href='settings-other.php';</script>";
+        }
+      }// end of delete method function
+
+      function listCategory(){
+        $query ="SELECT * FROM category";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of list category
+
+      function addCategory($name,$desc){
+        $query = "INSERT INTO category(category_name,category_description) VALUES('$name','$desc')";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Category Added Successfully!');window.location.href='settings-other.php';</script>";
+        }
+      }//end of function add payment method
+
+      function editCategory($id,$name,$desc){
+        $query = "UPDATE category SET category_name = '$name',category_description = '$desc' WHERE category_id = $id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Category Edited Successfully');window.location.href='settings-other.php';</script>";
+        }
+      }//end of edit category function
+
+      function delCategory($id){
+        $query = "DELETE FROM category WHERE category_id = $id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Category Deleted Successfully');window.location.href='settings-other.php';</script>";
+        }
+      }// end of delete method function
+
 
       function transaction(){
         $query = "SELECT payTrans_id,pay_amount,quantity,trans_status,pay_datetime,user.user_userName,address.full_name,address.contact,address.region,address.city,address.barangay,address.street,address.zip,address.label,
@@ -645,4 +850,103 @@ session_start();
 
     }//end of class backend
 
+    class Rating {
+      public $con;
+
+      function __construct(){
+        $db = new Database;
+        $this->con = $db->getConnection();
+      }//end of function construct
+
+      function listRating($trans){
+        $id = $_SESSION['id'];
+        $query = "SELECT * FROM rating JOIN food_order ON food_order.order_id = rating.order_id
+                  INNER JOIN food_product ON food_product.food_id = food_order.food_id
+                  JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id
+                  JOIN address on address.address_id = food_order.address_id
+                  WHERE food_order.payTrans_id = $trans ORDER BY rating_id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of view rating function
+
+      function foodRating($food_id){
+        $query = "SELECT * FROM rating JOIN food_order ON rating.order_id = food_order.order_id
+                  INNER JOIN food_product ON food_product.food_id = food_order.food_id WHERE food_order.food_id = $food_id";
+        $result = $this->con->query();
+          if ($result) {
+            return $result;
+          }
+      }//end of function food rating
+
+      function avgRating($food_id){
+        $query = "SELECT AVG(rating) AS rate FROM rating JOIN food_order ON rating.order_id = food_order.order_id
+                  WHERE food_order.food_id = $food_id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }
+
+    }
+    class Chat{
+        public $con;
+  
+        function __construct(){
+          $db = new Database;
+          $this->con = $db->getConnection();
+        }//end of function construct
+
+        //start of chat functions
+
+        function countMsg(){
+          $user_id = $_SESSION['id'];
+          $query = "SELECT COUNT(msg_id) AS msg FROM message WHERE receiver_id = $user_id AND status = 'Unread'";
+          $result = $this->con->query($query);
+
+            if ($result) {
+              return $result;
+            }
+        }// end of count message function for unread messages
+
+        function createMsg($user,$receiver,$content){
+          $query = "INSERT INTO message(user_id,receiver_id,content,status) VALUES($user,$receiver,'$content','Unread')";
+          $result = $this->con->query($query);
+
+            if ($result) {
+              echo "<script>alert('Message Sent');</script>";
+            }
+        }//end of message creation function
+
+        function viewMsg(){
+          $receiver = $_SESSION['id'];
+          $query = "SELECT * FROM message JOIN user ON message.user_id = user.user_id WHERE receiver_id = $receiver ORDER BY msg_datetime DESC";
+          $result = $this->con->query($query);
+
+            if ($result) {
+              return $result;
+            }
+        }//end of view message function
+
+        function updateRead($id){
+          $query = "UPDATE message SET status = 'Read' WHERE msg_id = $id";
+          $result = $this->con->query($query);
+
+          if ($result) {
+            
+          }
+        }//end of function update status to read
+
+        function delMsg($id){
+          $query = "DELETE FROM message WHERE msg_id = $id";
+          $result = $this->con->query($query);
+
+          if ($result) {
+            echo "<script>alert('Message Deleted Successfully!');</script>";
+          }
+        }
+    }
 ?>

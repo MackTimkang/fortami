@@ -1,3 +1,6 @@
+<?php
+  $disabled = (isset($_SESSION['id'])) ?: 'disabled';
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,7 +23,7 @@
     
   </head>
   <body>
-    <nav class="navbar navbar-expand" style="background-color: #4990b5">
+    <nav class="navbar navbar-expand-md" style="background-color: #4990b5">
       <div class="container">
         <a
           class="navbar-brand"
@@ -45,13 +48,16 @@
               <a class="nav-link active" aria-current="page" href="" style="color: white">Home</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="profile.php" style="color: white">Profile</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="product.php"style="color: white">Products</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="order.php"style="color: white">Orders</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="delivery.php"style="color: white">Delivery</a>
+              <a class="nav-link" href="delivery.php"style="color: white">Lounge</a>
             </li>
             <li class="nav-item dropdown">
               <a
@@ -72,6 +78,30 @@
                   <a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="./register.php">Create Account</a>
                 </li>
               </ul>
+            </li>
+            <li class="nav-item">
+              <a href="chat.php" class="nav-link active position-relative <?=$disabled?> mx-2" style="color:white;">
+                <h5><i class="bi bi-envelope"></i></h5>
+                <h6>
+                  <small class="text-secondary">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-2">
+                      <?php
+                        $backend = new Chat;
+                        if (isset($_SESSION['id'])) {
+                          $count = $backend->countMsg();
+                          $msg = mysqli_fetch_assoc($count);
+                          echo $msg['msg'];
+                        }
+                        else {
+                          echo "0";
+                        }
+                      ?>
+                      <span class="visually-hidden">Cart</span>
+                    </span>
+                  </small>
+                </h6>
+                  
+              </a>
             </li>
           </ul>
           <form class="d-flex" role="search">

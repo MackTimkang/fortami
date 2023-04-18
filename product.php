@@ -19,7 +19,7 @@ $backend->checksession();
         $list = $backend->listproduct();
     ?>
     
-    <div class="container-fluid p-5" >
+    <div class="container-fluid p-5 table-responsive" >
         <div class="col-12"><h1 class=" text-center "><i>Your Food Listing</i></h1></div>
         <table class="table table-dark shadow table-striped text-center">
             <tr>
@@ -52,24 +52,18 @@ $backend->checksession();
                 </td>
                 <td><?="<small><s class='text-secondary'>".$data['food_origPrice']."</s></small>"." ".$data['food_discountedPrice'];?></td>
                 <td>
-                    <div class="row" >
-                        <div class="col-md-6">
-                            <a class="btn btn-warning" href="./edit.php?id=<?=$data['food_id']?>" >Edit</a>
-                        </div>
-                        <div class="col-md-6">
-                            <form action="" method="post">
-                                <input type="hidden" name="food_id" value="<?=$data['food_id']?>">
-                                <input type="submit" value="Delete" name="delbtn" class="btn btn-danger">
-                            </form>
-                        </div>
-                    </div>
+                    <form action="" method="post">
+                        <a class="btn btn-warning" href="./edit.php?id=<?=$data['food_id']?>" ><i class="bi bi-pencil-fill"></i></a>
+                            <input type="hidden" name="food_id" value="<?=$data['food_id']?>">
+                            <button type="submit" value="clicked" name="delbtn" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                    </form>
                 </td>
             </tr>
             <?php
                 }
                 if (isset($_POST['delbtn'])) {
                     $food_id = $_POST['food_id'];
-                    $backend->deleteproduct($food_id);
+                    $backend->pendingProduct($food_id);
                 }
                 
             ?>
