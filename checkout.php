@@ -174,7 +174,7 @@
                     </div>
                     
                 </div>
-                <div class="col-6 p-2 bg-light rounded-end">
+                <div class="col-6 p-2 bg-light rounded-end table-responsive">
                     <i><h3>Your Order</h3></i>
                     <table class="table table-dark table-striped ">
                         

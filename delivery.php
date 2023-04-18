@@ -28,7 +28,7 @@
             <div class="col-12 text-end">
                 <a href="sales.php" class="btn btn-outline-dark"><i class="bi bi-clock-history"> Sales History</i></a>
             </div>
-            <div class="col-12">
+            <div class="col-12 table-responsive">
                 <table class="table text-center table-dark table-striped">
                     <tr>
                         <th>Transaction No.</th>

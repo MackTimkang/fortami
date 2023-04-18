@@ -15,7 +15,7 @@
     <title>Activity</title>
 </head>
 <body>
-    <div class="container  p-5">
+    <div class="container table-responsive p-5">
         <div class="row shadow g-3">
             <div class="col-12 p-2 bg-dark">
                 <h2 class="text-light text-center">Ongoing Orders</h2>
