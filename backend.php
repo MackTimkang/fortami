@@ -119,8 +119,7 @@ session_start();
 
           if ($result) {
             echo "<script>alert('Profile Successfully Deleted!');</script>";
-            session_unset();
-            echo "<script>window.location.href='login.php';</script>";
+            echo "<script>window.location.href='logout.php';</script>";
           }
       }
 
@@ -947,6 +946,25 @@ session_start();
           if ($result) {
             echo "<script>alert('Message Deleted Successfully!');</script>";
           }
-        }
+        }//end of delete message function
+
+        function viewSent(){
+          $sender = $_SESSION['id'];
+          $query = "SELECT * FROM message JOIN user ON message.user_id = user.user_id WHERE message.user_id = $sender ORDER BY msg_datetime DESC";
+          $result = $this->con->query($query);
+
+            if ($result) {
+              return $result;
+            }
+        }//end of view message the user sent
+
+        function viewDetails($msg_id,$user){
+          $query = "SELECT * FROM message JOIN user ON user.user_id = message.user_id WHERE receiver_id = $user";
+          $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+        }//end of function view sender/receiver details
     }
 ?>

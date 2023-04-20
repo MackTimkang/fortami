@@ -32,9 +32,9 @@ $backend = new Backend;
                 <label for="profile" class="form-label my-1"><i>Profile Picture</i> </label>
                 <input type="file" class="form-control" name="profile" required>
                 <label for="Fname" class="form-label my-1"><i>First Name</i> </label>
-                <input type="text" class="form-control" name="Fname" required>
+                <input type="text" class="form-control" name="Fname" value="Fortami" disabled>
                 <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
-                <input type="text" class="form-control" name="Lname" required>
+                <input type="text" class="form-control" name="Lname" value="Admin"disabled>
             </div>
             <div class="col-md-6">
                 <label for="email" class="form-label my-1"><i> Email</i></label>

@@ -3,7 +3,9 @@
     include 'sellerheader.php';
     $backend = new Backend;
 
-
+    $user = $backend->userAddress();
+    $data = mysqli_fetch_assoc($user);
+    $shop_name = $data['full_name'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,11 +56,14 @@
                                 <input type="hidden" name="option" value="<?=$row['delivery_option']?>">
                                 <input type="hidden" name="contact" value="<?=$row['contact']?>">
                                 <input type="hidden" name="paystats" value="<?=$row['trans_status']?>">
+                                <input type="hidden" name="shop_name" value="<?=$shop_name?>">
+                                <input type="hidden" name="shop_contact" value="<?=$data['contact']?>">
+                                <input type="hidden" name="shop_address" value="<?=$data['street'].', '.$data['barangay'].', '.$data['city'].' City'?>">
                                 <button type="submit" name="receipt" class="btn btn-outline-light"><i class="bi bi-receipt"></i></button>
                             </form>
                         </td>
                         <td>
-                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
+                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>&shop=<?=$shop_name?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
                         </td>
                     </tr>
                     <?php

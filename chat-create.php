@@ -45,7 +45,7 @@
                     <textarea name="msg" class="form-control" rows="10" placeholder="Message here..." required></textarea>
                     <hr>
                     <button type="submit" name="send" value="true"  class="btn btn-success my-2 form-control p-2">Send</button>
-                    <a href="<?php if($_SESSION['role'] == 'Buyer'){ echo 'menu.php';}elseif($_SESSION['role'] == 'Seller'){ echo 'product.php';}elseif($_SESSION['role'] == 'Admin'){ echo 'user.php';}?>" class="btn btn-danger form-control">Cancel</a>
+                    <a href="chat.php" class="btn btn-danger form-control">Cancel</a>
                 </form>
             </div>
             

@@ -51,7 +51,7 @@
         <div class="row row-gap-4 shadow rounded bg-body-tertiary">
             <div class="col-12 bg-dark bg-gradient d-flex align-items-center text-light p-3">
                 <img src="./src/uploads/profile/<?=$pic?>" alt="profile" class="img-thumbnail" style="max-width:100px">
-                &nbsp;&nbsp;<h3 class="text-light"><?=$sender?><br><small><i class="text-secondary">(Sender)</i></small></h3> 
+                &nbsp;&nbsp;<h3 class="text-light"><?=$sender?><br><small><i class="text-secondary"><?=($_SESSION['id']==$sender_id)?'':'(Sender)'?></i></small></h3> 
             </div>
             <div class="col-12 p-4 shadow bg-body-secondary">
                 <h5><small class="text-secondary"><i>Message:</i></small>  <br><br>
@@ -60,8 +60,17 @@
                 
             </div>
             <div class="col-12 p-2t">
-                    <a href="chat-create.php?receiver=<?=$sender_id?>&name=<?=$sender?>&pic=<?=$pic?>" class="form-control btn btn-success">Reply</a>
-                    <a href="<?php if($_SESSION['role'] == 'Buyer'){ echo 'menu.php';}elseif($_SESSION['role'] == 'Seller'){ echo 'product.php';}elseif($_SESSION['role'] == 'Admin'){ echo 'admin.php';}?>" class="btn btn-warning form-control my-2">Back</a>
+                    <?php
+                        if ($_SESSION['id'] == $sender_id) {
+                           
+                        }
+                        else {
+                    ?>
+                        <a href="chat-create.php?receiver=<?=$sender_id?>&name=<?=$sender?>&pic=<?=$pic?>" class="form-control btn btn-success">Reply</a>
+                    <?php
+                        }
+                    ?>
+                    <a href="<?=($_SESSION['id'] == $sender_id)?'chat-sent.php':'chat.php'?>" class="btn btn-warning form-control my-2">Back</a>
                 </form>
             </div>
             

@@ -38,9 +38,22 @@ $backend = new Backend;
                 <label for="profile" class="form-label my-1"><i>Profile Picture</i></label>
                 <input type="file" class="form-control" name="profile"  required>
                 <label for="Fname" class="form-label my-1"><i>First Name</i> </label>
-                <input type="text" class="form-control" name="Fname" value="<?=$row['user_fName']?>" required>
-                <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
-                <input type="text" class="form-control" name="Lname" value="<?=$row['user_lName']?>" required>
+                    <?php
+                        if ($_SESSION['role'] == 'Admin') {
+                    ?>
+                        <input type="text" class="form-control" name="Fname" value="Fortami" disabled>
+                        <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
+                        <input type="text" class="form-control" name="Lname" value="Admin" disabled>
+                    <?php
+                        }else{
+                    ?>
+                        <input type="text" class="form-control" name="Fname" value="<?=$row['user_fName']?>" required>
+                        <label for="lname" class="form-label my-1"><i>Last Name</i> </label>
+                        <input type="text" class="form-control" name="Lname" value="<?=$row['user_lName']?>" required>
+                    <?php
+                        }
+                    ?>
+                
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-5">
@@ -71,8 +84,14 @@ $backend = new Backend;
             if (isset($_POST['role'])&& isset($_FILES['profile'])) {
                 $role = $_POST['role'];
                 $profile_img = $_FILES['profile'];
-                $fn = $_POST['Fname'];
-                $ln = $_POST['Lname'];
+                if ($_SESSION['role'] == 'Admin') {
+                    $fn = "Fortami";
+                    $ln = "Admin";
+                }
+                else {
+                    $fn = $_POST['Fname'];
+                    $ln = $_POST['Lname'];
+                }
                 $email = $_POST['email'];
                 $uname = $_POST['uname'];
 

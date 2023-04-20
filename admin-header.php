@@ -47,6 +47,9 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="admin.php" style="color: white">Dashboard</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="profile.php" style="color: white">Profile</a>
+            </li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -62,7 +65,6 @@
                 <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="login.php">Login</a></li>
                 <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item"':'class="dropdown-item disabled"'?> href="./logout.php" >Logout</a></li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item "':'class="dropdown-item disabled"'?> href="profile.php">Profile</a></li>
                 <li>
                   <a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="./register.php">Create Account</a>
                 </li>

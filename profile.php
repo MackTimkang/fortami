@@ -2,6 +2,8 @@
     include 'backend.php';
     
     $backend = new Backend;
+    $backend->checksession();
+    
     $list = $backend->usersearch($_SESSION['id']);
     $row = mysqli_fetch_assoc($list);
 ?>
@@ -41,7 +43,11 @@
             <div class="col-12 text-center">
                 <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
                 <button type="submit" name="editbtn" class="btn btn-warning form-control p-2" value="true">Edit Profile</button>
-                <a class="btn btn-danger form-control my-2" href="deactivate.php?id=<?=$row['user_id']?>">Deactivate</a>
+                </form>
+                <form action="deactivate.php" method = "post">
+                    <input type="hidden" name="id" value="<?=$row['user_id']?>">
+                    <button class="btn btn-danger form-control my-2" type="submit" name="deactbtn" value="true">Deactivate</button>
+                </form>
                 <?php
                     $role = $row['user_type'];
                     if ($role === 'Admin') {
@@ -56,7 +62,7 @@
                 ?>
             </div>
         </div>
-        </form>
+        
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>

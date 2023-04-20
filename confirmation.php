@@ -24,7 +24,25 @@
 		$option = $_POST['option'];
         $paystats = $_POST['paystats'];
         $contact = $_POST['contact'];
+		$shop = $_POST['shop_name'];
+		$shop_address = $_POST['shop_address'];
+		$shop_contact = $_POST['contact'];
 		$result = $backend->foodBought($trans_id);
+	}else{
+		$buyer = "";
+		$buyer_id = "";
+		$trans_id = "";
+		$address = "";
+		$total = "";
+		$received = "";
+		$status = "";
+		$option = "";
+        $paystats = "";
+        $contact = "";
+		$shop = "";
+		$shop_address = "";
+		$shop_contact = "";
+		$result= array();
 	}
 
 ?>
@@ -46,7 +64,7 @@
 <div class="container">
 	<div class="row mb-4">
 		<div class="col-md-6">
-			<h1>Receipt</h1>
+			<h1 class="">Receipt</h1>
 			<p class="font-weight-bold mb-0"><small class="text-secondary">Date:</small> <?=date("M d, Y h:i:s a",strtotime($received))?></p>
 			<p class="font-weight-bold mb-0"><small class="text-secondary">Receipt #:</small> 2023<?=$trans_id?> </p>
 			<p class="font-weight-bold mb-0"><small class="text-secondary">Delivery Option:</small> <?=$option?> </p>
@@ -54,43 +72,47 @@
 			<p class="font-weight-bold"><small class="text-secondary">Payment Status:</small>  <?=$paystats?> </p>
 		</div>
 		<div class="col-md-6 text-md-right">
-			<h2 class="mb-0"><i class="bi bi-person-square"></i> <?=$buyer?></h2>
-			<p class="mb-0"><h6><?=$address?></h6></p>
-			<p class="mb-0">Contact #: <?=$contact?></p>
-			<p class="mb-0">Delivery</p>
+			<h2 class=" rounded shadow"> <i class="bi bi-person-square"> Recipient</i></h2>
+			<h4 class="mb-0"> <strong><?=$buyer?></strong></h4>
+			<p class="mb-0"><h6><?=$address?></h6>
+			Contact #: <?=$contact?>
+			</p>
+
 		</div>
 	</div>
 	<hr>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Food</th>
-				<th>Qty</th>
-				<th>Price</th>
-				<th>Total</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php
-				if (!is_null($result)) {
-					foreach ($result as $row) {
-			?>
-			<tr>
-				<td><?=$row['food_name']?></td>
-				<td><?=$row['quantity']?></td>
-				<td><?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
-				<td><?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
-			</tr>
-			<?php
+	<div class="col-12 table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Food</th>
+					<th>Qty</th>
+					<th>Price</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					if (!is_null($result)) {
+						foreach ($result as $row) {
+				?>
+				<tr>
+					<td><?=$row['food_name']?></td>
+					<td><?=$row['quantity']?></td>
+					<td><?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
+					<td><?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
+				</tr>
+				<?php
+						}
 					}
-				}
-			?>
-			<tr>
-				<td colspan="3">Total Payment</td>
-				<td>₱ <?=$total?></td>
-			</tr>
-        </tbody>
-    </table>
+				?>
+				<tr>
+					<td colspan="3">Total Payment</td>
+					<td>₱ <?=$total?></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
     
             <?php
 				if ($status == 'Received') {

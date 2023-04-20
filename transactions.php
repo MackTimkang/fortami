@@ -1,6 +1,7 @@
 <?php
     include 'backend.php';
     include 'buyerheader.php';
+    $backend = new Backend;
 ?>
 <!DOCTYPE html>
 <html lang="en">

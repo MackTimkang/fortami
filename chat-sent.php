@@ -12,7 +12,7 @@
     }
 
     $chat = new Chat;
-    $message = $chat->viewMsg();
+    $message = $chat->viewSent();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Message Sent</title>
     <style>
         p {
             max-width: 300px;
@@ -34,16 +34,17 @@
     <div class="container">
         <div class="row row-gap-3 shadow">
             <div class="col-12 p-2 bg-dark bg-gradient text-light my-2 rounded shadow">
-                <h1><i class="bi bi-chat-right-dots-fill"> Inbox</i> </h1>
+                <h1><i class="bi bi-chat-right-dots-fill"> Sent Messages</i> </h1>
             </div>
             <div class="col-12">
-                    <a href="chat-sent.php" class="btn btn-warning"><i class="bi bi-send-check"> Sent Messages</i></a>
+                <a href="chat.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-bar-left">Back</i></a>
             </div>
             <div class="col-12 table-responsive">
                 <table class="table table-warning align-middle">
                 <?php
                     if (!is_null($message)) {
                         foreach ($message as $msg) {
+                            
                 ?>
                     <tr>
                         <td><h6><?=($msg['status'] == 'Unread')?'<i class="bi bi-envelope-fill"></i>':'<i class="bi bi-envelope-open"></i>'?></h6></td>
