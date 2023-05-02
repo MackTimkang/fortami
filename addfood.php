@@ -109,8 +109,10 @@
 
 
             
-
+            $notifs = new Notification;
+            $notify = $notifs->newUserNotif($_SESSION['id'],"Hooray! You have added a new product, increase your menu by adding more products!","Unread");
             $backend->addproduct($catid,$img_newName,$foodname,$desc,$prep,$time,$discount,$price);
+            
             if (isset($_GET['error'])) {
                 echo $error;
             }

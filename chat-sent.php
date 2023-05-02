@@ -10,7 +10,8 @@
     elseif ($_SESSION['role'] == "Admin") {
         include 'admin-header.php';
     }
-
+    $backend = new Backend();
+    $backend->checksession();
     $chat = new Chat;
     $message = $chat->viewSent();
 ?>
@@ -48,7 +49,71 @@
                 ?>
                     <tr>
                         <td><h6><?=($msg['status'] == 'Unread')?'<i class="bi bi-envelope-fill"></i>':'<i class="bi bi-envelope-open"></i>'?></h6></td>
-                        <td><h6><?=$msg['user_fName'].' '.$msg['user_lName']?></h6></td>
+                        <td><h6>
+                            <?php 
+                                if($_SESSION['role'] == 'Buyer'){
+                                    echo $msg['user_fName'].' '.$msg['user_lName'];
+                                }
+                                elseif ($_SESSION['role'] == 'Seller') {
+                                    $res = $backend->findAddress($_SESSION['id']);
+                                    $name = mysqli_fetch_assoc($res);
+
+                                    echo $name['full_name'];
+                                }elseif ($_SESSION['role'] == 'Admin') {
+                                    echo $msg['user_fName'].' '.$msg['user_lName'];;
+                                }
+                            ?>
+                        </h6></td>
+                        <td><h6>
+                            <?php
+                                if ($_SESSION['role'] == 'Buyer') {
+                                    $res = $backend->findAddress($msg['receiver_id']);
+                                    $rec = mysqli_fetch_assoc($res);
+
+                                    if (!is_null($rec)) {
+                                        echo $rec['full_name'];
+                                    }else{
+                                        $user = $backend->usersearch($msg['receiver_id']);
+                                        $rcvr = mysqli_fetch_assoc($user);
+
+                                        if (!is_null($rcvr)) {
+                                            echo $rcvr['user_fName'].' '.$rcvr['user_lName'];
+                                        }
+                                        else {
+                                            echo "[Deleted User]";
+                                        }
+                                    }
+                                }
+                                elseif($_SESSION['role'] == 'Seller') {
+                                    $res = $backend->findAddress($msg['receiver_id']);
+                                    $rec = mysqli_fetch_assoc($res);
+
+                                    if (!is_null($rec)) {
+                                        echo $rec['user_fName'].' '.$rec['user_lName'];
+                                    }else{
+                                        $user = $backend->usersearch($msg['receiver_id']);
+                                        $rcvr = mysqli_fetch_assoc($user);
+
+                                        if (!is_null($rcvr)) {
+                                            echo $rcvr['user_fName'].' '.$rcvr['user_lName'];
+                                        }
+                                        else {
+                                            echo "[Deleted User]";
+                                        }
+                                    }
+                                }
+                                elseif($_SESSION['role'] == 'Admin'){
+                                    $res = $backend->findAddress($msg['receiver_id']);
+                                    $rec = mysqli_fetch_assoc($res);
+
+                                    if (!is_null($rec)) {
+                                        echo $rec['user_fName'].' '.$rec['user_lName'];
+                                    }else{
+                                        
+                                    }
+                                }
+                            ?>
+                        </h6></td>
                         <td><p><?=$msg['content']?></p></td>
                         <td><small><?=$time = date("M d, Y H:i a", strtotime($msg['msg_datetime']))?></small></td>
                         <td>

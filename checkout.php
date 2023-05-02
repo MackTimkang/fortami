@@ -4,6 +4,7 @@
     $result= $backend->total();
     $subtotal = mysqli_fetch_assoc($result);
     $total = number_format((float)$subtotal['total'], 2, '.', ',');
+    $pay_amount = number_format((float)$subtotal['total'], 2, '.', '');
 
     if (isset($_GET['trans_id'])) {
         $transaction = $_GET['trans_id'];
@@ -260,7 +261,7 @@
               $option = $_SESSION['option'];
                 if (isset($_SESSION['address_id'])) {
                     $address = $_SESSION['address_id'];
-                    $backend->payment($user,$method,$total,$option,$status);//inserting the payment to payment db
+                    $backend->payment($user,$method,$pay_amount,$option,$status);//inserting the payment to payment db
                 
                     $getpayment = $backend->getpayment($user,$time);//get trans_id
                         if ($getpayment->num_rows > 0) {
@@ -273,6 +274,13 @@
                                         foreach ($cart as $cartRow) {
                                             $backend->order($cartRow['food_id'],$address,$trans_id,'Pending',$cartRow['quantity']);
                                         }
+                                        $shop = $_GET['shop_id'];
+                                        $shopfunc = $backend->sellerAddress($shop);
+                                        $shopData = mysqli_fetch_assoc($shopfunc);
+                                        $shopName = $shopData['full_name'];
+                                        $notif = new Notification;
+                                        $notif->newUserNotif($user,"You have ordered from $shopName with a total amount of ₱$total","Unread");
+                                        $notif->newUserNotif($shop,"Hooray!, you have a new order,open the Orders tab to view pending orders.","Unread");
                                         $backend->clearcart();
                                 }
                     }

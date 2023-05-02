@@ -1,7 +1,7 @@
 <?php
     include 'backend.php';
     include 'buyerheader.php';
-    $backend = new Backend();
+    $backend = new Backend;
     
     if (isset($_GET['shop_id'])) {
         $id = $_GET['shop_id'];
@@ -11,6 +11,17 @@
         $address =$backend->sellerAddress($id);
         $add = mysqli_fetch_assoc($address);
     }
+    else{
+        $user = [];
+        $add = [];
+        $user['user_userName'] = "";
+        $add['street'] = "";
+        $add['barangay'] ="";
+        $add['city']="";
+        $add['contact'] = "";
+        $user['profile_pic'] = "";
+    }
+    $none="";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,8 +37,9 @@
         <a class="btn btn-outline-dark" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
             <i class="bi bi-funnel"></i>
         </a>
-            <input class="form-control mx-2 w-50" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+            <input type="hidden" name="shop_id" value="<?=$id?>">
+            <input class="form-control mx-2 w-50" type="search" name="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit" name="searchbtn" value="true">Search</button>
     </form>
     <!-- FILTER -->
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -109,6 +121,11 @@
                 else {
                     $list = $backend->viewProduct($id);
                 }
+                    if (isset($_GET['searchbtn'])) {
+                        $content = $_GET['search'];
+                        $search = new Search;
+                        $list = $search->applyFilter($content);
+                    }
                     if ($list->num_rows > 0) {
                         while($row= $list->fetch_assoc()){
         ?>
@@ -148,6 +165,9 @@
             <?php
                         }
                     }
+                    else{
+                        $none = "<h1 class='text-center'><i class= 'bi bi-bag-x'> Fortami Has Found Nothing.</i> </h1>";
+                    }
                 }
                 if(isset($_POST['addcart'])){
                     $food_id = $_POST['food_id'];
@@ -171,6 +191,50 @@
                 }
             ?>
         </div>  
+        <?=$none?>
+        <div class="row g-2 d-flex justify-content-evenly">
+            <div class="col-12 bg-warning bg-gradient rounded shadow text-center p-2">
+                <h3>Ratings / Reviews</h3>
+            </div>
+            <?php
+                if (isset($_GET['shop_id'])) {
+                    $shop_id = $_GET['shop_id'];
+
+                    $rating = new Rating;
+                    $rate = $rating->shopRating($shop_id);
+
+                        if(!is_null($rate)){
+                            foreach ($rate as $row) {
+                                $address = $row['address_id'];
+                                $add = $backend->searchAddress($address);
+                                if (!is_null($add)) {
+                                    $info = mysqli_fetch_assoc($add);
+                               ?>
+                               <div class="col-md-3 bg-body-tertiary rounded shadow mx-1">
+                                    <p class="d-flex justify-content-between"><small class="text-secondary"><?=$info['full_name']?></small><small class="text-secondary text-end"><?=date('M d, Y h:i a',strtotime($row['received_datetime']))?></small></p>
+                                    <h6 class="text-center"><?=$row['food_name']?></h6>
+                                    <h6 class="text-center">    
+                                        <?php 
+                                            $star = "<i class='bi bi-star-fill text-warning'> </i>";
+                                            $noStar =  "<i class='bi bi-star text-warning'> </i>";
+                                            $notFilled = 5 - $row['rating'];
+                                                for ($i=0; $i < $row['rating'] ; $i++) { 
+                                                    echo $star;
+                                                }
+                                                for ($k=0; $k < $notFilled ; $k++) { 
+                                                    echo $noStar;
+                                                }
+                                        ?>
+                                    </h6>
+                                    <p class="text-center"><i >"<?php if($row['comment']== ""){echo "No Comment";}else{echo $row['comment'];}?>"</i></p>
+                                </div>
+                               <?php
+                               }
+                            }
+                        }
+                }
+            ?>
+        </div>
     </div>
 </body>
 </html>

@@ -9,6 +9,18 @@ $backend->checksession();
     }
     $list = $backend->usersearch($id);
     $row = mysqli_fetch_assoc($list);
+    $permit = $row['permit'];
+
+        if ($permit == '') {
+            $verify = "No Permit Uploaded";
+        }
+        else{
+           if ($row['user_type'] == 'Buyer') {
+             $verify = "<a href='./src/uploads/business_permit/$permit' class='btn btn-warning form-control p-2'>View Valid ID</a>";
+           }else{
+             $verify = "<a href='./src/uploads/business_permit/$permit' class='btn btn-warning form-control p-2'>View Business Permit</a>";
+           }
+        }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,9 +62,9 @@ $backend->checksession();
                 <input type="email" class="form-control" name="email" value="<?=$row['user_email']?>" disabled>
                 <label for="uname" class="form-label my-1"><i>Username</i> </label>
                 <input type="text" class="form-control" name="uname" value="<?=$row['user_userName']?>" disabled>
-                
             </div>
-            <div class="col-md-6 text">
+            <div class="col-12">
+                <h6 class="text-center"><?=$verify?></h6>
                 <a class="btn btn-info form-control my-2" href="user.php">Back</a>
             </div>
         </div>

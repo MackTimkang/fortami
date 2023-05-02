@@ -57,6 +57,7 @@
                 <th>Image</th>
                 <th>Name</th>
                 <th>Role</th>
+                <th>Verification</th>
                 <th>Action</th>
             </tr>
             <?php
@@ -69,10 +70,23 @@
                 <td><img src="./src/uploads/profile/<?=$row['profile_pic']?>" alt="profile" class="img-thumbnail" style="max-width:100px"></td>
                 <td><?=$row['user_fName'].' '.$row['user_lName']?></td>
                 <td><?=$row['user_type']?></td>
+                <td><?php
+                        if ($row['verification'] == '') {
+                            ?>
+                                <form action="" method="post">
+                                    <input type="hidden" name="userID" value=<?=$row['user_id']?>>
+                                    <button type="submit" name="verify" class="btn btn-secondary"><i class="bi bi-shield-check"> Verify Now</i></button>
+                                </form>
+                            <?php
+                        }else{
+                            echo "<i class='bi bi-shield-fill-check'> ".$row['verification']."</i>";
+                        }
+                    ?>
+                </td>
                 <td>
                     <form action="user-edit.php">
                         <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
-                        <button type="submit" name="editbtn" class="btn btn-outline-success" value="true"><i class="bi bi-eye-fill"></i></button>
+                        <button type="submit" name="editbtn" class="btn btn-outline-success" value="true"><i class="bi bi-eye-fill"></i></button>                        
                         <a href="chat-create.php?receiver=<?=$row['user_id']?>&name=<?=$row['user_fName'].' '.$row['user_lName']?>&pic=<?=$row['profile_pic']?>" class="btn btn-outline-info" value="true"><i class="bi bi-envelope-fill"></i></a>
                     </form>
                 </td>
@@ -80,8 +94,11 @@
             <?php
                     }
                 }
+                if (isset($_POST['verify'])) {
+                    $id = $_POST['userID'];
 
-                
+                    $backend->verifyUser($id);
+                }
             ?>
         </table>
     </div>

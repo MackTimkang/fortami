@@ -23,7 +23,7 @@
     <div class="container bg-body-secondary p-3 my-4 shadow rounded">
         <div class="row p-2 g-3">
             <div class="col-12 rounded bg-dark bg-gradient text-center">
-                <h2 class="text-light">Order Lounge</h2>
+                <h2 class="text-light">Sales</h2>
             </div>
             <div class="col-12 text-end">
                 <a href="sales.php" class="btn btn-outline-dark"><i class="bi bi-clock-history"> Sales History</i></a>

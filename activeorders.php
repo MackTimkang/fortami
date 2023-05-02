@@ -2,7 +2,7 @@
     include 'backend.php';
     include 'buyerheader.php';
     $backend = new Backend;
-
+    $notif = new Notification;
     $backend->checksession();
 
 ?>
@@ -73,6 +73,7 @@
             $status = 'Received';
             $backend->orderStatus($trans,$status);
             $backend->receivedTime($time,$trans);
+            $notif->newUserNotif(46,"New Successful Transaction with an ID of 2023$trans",'Unread');
             echo "<script>window.location.href='rate.php?trans=$trans';</script>";
         }   
         else {
@@ -85,9 +86,6 @@
             $backend->orderStatus($trans,$status);
             $backend->tranStatus($trans,$status);
             echo "<script>window.location.href='transactions.php?trans=$trans';</script>";
-        }
-        if (isset($_POST['ratebtn'])) {
-            echo "tidert";
         }
     ?>
 </body>

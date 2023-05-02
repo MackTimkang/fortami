@@ -36,7 +36,7 @@
                         $list = $backend->saleHistory();
                             if (!is_null($list)) {
                                 foreach($list as $row){
-                        $date = date("M d, Y h:i:s a",strtotime($row['received_datetime']));
+                        $date = date("M d, Y h:i a",strtotime($row['received_datetime']));
                     ?>
                     <tr>
                         <td>2023<?=$row['payTrans_id']?></td>

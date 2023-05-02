@@ -59,13 +59,13 @@
             $message = $chat->createMsg($sender,$receiver,$msg);
 
             if ($_SESSION['role'] == 'Buyer') {
-                echo "<script>window.location.href='menu.php';</script>";
+                echo "<script>window.location.href='chat.php';</script>";
             }
             elseif ($_SESSION['role'] == 'Seller') {
-                echo "<script>window.location.href='product.php';</script>";
+                echo "<script>window.location.href='chat.php';</script>";
             }
             if ($_SESSION['role'] == 'Admin') {
-                echo "<script>window.location.href='admin.php';</script>";
+                echo "<script>window.location.href='chat.php';</script>";
             }
         }
     ?>

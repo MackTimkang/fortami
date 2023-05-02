@@ -37,14 +37,14 @@
 </head>
 <body>
     <div class="container p-3">
-        <div class="row g-3">
+        <div class="row">
             <div class="col-12 p-2">
-                <form class="d-flex justify-content-center align-items-center" role="search">
+                <form action="" class="d-flex justify-content-center align-items-center" role="search">
                     <a class="btn btn-outline-dark" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                         <i class="bi bi-funnel"></i>
                     </a>
-                    <input class="form-control mx-2 w-50" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <input class="form-control mx-2 w-50" type="search" name="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit" name="searchbtn" value="true">Search</button>
                 </form>
             </div>
             <div class="col-12">
@@ -105,7 +105,7 @@
                                     <option value="pickup">Pick-up</option>
                                     <option value="deliver">Deliver</option>
                                 </select>
-                            <input type="submit" class="btn btn-warning form-control" name="savebtn" value="Apply">
+                            <input type="submit" class="btn btn-warning form-control" name="applybtn" value="Apply">
                         </form>
                     </div>
                 </div>
@@ -118,7 +118,16 @@
         <br>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php
-                $list = $backend->listSellers();
+                if (isset($_GET['searchbtn'])) {
+                    $search = $_GET['search'];
+        
+                    $find = new Search;
+        
+                    $list = $find->applyFilter($search);
+                }else{
+                    $list = $backend->listSellers();
+                }
+                    if(!is_null($list)){
                     foreach ($list as $row) {
             ?>
             
@@ -133,15 +142,25 @@
                                 $find = mysqli_fetch_assoc($seller);
                             ?>
                             <p class="card-text"><?=$find['street'].', '.$find['barangay'].', '.$find['city'].' City'?></i></p>
+                            <?php
+                                if ($row['verification'] == 'Verified') {
+                                    echo "<i class='bi bi-shield-fill-check'>".$row['verification']."</i>";
+                                }
+                                else {
+                                    echo "<i class='bi bi-shield-exclamation'> Unverified</i>";
+                                }
+                            ?>
                         </div>
                     <div class="card-footer">
                     <small class="text-body-secondary">Last updated 3 mins ago</small>
                     </div>
                 </div>
             </div>
-            
             <?php
-                }            
+                } 
+            }else{
+                echo "<h1><i class='bi bi-bag-x-fill'> No Product Found!</i></h1>";
+            }     
             ?>
         </div>
     </div>
@@ -149,16 +168,16 @@
     <!-- END OF FOOD SHOPS -->
     <br>
     <div class="container text-center">
-    <h4 class="p-3 bg-warning bg-gradient rounded shadow"> <i>Find Your Favorites</i></h4>
+    <h4 class="p-3 bg-warning bg-gradient rounded shadow"> <i class="bi bi-fire"> Hot Picks For Today!</i></h4>
     <div class="row row-cols-1 row-cols-md-4 g-4 p-2">
         <?php
-            $list = $backend->getproduct();
+            $list = $backend->hotProducts();
             if ($list->num_rows > 0) {
                 while($row= $list->fetch_assoc()){
         ?>
         <div class='col'>
                     <div class='card h-100'>
-                        <img src='./src/uploads/food_picture/<?=$row['food_pic'];?>' class='card-img-top' alt='...' style='max-width:100%;height:250px'>
+                        <img src='./src/uploads/food_picture/<?=$row['food_pic'];?>' class='card-img-top' alt='food pic' style='max-width:100%;height:100px'>
                       <div class='card-body'>
                         <h5 class='card-title'><?=$row['food_name'];?></h5>
                         <h6>
@@ -192,6 +211,8 @@
             <?php
                     }
                 }
+
+
             ?>
         </div>  
     </div>

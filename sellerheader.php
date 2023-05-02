@@ -45,7 +45,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="" style="color: white">Home</a>
+              <a class="nav-link active" aria-current="page" href="dashboard.php" style="color: white">Dashboard</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="profile.php" style="color: white">Profile</a>
@@ -57,7 +57,7 @@
               <a class="nav-link" href="order.php"style="color: white">Orders</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="delivery.php"style="color: white">Lounge</a>
+              <a class="nav-link" href="delivery.php"style="color: white">Sales</a>
             </li>
             <li class="nav-item dropdown">
               <a
@@ -101,6 +101,29 @@
                   </small>
                 </h6>
                   
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="notification.php" class="nav-link active position-relative <?=$disabled?>" style="color:white;">
+                <i class="bi bi-bell"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-2">
+                    <?php
+                          if (isset($_SESSION['id'])) {
+                            $notif = new Notification;
+                            $notify = $notif->countNotif();
+                            $notifs = mysqli_fetch_assoc($notify);
+                            if (is_null($notifs)) {
+                              echo "0";
+                            }
+                            else {
+                              echo $notifs['count'];
+                            }
+                          }else{
+                            echo 0;
+                          }
+                      ?>
+                    <span class="visually-hidden">New alerts</span>
+                </span>
               </a>
             </li>
           </ul>

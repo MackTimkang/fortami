@@ -42,7 +42,7 @@
 		$shop = "";
 		$shop_address = "";
 		$shop_contact = "";
-		$result= array();
+		$result= [];
 	}
 
 ?>
@@ -133,10 +133,21 @@
 							  </div>";
 				}
 			?>
-
+	<div class="d-flex justify-content-center align-items-center">
+		<button class="btn btn-primary my-2" id="exclude" onclick="printPage()"><i class="bi bi-printer"> Print Receipt</i></button>
+	</div>
     <div class="col-12 my-2">
-		<h4><a href="sales.php"><i class="bi bi-arrow-return-left">Back</i></a></h4>
+		<h4><a href="sales.php" id="backbtn"><i class="bi bi-arrow-return-left">Back</i></a></h4>
     </div>
+	<script>
+		function printPage(){
+			var ex = document.querySelector('#exclude');
+			var backbtn = document.querySelector('#backbtn');
 
+			ex.remove();
+			backbtn.remove();
+			window.print();
+		}
+	</script>
 </body>
 </html>

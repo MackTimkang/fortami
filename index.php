@@ -19,7 +19,7 @@ include 'buyerheader.php';
               Don't Starve
               <div class="row">
               <small class="text-muted">Just Order</small>
-              <a href="" class="btn btn-primary" style="background-color:#4990b5;border:none">Order Now</a>
+              <a href="login.php" class="btn btn-primary" style="background-color:#4990b5;border:none">Order Now</a>
               </div>
             </h1>
         </div>
@@ -42,7 +42,7 @@ include 'buyerheader.php';
               More Customers
               <div class="row">
               <small class="text-muted">More Sales</small>
-              <a href="" class="btn btn-success">Sell Now</a>
+              <a href="login.php" class="btn btn-success">Sell Now</a>
               </div>
             </h1>
         </div>

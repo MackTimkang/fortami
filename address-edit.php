@@ -70,7 +70,7 @@
                 <h1><i class="bi bi-person-fill-up"></i> Delivery Address</h1>
             </div>
             <div class="col-md-6">
-                <label for="fname" class="form-label" >Full Name</label>
+                <label for="fname" class="form-label" ><i><?=($_SESSION['role'] == 'Seller')?'Shop Name':'Full Name'?></i></label>
                 <input type="text" class="form-control" name="fullname" value="<?=$name?>" required>
             </div>
             <div class="col-md-6">

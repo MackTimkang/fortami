@@ -41,7 +41,7 @@ session_start();
                 $_SESSION['id'] = $row['user_id'];
                 $_SESSION['role'] = $row['user_type'];
                   if ($row['user_type'] == 'Seller') {
-                    echo "<script>alert('Welcome Back!'); window.location.href = 'product.php'";
+                    echo "<script>alert('Welcome Back!'); window.location.href = 'dashboard.php'";
                     echo "</script>";
                   }
                   elseif ($row['user_type'] == 'Buyer') {
@@ -99,7 +99,7 @@ session_start();
                   echo "error in $reg".$this->con->error;
                 }
             }
-          }
+          }//end of register user function
       }//end of register user function
 
       function editProfile($id,$role,$new_Name,$fn,$ln,$email,$uname){
@@ -132,7 +132,7 @@ session_start();
       }//end of search user function
 
       function listSellers(){
-        $query = "SELECT * FROM user WHERE user_type = 'Seller'";
+        $query = "SELECT * FROM user WHERE user_type = 'Seller' AND verification = 'Verified'";
         $result = $this->con->query($query);
           if ($result) {
             return $result;
@@ -141,13 +141,22 @@ session_start();
 
       function getSellerId(){
         $user = $_SESSION['id'];
-        $query = "SELECT food_product.user_id FROM cart JOIN food_product ON food_product.food_id = cart.food_id INNER JOIN user ON user.user_id = food_product.user_id WHERE cart.user_id = $user GROUP BY user_id";
+        $query = "SELECT food_product.user_id FROM cart JOIN food_product ON food_product.food_id = cart.food_id 
+                  INNER JOIN user ON user.user_id = food_product.user_id WHERE cart.user_id = $user GROUP BY user_id";
         $result = $this->con->query($query);
           if ($result) {
             return $result;
           }
-      }
+      }//end of function get seller ID
 
+      function verifyUser($user_id){
+        $query = "UPDATE user SET verification = 'Verified' WHERE user_id = $user_id";
+        $result =$this->con->query($query);
+
+        if ($result) {
+          echo "<meta http-equiv='refresh' content='0'>";
+        }
+      }//end of function verify user
 
     }//end of class Account
 
@@ -272,7 +281,7 @@ session_start();
         }//end of searchaddress function
 
         function findAddress($user_id){
-          $query = "SELECT * FROM address WHERE user_id = $user_id";
+          $query = "SELECT * FROM address JOIN user ON address.user_id = user.user_id WHERE address.user_id = $user_id";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
@@ -318,7 +327,7 @@ session_start();
           $result = $this->con->query($query);
             if ($result) {
               if ($role === 'Seller') {
-                echo "<script>alert('Address saved successfully!');window.location.href = 'product.php';</script>";
+                echo "<script>alert('Address saved successfully!');</script>";
               }
               else {
                 echo "<script>alert('Address saved successfully!');window.location.href = 'menu.php';</script>";
@@ -358,7 +367,7 @@ session_start();
 
         if ($result) {
           if ($result) {
-            echo "<script>alert('Successfuly Saved!');window.location.href='product.php'</script>";
+            echo "<script>alert('Successfuly Saved!');</script>";
           }
           else{
             echo "error in $db".$this->con->error;
@@ -414,7 +423,7 @@ session_start();
       }//end of list product function
       
       function getproduct(){
-        $query = "SELECT * FROM food_product JOIN user ON food_product.user_id = user.user_id";
+        $query = "SELECT * FROM food_product JOIN user ON food_product.user_id = user.user_id WHERE user.verification = 'Verified'";
         $result = $this->con->query($query);
         if ($result) {
             return $result;
@@ -432,7 +441,7 @@ session_start();
         else {
           echo "No item found!";
         }
-      }
+      }//end of function product filter
 
       function viewProduct($id){
         $query = "SELECT * FROM food_product WHERE user_id = $id";
@@ -440,7 +449,39 @@ session_start();
           if ($result) {
             return $result;
           }
-      }
+      }//end of view product function
+
+      function hotProducts(){
+        $date = date('Y-m-d');
+        $query = "SELECT * FROM food_order JOIN food_product ON food_product.food_id = food_order.food_id WHERE rating_status = 'Done' AND order_datetime LIKE '%$date%' GROUP BY food_order.food_id ORDER BY COUNT(food_order.food_id) DESC";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of hot products function
+
+      function demandProducts(){
+        $id = $_SESSION['id'];
+        $date = date("Y-m-d");
+        $query = "SELECT * FROM food_order JOIN food_product ON food_product.food_id = food_order.food_id
+                  INNER JOIN user ON food_product.user_id = user.user_id WHERE food_product.user_id = $id AND order_datetime LIKE '%$date%'
+                  GROUP BY food_order.food_id ORDER BY COUNT(food_order.food_id) DESC";
+        $result = $this->con->query($query);
+        if ($result) {
+          return $result;
+        }
+      }//end of in demand product function
+
+      function countSalesperProduct($food_id){
+        $date = date("Y-m-d");
+        $query = "SELECT COUNT(food_id) as foodCount FROM food_order WHERE food_id = $food_id AND order_datetime LIKE '%$date%'";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of count sales per product function
 
       //end of food management
 
@@ -836,17 +877,24 @@ session_start();
             }
         }
 
-
         function viewRating($food_id){
           $query = "SELECT AVG(rating) AS rate FROM rating JOIN food_order ON food_order.order_id = rating.order_id
                     INNER JOIN food_product ON food_product.food_id = food_order.food_id WHERE food_order.food_id = $food_id";
-          $return = $this->con->query();
-            if ($return) {
+          $result = $this->con->query($query);
+            if ($result) {
               return $result;
             }
         }//end of done rating
 
-
+        function uploadPermit($permit){
+          $id = $_SESSION['id'];
+          $query = "UPDATE user SET permit = '$permit' WHERE user_id = $id";
+          $result = $this->con->query($query);
+          
+            if ($result) {
+              echo "<script>window.location.href='dashboard.php';</script>";
+            }
+        }//end of upload permit for sellers
     }//end of class backend
 
     class Rating {
@@ -871,6 +919,16 @@ session_start();
         }
       }//end of view rating function
 
+      function shopRating($shop_id){
+        $query = "SELECT * FROM rating JOIN food_order ON food_order.order_id = rating.order_id JOIN food_product ON food_product.food_id = food_order.food_id
+                  INNER JOIN user ON food_product.user_id = user.user_id WHERE food_product.user_id = $shop_id ORDER BY rating_id DESC";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of shop Rating function
+
       function foodRating($food_id){
         $query = "SELECT * FROM rating JOIN food_order ON rating.order_id = food_order.order_id
                   INNER JOIN food_product ON food_product.food_id = food_order.food_id WHERE food_order.food_id = $food_id";
@@ -888,10 +946,11 @@ session_start();
         if ($result) {
           return $result;
         }
-      }
+      }//end of average rating function
 
-    }
-    class Chat{
+    }//end of rating class
+
+    class Chat extends Account{
         public $con;
   
         function __construct(){
@@ -950,7 +1009,8 @@ session_start();
 
         function viewSent(){
           $sender = $_SESSION['id'];
-          $query = "SELECT * FROM message JOIN user ON message.user_id = user.user_id WHERE message.user_id = $sender ORDER BY msg_datetime DESC";
+          $query = "SELECT * FROM message JOIN user ON message.user_id = user.user_id
+                    WHERE message.user_id = $sender ORDER BY msg_datetime DESC";
           $result = $this->con->query($query);
 
             if ($result) {
@@ -966,5 +1026,190 @@ session_start();
             return $result;
           }
         }//end of function view sender/receiver details
-    }
+    }//end of chat class
+
+    class Sales{
+      public $con;
+
+      function __construct(){
+        $db = new Database;
+        $this->con = $db->getConnection();
+      }//end of function construct
+
+      function totalSales(){
+        $id = $_SESSION['id'];
+        $query = "SELECT SUM(pay_amount) AS sales FROM food_order 
+                  JOIN payment_transaction ON food_order.payTrans_id = payment_transaction.payTrans_id
+                  JOIN food_product ON food_product.food_id = food_order.food_id WHERE food_product.user_id = $id AND payment_transaction.trans_status='Successful'";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of total sales function
+
+      function totalPending(){
+        $seller_id = $_SESSION['id'];
+        $query = "SELECT COUNT(order_id) AS pending FROM food_order JOIN food_product ON food_product.food_id = food_order.food_id
+                  WHERE food_product.user_id = $seller_id AND order_status != 'Received' AND order_status != 'Cancelled'";
+        $result = $this->con->query($query);
+        
+          if ($result) {
+            return $result;
+          }
+      }// end of total pending transaction
+
+      function salesReport($month,$year){
+        $user = $_SESSION['id'];
+        $query = "SELECT WEEK(pay_datetime) AS week,SUM(pay_amount) AS weeklySales FROM `food_order` JOIN food_product ON food_product.food_id = food_order.food_id 
+                  INNER JOIN user ON user.user_id = food_product.user_id 
+                  JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
+                  WHERE food_product.user_id = $user AND MONTH(pay_datetime) = $month AND YEAR(pay_datetime)=$year";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of sales report function
+
+      function totalTrans(){
+        $user = $_SESSION['id'];
+        $query = "SELECT COUNT(payment_transaction.payTrans_id) AS totalTrans FROM `food_order` JOIN food_product ON food_product.food_id = food_order.food_id 
+                  INNER JOIN user ON user.user_id = food_product.user_id 
+                  JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
+                  WHERE food_product.user_id = $user";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of total transaction function
+
+    }//end of class sales
+
+    class Notification extends Backend{
+      
+      function newUserNotif($user_id,$details,$status){
+        $query = "INSERT INTO notification(user_id,notif_details,notif_status) VALUES($user_id,'$details','$status')";
+        $result = $this->con->query($query);
+          if ($result) {
+          }
+          else{
+            echo "Error in ".$this->con->error;
+          }
+      }//end of  function add notification
+
+      function getAdminId(){
+        $sql = "SELECT user_id FROM user WHERE user_type = 'Admin'";
+        $res = $this->con->query($sql);
+          if ($res) {
+            return $res;
+          }
+          else{
+            echo "Error in ".$this->con->error;
+          }
+      }//end of function get admin Ids
+
+      function newAdminNotif($details,$status){
+        $ids = $this->getAdminId();
+          if (!is_null($ids)) {
+            foreach ($ids as $id) {
+              $this->newUserNotif($id,$details,$status);
+            }
+          }
+          else{
+            echo $this->con->error();
+          }
+      }//end of admin notification
+      
+      function viewNotif(){
+        $user_id = $_SESSION['id'];
+        $query = "SELECT * FROM notification WHERE user_id = $user_id ORDER BY notif_status DESC";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            return $result;
+          }
+      }//end of view notification function
+
+      function readNotif($notif_id){
+        $query = "SELECT * FROM notification WHERE notification_id = $notif_id ";
+        $result = $this->con->query($query);
+
+          if ($result) {
+            $this->markRead($notif_id);
+            return $result;
+          }
+      }//end of read notification function
+
+
+      function delNotif($notif_id){
+        $query = "DELETE FROM notification WHERE notification_id = $notif_id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<meta http-equiv='refresh' content='0'>";
+        }
+      }//end of delete notifation function
+
+      function countNotif(){
+        $user = $_SESSION['id'];
+        $query = "SELECT COUNT(notification_id) AS count FROM notification WHERE user_id = $user AND notif_status = 'Unread' ";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of count notification function
+
+      function markRead($id){
+        $query = "UPDATE notification SET notif_status = 'Read' WHERE notification_id = $id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          
+        }
+      }//end of mark as read function
+
+      function clearNotif(){
+        $id = $_SESSION['id'];
+        $query = "DELETE FROM notification WHERE user_id = $id";
+        $result = $this->con->query($query);
+
+        if ($result) {
+          echo "<script>alert('Notifications successfully cleared'!);</script>";
+        }
+      }//end of clear notifications
+    }//end of class notification
+
+    class Search extends Backend{
+      
+      function applyFilter($search){
+        $query = "SELECT * FROM food_product JOIN user ON food_product.user_id = user.user_id
+                  JOIN address ON address.user_id = food_product.user_id WHERE food_name LIKE '%$search%'
+                  OR preparation LIKE '%$search%' OR city LIKE '%$search%' OR barangay LIKE '%$search%' AND user.verification = 'Verified'";
+
+        $result = $this->con->query($query);
+
+        if ($result) {
+          return $result;
+        }
+      }//end of apply filter function
+      
+    }//end of search class
+
+    class Wallet extends Account{
+
+      function cashinWallet(){
+
+      }//end of function cashin wallet
+
+      function cashoutWallet(){
+
+      }//end of cashout wallet function
+
+      function sendMoney(){
+
+      }//end of function send money
+
+    }//end of class Wallet
 ?>

@@ -123,6 +123,29 @@
                   
               </a>
             </li>
+            <li class="nav-item">
+              <a href="notification.php" class="nav-link active position-relative <?=$disabled?>" style="color:white;">
+                <i class="bi bi-bell"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger my-2">
+                     <?php
+                        if (isset($_SESSION['id'])) {
+                          $notif = new Notification;
+                          $notify = $notif->countNotif();
+                          $notifs = mysqli_fetch_assoc($notify);
+                          if (is_null($notifs)) {
+                            echo "0";
+                          }
+                          else {
+                            echo $notifs['count'];
+                          }
+                        }else{
+                          echo 0;
+                        }
+                     ?>
+                    <span class="visually-hidden">New alerts</span>
+                </span>
+              </a>
+            </li>
           </ul>
           
           <a href="support.php" class="btn btn-outline-light"><i class="bi bi-headset"></i>Help</a>

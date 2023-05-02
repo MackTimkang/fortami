@@ -10,7 +10,7 @@
     elseif ($_SESSION['role'] == "Admin") {
         include 'admin-header.php';
     }
-
+    $backend = new Backend;
     $chat = new Chat;
     $message = $chat->viewMsg();
 ?>
@@ -47,9 +47,26 @@
                 ?>
                     <tr>
                         <td><h6><?=($msg['status'] == 'Unread')?'<i class="bi bi-envelope-fill"></i>':'<i class="bi bi-envelope-open"></i>'?></h6></td>
-                        <td><h6><?=$msg['user_fName'].' '.$msg['user_lName']?></h6></td>
+                        <td><h6>
+                            <?php
+                                if ($_SESSION['role'] == 'Buyer') {
+                                    $res = $backend->findAddress($msg['user_id']);
+                                    $sender = mysqli_fetch_assoc($res);
+
+                                    if (!is_null($sender)) {
+                                        echo $sender['full_name'];
+                                    }
+                                    else {
+                                        echo $msg['user_fName'].' '.$msg['user_lName'];
+                                    }
+                                }
+                                else {
+                                    echo $msg['user_fName'].' '.$msg['user_lName'];
+                                }
+                            ?>
+                        </h6></td>
                         <td><p><?=$msg['content']?></p></td>
-                        <td><small><?=$time = date("M d, Y H:i a", strtotime($msg['msg_datetime']))?></small></td>
+                        <td><small><?=$time = date("M d, Y h:i a", strtotime($msg['msg_datetime']))?></small></td>
                         <td>
                             <!-- <a href="" class="btn btn-dark"><i class="bi bi-envelope-open"></i></a>
                             <a href="" class="btn btn-danger"><i class="bi bi-trash"></i></a>      -->
