@@ -157,6 +157,14 @@ session_start();
           echo "<meta http-equiv='refresh' content='0'>";
         }
       }//end of function verify user
+      
+      function sellerId($food_id){
+        $query = "SELECT user_id FROM food_product WHERE food_id = $food_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of function get seller ID from food product
 
     }//end of class Account
 
@@ -286,7 +294,7 @@ session_start();
             if ($result) {
               return $result;
             }
-        }
+        }//end of function find user address
 
         function sellerAddress($seller_id){
           $query = "SELECT * FROM address WHERE user_id = $seller_id";
@@ -295,7 +303,7 @@ session_start();
             if ($result) {
               return $result;
             }
-        }
+        }//end 
 
         function delAddress($id){
           $query = "DELETE FROM address WHERE address_id = $id";
@@ -312,7 +320,17 @@ session_start();
           WHERE address_id = $id";
           $result = $this->con->query($query);
           if ($result) {
-            echo "<script>alert('Address updated successfully!');window.location.href = 'checkout.php';</script>";
+            $notify = new Notification;
+            $search = $this->searchaddress($id);
+            $list = mysqli_fetch_assoc($search);
+            echo "<script>alert('Address updated successfully!');</script>";
+            $notify->newUserNotif($list['user_id'],'You have successfully edited your address.','Unread');
+              if ($_SESSION['role'] == 'Seller') {
+                echo "<script>window.location.href = 'dashboard.php';</script>";
+              }
+              else {
+                echo "<script>window.location.href = 'checkout.php';</script>";
+              }
           }
           else {
 
@@ -387,7 +405,7 @@ session_start();
         else {
           echo "Error in $query".$this->con->error;
         }
-        echo "<meta http-equiv='refresh' content='0'>";
+        // echo "<meta http-equiv='refresh' content='0'>";
       }// end of edit product function
 
       function pendingProduct($food_id){
@@ -398,11 +416,34 @@ session_start();
           if ($result->num_rows > 0) {
             echo "<script>alert('Cannot delete a product with a pending transaction');</script>";
           }else{
-            $this->deleteproduct($food_id);
+              if ($_SESSION['role'] == 'Admin') {
+                $act = new Account;
+                $backend = new Backend;
+                $prodInfo = $backend->fetchProduct($food_id);
+                $prod = mysqli_fetch_assoc($prodInfo);
+                $seller_id = $act->sellerId($food_id);
+                $seller = mysqli_fetch_assoc($seller_id);
+                  if (!is_null($seller)){
+                    $sellad = $act->findAddress($seller['user_id']);
+                    $shop = $sellad['full_name'];
+                    $notif = new Notification;
+                    $note = "Your Product ".$prod['food_name']." was deleted by the Admin, because it's content can confusion/false advertisement";
+                    $notif->newUserNotif($seller_id,$note,"Unread");
+                    $this->deleteproduct($food_id);
+                    header('admin.php');
+                }
+              }elseif($_SESSION['role'] == 'Buyer'){
+                $this->deleteproduct($food_id);
+                header('location:menu.php');
+              }else{
+                $this->deleteproduct($food_id);
+                header('dashboard.php');
+              }
+            
           }
         }
 
-      }
+      }//end of pending product function
       function deleteproduct($food_id){
         $query = "DELETE FROM food_product WHERE food_id = $food_id";
         $result = $this->con->query($query);
@@ -421,6 +462,14 @@ session_start();
           $result = $this->con->query($sql);
           return $result;
       }//end of list product function
+
+      function fetchProduct($id){
+        $query = "SELECT * FROM food_product JOIN category ON category.category_id = food_product.category_id WHERE food_id = $id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of function searchProduct
       
       function getproduct(){
         $query = "SELECT * FROM food_product JOIN user ON food_product.user_id = user.user_id WHERE user.verification = 'Verified'";
@@ -1064,7 +1113,7 @@ session_start();
         $query = "SELECT WEEK(pay_datetime) AS week,SUM(pay_amount) AS weeklySales FROM `food_order` JOIN food_product ON food_product.food_id = food_order.food_id 
                   INNER JOIN user ON user.user_id = food_product.user_id 
                   JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
-                  WHERE food_product.user_id = $user AND MONTH(pay_datetime) = $month AND YEAR(pay_datetime)=$year";
+                  WHERE food_product.user_id = $user AND MONTH(pay_datetime) = $month AND YEAR(pay_datetime)=$year GROUP BY week";
         $result = $this->con->query($query);
 
           if ($result) {

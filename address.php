@@ -66,24 +66,26 @@ $backend = new Backend;
             </div>
             <div class="col-12">
                 <label for="label" class="form-label">Label Address as: </label>
-                    <input class="form-check-input" type="radio" name="label" value="Home" id="flexRadioDefault1"checked>
-                    <label class="form-check-label" for="flexRadioDefault1" >
-                        Home
-                    </label>
-                    <input class="form-check-input" type="radio" value="Work" name="label" id="flexRadioDefault2">
-                    <label class="form-check-label" for="flexRadioDefault2">
-                        Work
-                </label>
+                    <?php
+                        if ($_SESSION['role'] == 'Seller') {
+                            echo "<input class='form-check-input' type='radio' name='label' value='Pickup' id='flexRadioDefault1'>";
+                            echo "<label class='form-check-label' for='flexRadioDefault1'>Pickup</label>";
+                        }
+                        else{
+                            echo "<input class='form-check-input' type='radio' name='label' value='Home' id='flexRadioDefault1'>";
+                            echo "<label class='form-check-label' for='flexRadioDefault1'>Home</label>";
+                        }
+                        if ($_SESSION['role'] == 'Buyer') {
+                                echo "<input class='form-check-input' type='radio' value='Work' name='label' id='flexRadioDefault2'>";
+                                echo "<label class='form-check-label' for='flexRadioDefault2'>Work</label>";
+                        }
+                    ?>
             </div>
             <div class="col-12">
             <label for="type" class="form-label">Save as: </label>
                     <input class="form-check-input" type="radio" name="address_type" value="Default" id="flexRadioDefault1"checked>
                     <label class="form-check-label" for="flexRadioDefault1" >
                         Default
-                    </label>
-                    <input class="form-check-input" type="radio" name="address_type" id="flexRadioDefault2" disabled >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                        Pick-up address
                     </label>
             </div>
             <div class="col-12 text-center">

@@ -34,6 +34,7 @@
                 <?php
                     if (isset($_GET['clear'])) {
                         $notification->clearNotif();
+                        echo "<meta http-equiv='refresh' content='0'>";
                     }
                 ?>
             </div>

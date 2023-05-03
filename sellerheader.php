@@ -1,4 +1,6 @@
 <?php
+  $backend = new Backend;
+  $backend->checksession();
   $disabled = (isset($_SESSION['id'])) ?: 'disabled';
 ?>
 <!DOCTYPE html>
@@ -68,15 +70,35 @@
                 aria-expanded="false"
                 style="color: white"
               >
-                Account
+                <?php
+                  if (isset($_SESSION['user'])) {
+                    echo $_SESSION['user'];
+                  }else{
+                    echo 'Account';
+                  }
+                ?>
               </a>
               <ul class="dropdown-menu">
+              <li>
+                  <?php
+                    if (isset($_SESSION['user'])) {
+                      $user_id = $_SESSION['id'];
+                      $result = $backend->findAddress($user_id);
+                      $address = mysqli_fetch_assoc($result);
+                      $id = $address['address_id'];
+                      echo "<a href='address-edit.php?id=$id' class='dropdown-item'>Address</a>";
+                    }else{
+                      
+                    }
+                  ?>
+                </li>
                 <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="login.php" >Login</a></li>
                 <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item"':'class="dropdown-item disabled"'?> href="logout.php">Logout</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="./register.php">Create Account</a>
                 </li>
+                <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item"':'class="dropdown-item disabled"'?> href="logout.php">Logout</a></li>
               </ul>
             </li>
             <li class="nav-item">
@@ -127,17 +149,6 @@
               </a>
             </li>
           </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-success" type="submit"style="color: white;background-color: black;">
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>

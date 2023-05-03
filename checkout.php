@@ -1,6 +1,7 @@
 <?php
     include 'backend.php';
     $backend = new Backend;
+    $backend->checksession();
     $result= $backend->total();
     $subtotal = mysqli_fetch_assoc($result);
     $total = number_format((float)$subtotal['total'], 2, '.', ',');
@@ -51,37 +52,40 @@
                         if (isset($_POST['home'])) {
                             $_SESSION['option'] = "Delivery";
                             $row = mysqli_fetch_assoc($list);
-                            if ($row['label'] === 'Home' ) {
-                                $name = $row['full_name'];
-                                $contact = $row['contact'];
-                                $region = $row['region'];
-                                $province = $row['province'];
-                                $city = $row['city'];
-                                $brgy = $row['barangay'];
-                                $street = $row['street'];
-                                $zip = $row['zip'];
-                                $address_type = $row['address_type'];
-                                $note = $row['note'];
-                                $_SESSION['address_id'] = $row['address_id'];
-                            }
-                            
+                                if (!is_null($row)) {
+                                    if ($row['label'] === 'Home' ) {
+                                        $name = $row['full_name'];
+                                        $contact = $row['contact'];
+                                        $region = $row['region'];
+                                        $province = $row['province'];
+                                        $city = $row['city'];
+                                        $brgy = $row['barangay'];
+                                        $street = $row['street'];
+                                        $zip = $row['zip'];
+                                        $address_type = $row['address_type'];
+                                        $note = $row['note'];
+                                        $_SESSION['address_id'] = $row['address_id'];
+                                    }
+                                }
                         }
                         if(isset($_POST['work'])) {
                             $_SESSION['option'] = "Delivery";
                             $row = mysqli_fetch_assoc($list);
-                            if ($row['label'] === 'Work'){
-                                $name = $row['full_name'];
-                                $contact = $row['contact'];
-                                $region = $row['region'];
-                                $province = $row['province'];
-                                $city = $row['city'];
-                                $brgy = $row['barangay'];
-                                $street = $row['street'];
-                                $zip = $row['zip'];
-                                $address_type = $row['address_type'];
-                                $note = $row['note'];
-                                $_SESSION['address_id'] = $row['address_id'];
-                            }
+                                if (!is_null($row)) {
+                                    if ($row['label'] === 'Work'){
+                                        $name = $row['full_name'];
+                                        $contact = $row['contact'];
+                                        $region = $row['region'];
+                                        $province = $row['province'];
+                                        $city = $row['city'];
+                                        $brgy = $row['barangay'];
+                                        $street = $row['street'];
+                                        $zip = $row['zip'];
+                                        $address_type = $row['address_type'];
+                                        $note = $row['note'];
+                                        $_SESSION['address_id'] = $row['address_id'];
+                                    }
+                                }
                         }
 
                     if (isset($_POST['deletebtn'])) {

@@ -43,8 +43,7 @@
                         <span class="input-group-text">Month</span>
                         <input type="month" name="month" min="2023-01" value="2023-04" class="form-control"><br>
                         <button type="submit" name="searchbtn" value="true" class="btn btn-success">Search</button>
-                    </div>
-                    
+                    </div>   
                 </div>
                 <div class="col-12 shadow rounded p-2">
                     <div id="chart_div" style="width: 100%; height: 500px;"></div>

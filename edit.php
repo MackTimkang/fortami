@@ -1,8 +1,15 @@
 <?php
     include 'backend.php';
     $backend = new Backend;
-    $result = $backend->listproduct();
-    $row = mysqli_fetch_assoc($result);
+    if(isset($_GET['id'])) {
+        $id = $_GET['id'];
+        $result = $backend->fetchProduct($id);
+            if (!is_null($result)) {
+                $row = mysqli_fetch_assoc($result);
+            }else{
+                $row = [];
+            }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +31,7 @@
     </div>
     <div class="input-group" style="width:1000px;">
         <select class="form-select" aria-label="Default select example" name="category" required>
-            <option selected disabled>Select Food Category</option>
+            <option value="<?=$row['category_id']?>" selected><?=$row['category_name']?></option>
             <?php $backend->categorylist();?>
         </select>
     </div>
@@ -40,9 +47,9 @@
             <label for="preparation" class="form-label">Preparation</label>
             <select name="prep" id="" class="form-select" required>
                 <option value="" selected disabled>Choose....</option>
-                <option value="Made to order">Made to order</option>
-                <option value="Fresh">Fresh</option>
-                <option value="Surplus">Surplus</option>
+                <option value="Made to order" <?=($row['preparation'] == 'Made to order')?'Selected':''?>>Made to order</option>
+                <option value="Fresh" <?=($row['preparation'] == 'Fresh')?'Selected':''?>>Fresh</option>
+                <option value="Surplus" <?=($row['preparation'] == 'Surplus')?'Selected':''?>>Surplus</option>
             </select>
         </div>
     <div class="col-md-3">
@@ -99,6 +106,9 @@
                            $img_upload_path = './src/uploads/food_picture/'.$new_imgName;
 
                            move_uploaded_file($pic_tmp,$img_upload_path);
+                        }else{
+                            $new_imgName = "";
+                            echo "<script>alert('File type not supported');</script>";
                         }
                     }
                 }

@@ -61,13 +61,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> 
     <title>Edit Address</title>
+    <style>
+        body{
+            background-image:linear-gradient(#4990b5,skyblue);
+        }
+    </style>
 </head>
 <body>
-    <div class="container d-flex justify-content-center align-items-center">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
         <form action="" method="post">
         <div class="row g-3 p-5 ">
-            <div class="col-12 text-center">
-                <h1><i class="bi bi-person-fill-up"></i> Delivery Address</h1>
+            <div class="col-12 text-center text-light">
+                <h1><i class="bi bi-person-fill-up"> Delivery Address</i></h1>
             </div>
             <div class="col-md-6">
                 <label for="fname" class="form-label" ><i><?=($_SESSION['role'] == 'Seller')?'Shop Name':'Full Name'?></i></label>
@@ -107,14 +112,32 @@
             </div>
             <div class="col-12">
                 <label for="label" class="form-label">Label Address as: </label>
-                    <input class="form-check-input" type="radio" name="label" value="Home" id="flexRadioDefault1" <?=($row['label'] == 'Home') ? 'checked':''?>>
-                    <label class="form-check-label" for="flexRadioDefault1" >
-                        Home
-                    </label>
-                    <input class="form-check-input" type="radio" value="Work" name="label" id="flexRadioDefault2" <?=($row['label'] == 'Work') ? 'checked':''?>>
-                    <label class="form-check-label" for="flexRadioDefault2">
-                        Work
-                </label>
+                    <?php
+                        if ($_SESSION['role'] == 'Seller') {
+                            if ($row['label']=='Pickup') {
+                                echo "<input class='form-check-input' type='radio' name='label' value='Pickup' id='flexRadioDefault1' checked>";
+                                echo "<label class='form-check-label' for='flexRadioDefault1'>Pickup</label>";
+                            }else{
+                                echo "<input class='form-check-input' type='radio' name='label' value='Pickup' id='flexRadioDefault1'>";
+                                echo "<label class='form-check-label' for='flexRadioDefault1'>Pickup</label>";
+                            }
+                        }
+                        else{
+                            echo "<input class='form-check-input' type='radio' name='label' value='Home' id='flexRadioDefault1' checked>";
+                            echo "<label class='form-check-label' for='flexRadioDefault1'>Home</label>";
+                        }
+                        if ($_SESSION['role'] == 'Buyer') {
+                            if ($row['label'] == 'Work') {
+                               echo "<input class='form-check-input' type='radio' value='Work' name='label' id='flexRadioDefault2' checked>";
+                               echo "<label class='form-check-label' for='flexRadioDefault2'>Work</label>";
+                            }else{
+                                echo "<input class='form-check-input' type='radio' value='Work' name='label' id='flexRadioDefault2'>";
+                                echo "<label class='form-check-label' for='flexRadioDefault2'>Work</label>";
+ 
+                            }
+                            
+                        }
+                    ?>
             </div>
             <div class="col-12 my-5 text-center">
                 <button type="submit" name="editbtn" class="btn btn-primary">Save Address</button>
