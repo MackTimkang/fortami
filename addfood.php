@@ -13,9 +13,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="shortcut icon" type="image" href="./src/FortamiLogo.png">
     <title>Add</title>
+    <style>
+        body{
+            background-image:linear-gradient(#4990b5,skyblue);
+        }
+    </style>
 </head>
 <body>
-<div class="container-fluid" style="padding:30px;">
+<div class="container p-2 min-vh-100">
     <form class="row g-3"style="padding:30px;" action="" method="post" enctype="multipart/form-data">
         <h1><i class="bi bi-egg-fried"></i> Add Food Listing</h1>
         <div class="input-group">
@@ -61,7 +66,7 @@
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary" name="savebtn">Add Product</button>
-            <a class="btn btn-secondary" href="product.php" style="background-color:red;">Cancel</a>
+            <a class="btn btn-danger" href="product.php">Cancel</a>
         </div>
     </form>
 </div>
