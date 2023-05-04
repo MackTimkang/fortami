@@ -40,7 +40,7 @@
             </a>
         </div>
         <div class="col-md-3 card border border-none rounded-5 shadow text-center" style="background-image:linear-gradient(to top right,#4990b5,skyblue)">
-            <a href="order.php" style="text-decoration:none;color:white">
+            <a href="delivery.php" style="text-decoration:none;color:white">
               <div class="card-body">
                 <h2 class="card-title"> Ongoing Orders</h2>
                 <hr>
@@ -49,7 +49,7 @@
             </a>
         </div>
         <div class="col-md-4 card border border-none rounded-5 shadow text-center" style="background-image:linear-gradient(to top right, #4990b5,skyblue);">
-            <a href="order.php" style="text-decoration:none;color:white">
+            <a href="sales.php" style="text-decoration:none;color:white">
               <div class="card-body">
                 <h2 class="card-title"> Closed Transactions</h2>
                 <hr>

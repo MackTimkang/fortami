@@ -437,7 +437,6 @@ session_start();
                 header('location:menu.php');
               }else{
                 $this->deleteproduct($food_id);
-                header('dashboard.php');
               }
             
           }

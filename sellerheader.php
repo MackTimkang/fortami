@@ -98,7 +98,6 @@
                 <li>
                   <a <?=(isset($_SESSION['user']))?'class="dropdown-item disabled"':'class="dropdown-item"'?> href="./register.php">Create Account</a>
                 </li>
-                <li><a <?=(isset($_SESSION['user']))?'class="dropdown-item"':'class="dropdown-item disabled"'?> href="logout.php">Logout</a></li>
               </ul>
             </li>
             <li class="nav-item">
