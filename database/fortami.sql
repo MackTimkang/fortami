@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2023 at 06:13 AM
+-- Generation Time: May 04, 2023 at 01:40 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -48,11 +48,12 @@ CREATE TABLE `address` (
 --
 
 INSERT INTO `address` (`address_id`, `user_id`, `full_name`, `address_type`, `contact`, `region`, `province`, `city`, `barangay`, `street`, `zip`, `label`, `note`) VALUES
-(28, 36, 'Justin Eatery', 'Default', '09244466666', '7', 'Cebu', 'Cebu', 'Sambag 1', 'J. Alcantara St.', '6000', 'Home', 'Across Uc Pri Campus'),
 (30, 35, 'Reymark Timkang', 'Default', '09123456789', '7', 'Cebu', 'Talisay', 'Linao', 'Maghaway St. , San Antonio', '6045', 'Home', 'Gray gate , not on a rush so take your time and ha'),
-(31, 35, 'Reymark Timkang', 'Default', '09991551657', '7', 'Cebu', 'Cebu', 'N/A', 'University of Cebu Main Campus, Sanciangko St.', '6000', 'Work', 'Bilin lang sa guard, thank you.'),
 (32, 37, 'Joseph Restaurant', 'Default', '09999988543', '7', 'Cebu', 'Cebu', 'N/A', 'P.del Rosario St.', '6000', 'Home', 'Beside ACT school'),
-(34, 39, 'Romeo Food Hub', 'Default', '09994564213', '7', 'Cebu ', 'Cebu', 'N/A', 'Leon Kilat St.', '6000', 'Home', '');
+(34, 39, 'Romeo Food Hub', 'Default', '09994564213', '7', 'Cebu ', 'Cebu', 'N/A', 'Leon Kilat St.', '6000', 'Home', ''),
+(40, 47, 'Mike Resto', 'Default', '09995564157', '7', 'Cebu', 'Cebu', 'N/a', 'Leon Kilat St.', '6000', 'Home', 'Accross On Central'),
+(44, 35, 'Cardo Dalisay', 'Default', '09875648132', 'NCR', 'Manila', 'Manila', 'Pasig', 'Noded st', '5180', 'Work', 'Butihan mo ang pagdadala pag may tapon, patay ka sakin'),
+(45, 36, 'Justin Eatery', 'Default', '09875648981', '7', 'Cebu', 'Cebu', 'Sambag 1', 'J. Alcantara Street', '6000', 'Pickup', '');
 
 -- --------------------------------------------------------
 
@@ -114,29 +115,7 @@ CREATE TABLE `food_order` (
 --
 
 INSERT INTO `food_order` (`order_id`, `food_id`, `address_id`, `payTrans_id`, `order_status`, `rating_status`, `quantity`, `order_datetime`, `received_datetime`) VALUES
-(112, NULL, 30, 151, 'Received', 'Done', '1', '2023-04-17 04:13:03', '2023-04-17 11:56:59'),
-(113, NULL, 30, 152, 'Received', 'Done', '1', '2023-04-17 07:22:13', '2023-04-17 15:21:55'),
-(114, NULL, 30, 152, 'Received', 'Done', '2', '2023-04-17 07:22:21', '2023-04-17 15:21:55'),
-(115, NULL, 30, 153, 'Received', 'Done', '1', '2023-04-17 07:23:33', '2023-04-17 15:23:19'),
-(116, NULL, 30, 153, 'Received', 'Done', '2', '2023-04-17 07:24:05', '2023-04-17 15:23:19'),
-(117, NULL, 30, 154, 'Received', 'Done', '1', '2023-04-17 09:14:04', '2023-04-17 17:13:38'),
-(118, NULL, 30, 154, 'Received', 'Done', '1', '2023-04-17 09:14:20', '2023-04-17 17:13:38'),
-(119, NULL, 30, 155, 'Received', 'Done', '1', '2023-04-17 10:27:45', '2023-04-17 18:27:31'),
-(120, NULL, 30, 156, 'Cancelled', NULL, '1', '2023-04-17 12:38:57', NULL),
-(121, NULL, 30, 157, 'Received', 'Done', '1', '2023-04-17 12:41:33', '2023-04-17 20:41:09'),
-(122, NULL, 30, 158, 'Cancelled', NULL, '1', '2023-04-18 07:57:44', NULL),
-(123, NULL, 30, 159, 'Cancelled', NULL, '1', '2023-04-18 08:03:06', NULL),
-(124, NULL, 30, 160, 'Cancelled', NULL, '1', '2023-04-18 08:03:34', NULL),
-(125, NULL, 30, 161, 'Cancelled', NULL, '1', '2023-04-18 08:05:10', NULL),
-(126, NULL, 30, 162, 'Received', 'Done', '1', '2023-04-18 08:07:19', '2023-04-18 16:07:11'),
-(127, NULL, 30, 163, 'Cancelled', NULL, '1', '2023-04-18 09:01:44', NULL),
-(128, NULL, 30, 164, 'Cancelled', NULL, '1', '2023-04-18 09:02:39', NULL),
-(129, NULL, 30, 165, 'Cancelled', NULL, '1', '2023-04-18 09:03:19', NULL),
-(130, NULL, 30, 166, 'Received', 'Done', '1', '2023-04-18 09:04:37', '2023-04-18 17:04:26'),
-(131, NULL, 30, 167, 'Received', 'Done', '2', '2023-04-18 09:41:51', '2023-04-18 17:41:39'),
-(132, 90, 30, 168, 'Cancelled', NULL, '4', '2023-04-18 09:48:27', NULL),
-(133, NULL, 30, 169, 'Cancelled', NULL, '2', '2023-04-18 09:48:31', NULL),
-(134, 90, 30, 170, 'Received', 'Done', '1', '2023-04-18 09:50:50', '2023-04-18 17:50:28');
+(158, 97, 30, 194, 'Received', 'Done', '1', '2023-05-04 05:22:13', '2023-05-04 13:22:04');
 
 -- --------------------------------------------------------
 
@@ -162,8 +141,7 @@ CREATE TABLE `food_product` (
 --
 
 INSERT INTO `food_product` (`food_id`, `user_id`, `category_id`, `food_pic`, `food_name`, `food_description`, `preparation`, `food_creation`, `food_discountedPrice`, `food_origPrice`) VALUES
-(90, 36, 5, 'FORTAMI-643e5bfe2ac702.86181772.jpg', 'Caviar', 'Fresh luxurius caviar especially for you\r\n            ', 'Fresh', '2023-04-18 16:59:00', '1900', '2500'),
-(92, 37, 1, 'FORTAMI-643eee3608bfa7.67794895.jpg', 'Lechon Manok', 'Pinoy style grilled chicken. Very juicy and yummy                \r\n            ', 'Fresh', '2023-04-19 08:23:00', '275', '300');
+(97, 36, 1, 'FORTAMI-645340a04d7119.29174688.jpg', 'wdada', '      dawda          \r\n            ', 'Made to order', '0000-00-00 00:00:00', '2141', '12412');
 
 -- --------------------------------------------------------
 
@@ -180,17 +158,6 @@ CREATE TABLE `message` (
   `msg_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `message`
---
-
-INSERT INTO `message` (`msg_id`, `user_id`, `receiver_id`, `content`, `status`, `msg_datetime`) VALUES
-(3, 35, 36, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem sequi sunt voluptatibus quo incidunt necessitatibus, provident dolorem in voluptatum repellat! Facere, ipsam minima impedit ad inven', 'Read', '2023-04-18 21:54:04'),
-(4, 36, 35, 'Ha? Pagsure oi', 'Read', '2023-04-18 21:54:50'),
-(5, 35, 36, 'Lage mao rana', 'Read', '2023-04-18 21:56:31'),
-(6, 43, 36, 'Hi you are inactive, do you wish to continue selling?', 'Read', '2023-04-18 22:02:50'),
-(7, 36, 43, 'Yes admin I would like to continue selling.', 'Read', '2023-04-18 22:04:55');
-
 -- --------------------------------------------------------
 
 --
@@ -200,9 +167,20 @@ INSERT INTO `message` (`msg_id`, `user_id`, `receiver_id`, `content`, `status`, 
 CREATE TABLE `notification` (
   `notification_id` int(10) NOT NULL,
   `user_id` int(20) NOT NULL,
-  `notif_datetime` datetime NOT NULL,
-  `notif_details` varchar(50) NOT NULL
+  `notif_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `notif_details` varchar(200) NOT NULL,
+  `notif_status` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`notification_id`, `user_id`, `notif_datetime`, `notif_details`, `notif_status`) VALUES
+(41, 36, '2023-05-04 05:29:30', 'Hooray! You have added a new product, increase your menu by adding more products!', 'Read'),
+(42, 35, '2023-05-04 05:30:38', 'You have ordered from Justin Eatery with a total amount of ₱2,141.00', 'Read'),
+(43, 36, '2023-05-04 05:29:34', 'Hooray!, you have a new order,open the Orders tab to view pending orders.', 'Read'),
+(44, 46, '2023-05-04 05:22:04', 'New Successful Transaction with an ID of 2023194', 'Unread');
 
 -- --------------------------------------------------------
 
@@ -246,26 +224,7 @@ CREATE TABLE `payment_transaction` (
 --
 
 INSERT INTO `payment_transaction` (`payTrans_id`, `user_id`, `paymethod_id`, `pay_amount`, `delivery_option`, `trans_status`, `pay_datetime`) VALUES
-(151, 35, 4, '350.00', 'Delivery', 'Successful', '2023-04-17 03:55:00'),
-(152, 35, 4, '2,650.00', 'Pick-up', 'Successful', '2023-04-17 07:21:35'),
-(153, 35, 4, '2,650.00', 'Delivery', 'Successful', '2023-04-17 07:22:48'),
-(154, 35, 4, '258.00', 'Pick-up', 'Successful', '2023-04-17 09:12:09'),
-(155, 35, 4, '59.00', 'Delivery', 'Successful', '2023-04-17 10:26:48'),
-(156, 35, 4, '350.00', 'Delivery', 'Cancelled', '2023-04-17 12:38:42'),
-(157, 35, 4, '59.00', 'Delivery', 'Successful', '2023-04-17 12:40:17'),
-(158, 35, 4, '1,950.00', '', 'Cancelled', '2023-04-18 07:57:35'),
-(159, 35, 4, '1,950.00', 'Delivery', 'Cancelled', '2023-04-18 08:03:03'),
-(160, 35, 4, '1,950.00', 'Delivery', 'Cancelled', '2023-04-18 08:03:31'),
-(161, 35, 4, '1,950.00', 'Delivery', 'Cancelled', '2023-04-18 08:05:08'),
-(162, 35, 4, '1,950.00', 'Pick-up', 'Successful', '2023-04-18 08:05:27'),
-(163, 35, 4, '59.00', '', 'Cancelled', '2023-04-18 09:01:39'),
-(164, 35, 4, '59.00', '', 'Cancelled', '2023-04-18 09:02:37'),
-(165, 35, 4, '59.00', 'Delivery', 'Cancelled', '2023-04-18 09:03:16'),
-(166, 35, 4, '59.00', 'Pick-up', 'Successful', '2023-04-18 09:03:41'),
-(167, 35, 4, '110.00', 'Delivery', 'Successful', '2023-04-18 09:41:24'),
-(168, 35, 4, '7,600.00', 'Delivery', 'Cancelled', '2023-04-18 09:42:21'),
-(169, 35, 4, '110.00', 'Delivery', 'Cancelled', '2023-04-18 09:42:47'),
-(170, 35, 4, '1,900.00', 'Delivery', 'Successful', '2023-04-18 09:48:47');
+(194, 35, 4, '2141.00', 'Delivery', 'Successful', '2023-05-04 05:21:20');
 
 -- --------------------------------------------------------
 
@@ -285,19 +244,7 @@ CREATE TABLE `rating` (
 --
 
 INSERT INTO `rating` (`rating_id`, `order_id`, `rating`, `comment`) VALUES
-(6, 112, '4', 'Delicious'),
-(7, 113, '4', 'Yummy'),
-(8, 114, '5', 'Delicious'),
-(9, 115, '5', '2nd time still yummy'),
-(10, 116, '4', '2nd time very delicious'),
-(11, 117, '3', 'VERY INIT'),
-(12, 118, '5', 'VERY BUGNAW'),
-(13, 119, '4', 'yummy'),
-(14, 121, '4', 'Cold '),
-(15, 126, '4', 'Wow'),
-(16, 130, '3', 'Not cold anymore '),
-(17, 131, '4', 'Very lami and healthy'),
-(18, 134, '4', 'Good');
+(39, 158, '4', 'yummy');
 
 -- --------------------------------------------------------
 
@@ -314,19 +261,23 @@ CREATE TABLE `user` (
   `user_email` varchar(50) NOT NULL,
   `user_userName` varchar(50) NOT NULL,
   `user_password` varchar(255) NOT NULL,
-  `tagline` varchar(100) DEFAULT NULL
+  `tagline` varchar(100) DEFAULT NULL,
+  `permit` varchar(200) DEFAULT NULL,
+  `verification` varchar(20) NOT NULL,
+  `wallet` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `user_type`, `profile_pic`, `user_fName`, `user_lName`, `user_email`, `user_userName`, `user_password`, `tagline`) VALUES
-(35, 'Buyer', 'FORTAMI-643d60cb5a4912.19721463.jpg', 'Reymark', 'Timkang', 'reymark@gmail.com', 'reymark', '$2y$10$5Y844Z4VcjbQ0/AZyR.Ssuhw5GUtP9PV4hVQul6RL2IGvMRLVmtzm', NULL),
-(36, 'Seller', 'FORTAMI-643c2332b597c5.64436764.jpg', 'Justin', 'Conje', 'justinconje@gmail.com', 'JustinEatery', '$2y$10$AmjTjdgItwp5buYug9O5OujaflmPqx79Ub7Q65WTjw21iPMPQ.sIa', NULL),
-(37, 'Seller', 'FORTAMI-643d0b16de3775.33433947.jpg', 'Joseph', 'Banzon', 'joseph@gmail.com', 'Joseph Restaurant', '$2y$10$IJ/vWWD84ZQRiR3ojfnnWeAoV/XL79fqbwcli8Zqu5CEEr/pgVRm2', NULL),
-(39, 'Seller', 'FORTAMI-643d102d3a84e1.80215800.jpg', 'Romeo', 'Chavez', 'romeo@gmail.com', 'Romeo Food Hub', '$2y$10$VMZtYxqdzlAvv20wn/ryPOeWMqvxrqOb2WFNzNE/3dmhSHmTMltM.', NULL),
-(43, 'Admin', 'FORTAMI-643d8848154386.21430403.png', 'Fortami', 'Admin', 'timkang@gmail.com', 'Admin_Reymark', '$2y$10$X3eEtgUvjp/ANcl5PPbCdeD9Xe.KsqOXgCMa3c9y3yMyjBsetN/d.', NULL);
+INSERT INTO `user` (`user_id`, `user_type`, `profile_pic`, `user_fName`, `user_lName`, `user_email`, `user_userName`, `user_password`, `tagline`, `permit`, `verification`, `wallet`) VALUES
+(35, 'Buyer', 'FORTAMI-643d60cb5a4912.19721463.jpg', 'Reymark', 'Timkang', 'reymark@gmail.com', 'reymark', '$2y$10$5Y844Z4VcjbQ0/AZyR.Ssuhw5GUtP9PV4hVQul6RL2IGvMRLVmtzm', NULL, 'FORTAMI64513ec43863e0.05900499.jpg', '', 0),
+(36, 'Seller', 'FORTAMI-643c2332b597c5.64436764.jpg', 'Justin', 'Conje', 'justinconje@gmail.com', 'JustinEatery', '$2y$10$AmjTjdgItwp5buYug9O5OujaflmPqx79Ub7Q65WTjw21iPMPQ.sIa', NULL, 'FORTAMI645273a2d014a2.12803127.png', 'Verified', 0),
+(37, 'Seller', 'FORTAMI-643d0b16de3775.33433947.jpg', 'Joseph', 'Banzon', 'joseph@gmail.com', 'Joseph Restaurant', '$2y$10$IJ/vWWD84ZQRiR3ojfnnWeAoV/XL79fqbwcli8Zqu5CEEr/pgVRm2', NULL, '', '', 0),
+(39, 'Seller', 'FORTAMI-643d102d3a84e1.80215800.jpg', 'Romeo', 'Chavez', 'romeo@gmail.com', 'Romeo Food Hub', '$2y$10$VMZtYxqdzlAvv20wn/ryPOeWMqvxrqOb2WFNzNE/3dmhSHmTMltM.', NULL, '', '', 0),
+(46, 'Admin', 'FORTAMI-6444f29a7c7a66.99910239.png', 'Fortami', 'Admin', 'macktimkang@gmail.com', 'fortamiAdmin', '$2y$10$0dE6hnsi/Za3CWDWG07hfOaSLLkvJMhOy1hwMeHoGqeEBH6WsHusa', NULL, NULL, '', 0),
+(47, 'Seller', 'FORTAMI-64460a95079f61.27407185.png', 'Mike', 'Tango-an', 'mike@gmail.com', 'Mike_resto', '$2y$10$XwMb3gahwa6d39/.3fVfkOL9eXMNvhoP5h2YD3XFrjdVUVUxSE7uW', NULL, 'FORTAMI64465359703b37.31358579.png', 'Verified', 0);
 
 --
 -- Indexes for dumped tables
@@ -418,7 +369,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
-  MODIFY `address_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `address_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -430,49 +381,49 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `food_order`
 --
 ALTER TABLE `food_order`
-  MODIFY `order_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
+  MODIFY `order_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT for table `food_product`
 --
 ALTER TABLE `food_product`
-  MODIFY `food_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `food_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `msg_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `msg_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `notification_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
 --
 ALTER TABLE `payment_method`
-  MODIFY `paymethod_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `paymethod_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `payment_transaction`
 --
 ALTER TABLE `payment_transaction`
-  MODIFY `payTrans_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `payTrans_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=195;
 
 --
 -- AUTO_INCREMENT for table `rating`
 --
 ALTER TABLE `rating`
-  MODIFY `rating_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `rating_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `user_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- Constraints for dumped tables
