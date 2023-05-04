@@ -448,6 +448,8 @@ session_start();
         $query = "DELETE FROM food_product WHERE food_id = $food_id";
         $result = $this->con->query($query);
           if($result){
+              $notify = new Notification;
+              $notify->newUserNotif($_SESSION['id'],'You have successfully deleted a product.','Unread');
               echo "<script>alert('Deleted Successfully');</script>";
             }
             else {
