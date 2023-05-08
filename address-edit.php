@@ -141,7 +141,7 @@
             </div>
             <div class="col-12 my-5 text-center">
                 <button type="submit" name="editbtn" class="btn btn-primary">Save Address</button>
-                <a class="btn btn-secondary" href="checkout.php" style="background-color:red;border:none">Cancel</a>
+                <a class="btn btn-secondary" href="<?=($_SESSION['role'] == 'Buyer')?'checkout.php':'dashboard.php'?>" style="background-color:red;border:none">Cancel</a>
             </div>
         </div>
         </form>
