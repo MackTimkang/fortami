@@ -125,7 +125,7 @@ $backend = new Backend;
             $error = $_FILES['permit']['error'];
 
                 if ($error === 0) {
-                    if ($permit_size > 1000000) {
+                    if ($permit_size > 10000000) {
                         echo "Please upload a pic not more that 1mb";
                     }else{
                         $ext = pathinfo($permit_name,PATHINFO_EXTENSION);
