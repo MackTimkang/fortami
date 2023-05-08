@@ -39,9 +39,7 @@
         </div>
         <div class="col-md-6">
             <label for="form-label">Food Details</label>
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required>
-                
-            </textarea>
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required></textarea>
         </div>
         <div class="col-md-3">
             <label for="preparation" class="form-label">Preparation</label>
@@ -58,11 +56,11 @@
         </div>
         <div class="col-md-3">
             <label for="inputState" class="form-label">Discounted Price</label>
-            <input type="number" class="form-control" placeholder="$" name="disprice" id="disprice"required>
+            <input type="number" class="form-control" placeholder="₱" name="disprice" id="disprice"required>
         </div>
         <div class="col-md-3">
             <label for="inputZip" class="form-label">Original Price</label>
-            <input type="number" class="form-control" placeholder="$" name="origprice" id="origprice" required>
+            <input type="number" class="form-control" placeholder="₱" name="origprice" id="origprice" required>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary" name="savebtn">Add Product</button>

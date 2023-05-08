@@ -47,6 +47,7 @@
                 </div>
                 <div class="col-12 shadow rounded p-2">
                     <div id="chart_div" style="width: 100%; height: 500px;"></div>
+                    
                 </div>
             </form>
         </div>
