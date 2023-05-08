@@ -24,6 +24,11 @@
     <title>Payment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">    
+    <style>
+        body{
+            background-image:linear-gradient(#4990b5,skyblue);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -113,7 +118,7 @@
                         }
                     }
             ?>
-                <div class="col-6 p-2  rounded-start" >
+                <div class="col-12 p-2  rounded-start" >
                     <div class="row g-3 ">
                         <div class="col-12 text-center">
                             <h1><i class="bi bi-person-fill-up"></i> Delivery Address</h1>
@@ -179,7 +184,7 @@
                     </div>
                     
                 </div>
-                <div class="col-6 p-2 bg-light rounded-end table-responsive">
+                <div class="col-12 p-2 bg-secondary bg-gradient rounded table-responsive">
                     <i><h3>Your Order</h3></i>
                     <table class="table table-dark table-striped ">
                         
@@ -215,14 +220,14 @@
                     </table>
                     <br>
                     <div class="col-12">
-                        <a class="btn btn-warning p-2 w-100" href="payment.php?shop_id=&trans_id=">
-                            <img src="./src/epay.png" style="max-width:300px;" class="img-fluid">
+                        <a href="payment.php?shop=<?=$_GET['shop_id']?>" class="btn btn-warning p-2 w-100">
+                            <img src="./src/epay.png" style="max-width:100px;" class="img-fluid">
                         </a>
                     </div>
                     <div class="col-12">
                         <p>
                             <button class="btn btn-dark p-2 w-100 my-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                <img src="./src/creditcard.png" alt="Credit Card" class="img-fluid" style="max-width:200px">
+                                <img src="./src/creditcard.png" alt="Credit Card" class="img-fluid" style="max-width:100px">
                             </button>
                         </p>
                         <div class="collapse" id="collapseExample">

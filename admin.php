@@ -69,7 +69,7 @@
         </div>
         <hr>
         <div class="col-md-3 card p-3 bg-dark bg-gradient text-light rounded-5 shadow text-center">
-            <a href="" style="text-decoration:none;color:white">
+            <a href="chat.php" style="text-decoration:none;color:white">
               <div class="card-body">
                 <h2 class="card-title"><i class="bi bi-gear-fill"> Message</i></h2>
               </div>
