@@ -19,14 +19,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <title>Update</title>
-    <style>
-        body{
-            background-image:linear-gradient(#4990b5,skyblue);
-        }
-    </style>
 </head>
 <body>
-<div class="container p-2 min-vh-100">
+<div class="container-fluid" style="padding:30px;">
 <form class="row g-3"style="padding:30px;" action="" method="post" enctype="multipart/form-data">
     <h1>Update Food Listing</h1>
     <div class="input-group" style="width:1000px;">
@@ -70,8 +65,8 @@
         <input type="number" class="form-control" name="origprice" id="origprice" value="<?=$row['food_origPrice'];?>" required>
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary" name="editbtn">Save Changes</button>
-        <a class="btn btn-danger" href="product.php">Cancel</a>
+        <button type="submit" class="btn btn-primary" name="editbtn">Update</button>
+        <a class="btn btn-secondary" href="product.php" style="background-color:red;">Cancel</a>
     </div>
 </form>
     

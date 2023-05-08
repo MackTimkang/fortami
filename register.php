@@ -79,7 +79,7 @@ $backend = new Backend;
                 $error = $_FILES['profile']['error'];
 
                     if ($error === 0) {
-                        if ($img_size > 5000000) {
+                        if ($img_size > 1000000) {
                             echo "Please upload an image not more than 1mb";
                         }
                         else {

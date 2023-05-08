@@ -13,14 +13,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="shortcut icon" type="image" href="./src/FortamiLogo.png">
     <title>Add</title>
-    <style>
-        body{
-            background-image:linear-gradient(#4990b5,skyblue);
-        }
-    </style>
 </head>
 <body>
-<div class="container p-2 min-vh-100">
+<div class="container-fluid" style="padding:30px;">
     <form class="row g-3"style="padding:30px;" action="" method="post" enctype="multipart/form-data">
         <h1><i class="bi bi-egg-fried"></i> Add Food Listing</h1>
         <div class="input-group">
@@ -39,7 +34,9 @@
         </div>
         <div class="col-md-6">
             <label for="form-label">Food Details</label>
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required></textarea>
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required>
+                
+            </textarea>
         </div>
         <div class="col-md-3">
             <label for="preparation" class="form-label">Preparation</label>
@@ -56,15 +53,15 @@
         </div>
         <div class="col-md-3">
             <label for="inputState" class="form-label">Discounted Price</label>
-            <input type="number" class="form-control" placeholder="₱" name="disprice" id="disprice"required>
+            <input type="number" class="form-control" placeholder="$" name="disprice" id="disprice"required>
         </div>
         <div class="col-md-3">
             <label for="inputZip" class="form-label">Original Price</label>
-            <input type="number" class="form-control" placeholder="₱" name="origprice" id="origprice" required>
+            <input type="number" class="form-control" placeholder="$" name="origprice" id="origprice" required>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary" name="savebtn">Add Product</button>
-            <a class="btn btn-danger" href="product.php">Cancel</a>
+            <a class="btn btn-secondary" href="product.php" style="background-color:red;">Cancel</a>
         </div>
     </form>
 </div>

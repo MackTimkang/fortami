@@ -1248,27 +1248,6 @@ session_start();
     }//end of search class
 
     class Wallet extends Account{
-      public $con;
-
-      function __construct(){
-        $db = new Database;
-        $this->con = $db->getConnection();
-      }//end of function construct
-      
-      function findWallet($methodId,$shop){
-        $query = "SELECT * FROM wallet JOIN payment_method ON payment_method.paymethod_id = wallet.payment_method WHERE wallet.payment_method = $methodId AND wallet.user_id = $shop";
-        $result = $this->con->query($query);
-          if ($result) {
-            return $result;
-          }
-      }//end of function find wallet
-
-      function addWallet($user_id,$payment_method,$acc_name,$acc_num){
-        $query = "INSERT INTO wallet values()";
-        $result = $this->con->query($query);
-          if ($result) {
-          }
-      }//end of function add wallet
 
       function cashinWallet(){
 

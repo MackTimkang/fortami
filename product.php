@@ -50,7 +50,7 @@ $backend->checksession();
                         }
                     ?>
                 </td>
-                <td><?="<small><s class='text-secondary'>₱ ".$data['food_origPrice']."</s></small>"." ₱".$data['food_discountedPrice'];?></td>
+                <td><?="<small><s class='text-secondary'>".$data['food_origPrice']."</s></small>"." ".$data['food_discountedPrice'];?></td>
                 <td>
                     <form action="" method="post">
                         <a class="btn btn-warning" href="./edit.php?id=<?=$data['food_id']?>" ><i class="bi bi-pencil-fill"></i></a>

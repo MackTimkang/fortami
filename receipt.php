@@ -130,7 +130,7 @@
 				}
 			?><br>
 			<div class="d-flex align-items-center justify-content-center">
-				<!-- <button class="btn btn-info shadow" onclick="downloadWindow()"><i class="bi bi-box-arrow-down"> Download Receipt</i></button> -->
+				<button class="btn btn-info shadow" onclick="downloadWindow()"><i class="bi bi-box-arrow-down"> Download Receipt</i></button>
 				<!-- <button class="btn btn-secondary" id="dlpage" onclick="downloadPage()"><i class="bi bi-box-arrow-down"> Download Receipt</i></button> -->
 			</div>
 			<br>

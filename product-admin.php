@@ -22,13 +22,14 @@
             <div class="col-3">
                 <a href="admin.php" class="btn btn-outline-dark"><i class="bi bi-arrow-bar-left">Back</i></a>
             </div>
-            <div class="col-12 table-responsive">
+            <div class="col-12">
                 <table class="table table-dark table-striped text-center">
                     <tr>
                         <th>Id</th>
                         <th>Image</th>
                         <th>Food</th>
                         <th>Shop</th>
+                        <th>Rating <small class="text-secondary"><i>(average)</i></small></th>
                         <th>Delete</th>
                     </tr>
                         <?php
@@ -40,6 +41,23 @@
                         <td><img src="./src/uploads/food_picture/<?=$row['food_pic']?>" class="img-thumbnail" alt="food" style="max-width:100px"></td>
                         <td><?=$row['food_name']?></td>
                         <td><?=$row['user_userName']?></td>
+                        <td>
+                            <?php
+                                $average = $rating->avgRating($row['food_id']);
+                                $avg = mysqli_fetch_assoc($average);
+                                $rate = $avg['rate'];
+                                $unfilled = 5 - $rate;
+                                
+                                for ($i=0; $i < $rate; $i++) { 
+                                    $star = "<i class='bi bi-star-fill p-1 text-warning'></i>";
+                                    echo $star;
+                                }
+                                for ($i=0; $i < $unfilled; $i++) { 
+                                    $star = "<i class='bi bi-star p-1 text-warning'></i>";
+                                    echo $star;
+                                }
+                            ?>
+                        </td>
                         <td>
                             <form action="">
                                 <input type="hidden" name="food_id" value="<?=$row['food_id']?>">

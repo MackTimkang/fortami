@@ -15,7 +15,7 @@
     <title>Activity</title>
 </head>
 <body>
-    <div class="container p-5">
+    <div class="container table-responsive p-5">
         <div class="row shadow g-3">
             <div class="col-12 p-2 bg-dark">
                 <h2 class="text-light text-center">Ongoing Orders</h2>
@@ -23,44 +23,46 @@
             <div class="col-12  text-end">
                 <a href="transactions.php" class="btn btn-outline-dark"><i class="bi bi-clock-history"> Transaction History</i></a>
             </div>
-                <div class="col-12 table-responsive">
-                    <table class="table text-center table-striped">
-                        <tr>
-                            <th>Shop</th>
-                            <th>Total Amount</th>
-                            <th>Delivery Option</th>
-                            <th>Order Status</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                        <?php
-                            $result = $backend->activeOrders();
-                                if (!is_null($result)) {
-                                    if ($result->num_rows > 0) {
-                                        foreach ($result as $row){
-                        ?>
-                            <tr>
-                                <td style="font-weight:bold;font-style:italic;"><?=$row['user_userName']?></td>
-                                <td><?=$row['pay_amount']?></td>
-                                <td><?=$row['delivery_option']?></td>
-                                <td><?=$row['order_status']?></td>
-                                <td>
-                                    <form class="text-center" action="" method="post">
-                                        <input type="hidden" name="trans" value="<?=$row['payTrans_id']?>">
-                                        <button type="submit" name="cancelbtn" class="btn btn-danger" <?=($row['order_status'] == 'Pending')? '':'disabled'?>>Cancel</button>
-                                        <button type="submit" name="rcvbtn" class="btn btn-success"  <?=($row['order_status'] == 'Pending' || $row['order_status'] == 'Preparing' )? 'disabled':''?>>Receive</button>
-                                    </form>
-                                </td>
-                            </tr>
+                <table class="table text-center table-striped">
+                    <tr>
+                        <th>Shop</th>
+                        <th>Total Amount</th>
+                        <th>Delivery Option</th>
+                        <th>Order Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
                     <?php
-                            }
+                        $result = $backend->activeOrders();
+                            if (!is_null($result)) {
+                                if ($result->num_rows > 0) {
+                                    foreach ($result as $row){
+                    ?>
+
+                        <tr>
+                            <td style="font-weight:bold;font-style:italic;"><?=$row['user_userName']?></td>
+                            <td><?=$row['pay_amount']?></td>
+                            <td><?=$row['delivery_option']?></td>
+                            <td><?=$row['order_status']?></td>
+                            <td>
+                                <form class="text-center" action="" method="post">
+                                    <input type="hidden" name="trans" value="<?=$row['payTrans_id']?>">
+                                    <button type="submit" name="cancelbtn" class="btn btn-danger" <?=($row['order_status'] == 'Pending')? '':'disabled'?>>Cancel</button>
+                                    <button type="submit" name="rcvbtn" class="btn btn-success"  <?=($row['order_status'] == 'Pending' || $row['order_status'] == 'Preparing' )? 'disabled':''?>>Receive</button>
+                                </form>
+                            </td>
+                        </tr>
+
+                    
+            
+                <?php
                         }
                     }
-                    else {
-                        echo "<h1 class='text-center'><i class='bi bi-bag-x'></i><br>No Orders Yet!</h1>";
-                    }
-                    ?>
-                    </table>
-                </div>
+                }
+                else {
+                    echo "<h1 class='text-center'><i class='bi bi-bag-x'></i><br>No Orders Yet!</h1>";
+                }
+                ?>
+                </table>
             </div>  
         </div>
     </div>

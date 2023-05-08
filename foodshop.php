@@ -194,7 +194,7 @@
         <?=$none?>
         <div class="row g-2 d-flex justify-content-evenly">
             <div class="col-12 bg-warning bg-gradient rounded shadow text-center p-2">
-                <h3><i>Ratings / Reviews</i></h3>
+                <h3>Ratings / Reviews</h3>
             </div>
             <?php
                 if (isset($_GET['shop_id'])) {

@@ -15,7 +15,7 @@
     <div class="container">
         <div class="row g-3 p-5">
             <div class="col bg-dark text-center p-2"><h2 class="text-light"><i class="bi bi-clock-history"></i> Transaction History</h2></div>
-            <div class="col-12 table-responsive">
+            <div class="col-12">
                 <table class="table table-striped">
                     <tr>
                         <th>Transaction Id</th>

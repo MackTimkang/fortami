@@ -36,7 +36,7 @@
     <title>User</title>
 </head>
 <body>
-    <div class="container p-5 table-responsive">
+    <div class="container p-5">
         <h1 class="text-center bg-warning bg-gradient p-2 rounded-5 shadow"><i class="bi bi-gear-fill"> Account</i></h1>
             <div class="dropdown">
                 <a href="admin.php" class="btn btn-dark"><i class="bi bi-arrow-bar-left">Back</i></a>
