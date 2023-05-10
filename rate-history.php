@@ -33,7 +33,7 @@
             <div class="col-12 bg-warning bg-gradient rounded shadow text-light p-3 text-center">
                 <h3><i class="bi bi-star-fill text-light"> Rating History</i></h3>
             </div>
-            <div class="col-12 my-2">
+            <div class="col-12 my-2 table-responsive">
                 <a href="<?php if($_SESSION['role'] == 'Seller'){ echo 'sales.php';}elseif($_SESSION['role'] == 'Buyer'){echo 'transactions.php';}else{echo 'admin-transaction.php';}?>" class="btn btn-outline-dark"><i class="bi bi-arrow-bar-left">Back</i></a>
                 <table class="table table-dark table-striped text-center my-2">
                     <tr>

@@ -840,7 +840,7 @@ session_start();
                     JOIN address ON food_order.address_id = address.address_id 
                     JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id 
                     WHERE (SELECT food_product.user_id FROM food_order JOIN food_product ON food_order.food_id = food_product.food_id 
-                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' GROUP BY food_product.user_id) = $seller_id AND order_status = 'Pending' OR order_status = 'Preparing' GROUP BY food_order.payTrans_id";
+                            INNER JOIN user ON user.user_id = food_product.user_id WHERE order_status = 'Pending' OR order_status= 'Preparing' AND food_product.user_id = $seller_id GROUP BY food_product.user_id) = $seller_id AND order_status = 'Pending' OR order_status = 'Preparing' GROUP BY food_order.payTrans_id";
           $result = $this->con->query($query);
             if ($result) {
               return $result;
@@ -1248,6 +1248,27 @@ session_start();
     }//end of search class
 
     class Wallet extends Account{
+      public $con;
+
+      function __construct(){
+        $db = new Database;
+        $this->con = $db->getConnection();
+      }//end of function construct
+      
+      function findWallet($methodId,$shop){
+        $query = "SELECT * FROM wallet JOIN payment_method ON payment_method.paymethod_id = wallet.payment_method WHERE wallet.payment_method = $methodId AND wallet.user_id = $shop";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of function find wallet
+
+      function addWallet($user_id,$payment_method,$acc_name,$acc_num){
+        $query = "INSERT INTO wallet values()";
+        $result = $this->con->query($query);
+          if ($result) {
+          }
+      }//end of function add wallet
 
       function cashinWallet(){
 

@@ -24,7 +24,7 @@
                     </i>
                 </h2>
             </div>
-            <div class="col-12">
+            <div class="col-12 table-responsive">
                 <table class="table table-dark text-center table-striped">
                     <tr>
                         <th>Transaction No.</th>
