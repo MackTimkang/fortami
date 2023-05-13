@@ -43,7 +43,6 @@
                             $row = mysqli_fetch_assoc($list);
                             $name = $row['full_name'];
                             $contact = $row['contact'];
-                            $region = $row['region'];
                             $province = $row['province'];
                             $city = $row['city'];
                             $brgy = $row['barangay'];
@@ -61,7 +60,6 @@
                                     if ($row['label'] === 'Home' ) {
                                         $name = $row['full_name'];
                                         $contact = $row['contact'];
-                                        $region = $row['region'];
                                         $province = $row['province'];
                                         $city = $row['city'];
                                         $brgy = $row['barangay'];
@@ -80,7 +78,6 @@
                                     if ($row['label'] === 'Work'){
                                         $name = $row['full_name'];
                                         $contact = $row['contact'];
-                                        $region = $row['region'];
                                         $province = $row['province'];
                                         $city = $row['city'];
                                         $brgy = $row['barangay'];
@@ -107,7 +104,6 @@
                                 if (!is_null($address)) {
                                     $name = $address['full_name'];
                                     $contact = $address['contact'];
-                                    $region = $address['region'];
                                     $province = $address['province'];
                                     $city = $address['city'];
                                     $brgy = $address['barangay'];
@@ -144,10 +140,6 @@
                             <input type="text" class="form-control" name="ad" placeholder="street, apartment, studio or floor" value="<?=$street?>"disabled>
                         </div>
                         <div class="col-md-4">
-                            <label for="region" class="form-label">Region</label>
-                            <input type="text" class="form-control" name="region" value="<?=$region?>"disabled>
-                        </div>
-                        <div class="col-md-4">
                             <label for="province" class="form-label">Province</label>
                             <input type="text" class="form-control" name="province" value="<?=$province?>"disabled>
                         </div>
@@ -163,7 +155,7 @@
                             <label for="zip" class="form-label">Zip</label>
                             <input type="number" class="form-control" name="zip" value="<?=$zip?>"disabled>
                         </div>
-                        <div class="col-12">
+                        <div class="col-md-8">
                             <label for="note" class="form-label">Note <small class="text-secondary"><i>(Optional)</i> </small></label>
                             <input type="text" class="form-control" name="note" value="<?=$note?>"disabled>
                         </div>

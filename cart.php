@@ -69,7 +69,7 @@
                     <div class="col-md-1">
                         <div class="card-body ">
                             <p class="card-text">
-                                <h4 class="card-title"><?=$row['food_name'];?></h4>
+                                <h6 class="card-title"><?=$row['food_name'];?></h6>
                             </p>
                             
                         </div>
@@ -112,7 +112,7 @@
                         <div class="card-body">
                             <p class="card-text">
                                 <h4>
-                                    <small class="text-secondary"><?=$row['quantity'];?> pc/s</small>
+                                    <small class="text-secondary"><?=$row['quantity'];?> <?=($row['quantity'] > 1)? 'orders' : 'order'?></small>
                                         <button class="btn btn-outline-dark" type="button"  style="border:none;" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>

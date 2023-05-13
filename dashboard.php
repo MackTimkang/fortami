@@ -51,7 +51,7 @@
         <div class="col-md-4 card border border-none rounded-5 shadow text-center" style="background-image:linear-gradient(to top right, #4990b5,skyblue);">
             <a href="sales.php" style="text-decoration:none;color:white">
               <div class="card-body">
-                <h2 class="card-title"> Closed Transactions</h2>
+                <h2 class="card-title"> Completed Transactions</h2>
                 <hr>
                 <p class="card-text"><h1><?=$totalTrans['totalTrans']?></h1></p>
               </div>

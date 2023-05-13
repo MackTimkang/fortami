@@ -41,10 +41,6 @@ $backend = new Backend;
                 <input type="text" class="form-control" name="street" placeholder="street, apartment, studio or floor" required>
             </div>
             <div class="col-md-4">
-                <label for="region" class="form-label">Region <small class="text-danger">*</small></label>
-                <input type="text" class="form-control" name="region" required>
-            </div>
-            <div class="col-md-4">
                 <label for="province" class="form-label">Province <small class="text-danger">*</small></label>
                 <input type="text" class="form-control" name="province" required>
             </div>
@@ -60,7 +56,7 @@ $backend = new Backend;
                 <label for="zip" class="form-label">Zip <small class="text-danger">*</small></label>
                 <input type="number" class="form-control" name="zip" required>
             </div>
-            <div class="col-12">
+            <div class="col-md-8">
                 <label for="note" class="form-label">Note <small class="text-secondary"><i>(Optional)</i> </small></label>
                 <input type="text" class="form-control" name="note">
             </div>
@@ -106,7 +102,6 @@ $backend = new Backend;
             $name = $_POST['fullname'];
             $type = $_POST['address_type'];
             $con = $_POST['telnum'];
-            $reg = $_POST['region'];
             $province = $_POST['province'];
             $city = $_POST['city'];
             $brgy = $_POST['brgy'];
@@ -115,7 +110,7 @@ $backend = new Backend;
             $note = $_POST['note'];
             $label = $_POST['label'];
     
-            $backend->createAddress($id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label);
+            $backend->createAddress($id,$name,$type,$con,$province,$city,$brgy,$street,$zip,$note,$label);
     
             $permit = $_FILES['permit'];
 
