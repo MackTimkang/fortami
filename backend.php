@@ -314,8 +314,8 @@ session_start();
           }
         }
 
-        function editAddress($id,$name,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
-          $query = "UPDATE address SET full_name = '$name', contact = '$con' , region = '$reg' ,
+        function editAddress($id,$name,$con,$province,$city,$brgy,$street,$zip,$note,$label){
+          $query = "UPDATE address SET full_name = '$name', contact = '$con' ,
           province = '$province', city = '$city', barangay = '$brgy', street = '$street', zip = '$zip',note='$note',label='$label' 
           WHERE address_id = $id";
           $result = $this->con->query($query);
@@ -337,11 +337,11 @@ session_start();
           }
         }
 
-        function createAddress($user_id,$name,$type,$con,$reg,$province,$city,$brgy,$street,$zip,$note,$label){
+        function createAddress($user_id,$name,$type,$con,$province,$city,$brgy,$street,$zip,$note,$label){
           $userSearch = $this->userSearch($user_id);
           $user = mysqli_fetch_assoc($userSearch);
           $role = $user['user_type'];
-          $query = "INSERT INTO address(user_id,full_name,address_type,contact,region,province,city,barangay,street,zip,note,label) values($user_id,'$name','$type','$con','$reg','$province','$city','$brgy','$street','$zip','$note','$label')";
+          $query = "INSERT INTO address(user_id,full_name,address_type,contact,province,city,barangay,street,zip,note,label) values($user_id,'$name','$type','$con','$province','$city','$brgy','$street','$zip','$note','$label')";
           $result = $this->con->query($query);
             if ($result) {
               if ($role === 'Seller') {
@@ -1283,4 +1283,42 @@ session_start();
       }//end of function send money
 
     }//end of class Wallet
+
+    class Report extends Notification{
+      public $con;
+
+      function __construct(){
+        $db = new Database;
+        $this->con = $db->getConnection();
+      }//end of function construct
+
+      function reportTrans($order,$trans,$issue,$desc){
+        $query = "INSERT INTO report(order_id,trans_id,issue,description) VALUES($order,$trans,'$issue','$desc')";
+        $result = $this->con->query($query);
+          if ($result) {
+            $this->newUserNotif($_SESSION['id'],"You have reported transaction $trans, thank you for your feedback",'Unread');
+            $this->newUserNotif(46,"You have a new report pending",'Unread');
+            echo "<script>alert('Your report has been send to the admin, thank you!');window.location.href='transactions.php?report=trans';</script>";
+          }
+      }//end of function reportTrans
+
+      function viewAllReports(){
+        $query = "SELECT * FROM report JOIN payment_transaction ON payment_transaction.payTrans_id = report.trans_id 
+                  JOIN food_order ON food_order.order_id = report.order_id 
+                  INNER JOIN user ON user.user_id = payment_transaction.user_id ORDER BY report_datetime";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of function view all reports
+
+      function viewReport($id){
+        $query = "SELECT * FROM report WHERE report_id = $id";
+        $result =$this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of view report function
+
+    }
 ?>

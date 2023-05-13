@@ -3,7 +3,6 @@
     $backend = new Backend;
         $name = "";
         $contact = "";
-        $region = "";
         $province = "";
         $city = "";
         $brgy = "";
@@ -20,7 +19,6 @@
                 $row = mysqli_fetch_assoc($list);
                     $name = $row['full_name'];
                     $contact = $row['contact'];
-                    $region = $row['region'];
                     $province = $row['province'];
                     $city = $row['city'];
                     $brgy = $row['barangay'];
@@ -38,7 +36,6 @@
             $id = $_GET['id'];
             $name = $_POST['fullname'];
             $contact = $_POST['telnum'];
-            $region = $_POST['region'];
             $province = $_POST['province'];
             $city = $_POST['city'];
             $brgy = $_POST['brgy'];
@@ -47,7 +44,7 @@
             $note = $_POST['note'];
             $label = $_POST['label'];
 
-            $backend->editAddress($id,$name,$contact,$region,$province,$city,$brgy,$street,$zip,$note,$label);
+            $backend->editAddress($id,$name,$contact,$province,$city,$brgy,$street,$zip,$note,$label);
         }
 
 
@@ -87,10 +84,6 @@
                 <input type="text" class="form-control" name="street" value="<?=$street?>" placeholder="street, apartment, studio or floor" required>
             </div>
             <div class="col-md-4">
-                <label for="region" class="form-label">Region</label>
-                <input type="text" class="form-control" value="<?=$region?>" name="region" required>
-            </div>
-            <div class="col-md-4">
                 <label for="province" class="form-label">Province</label>
                 <input type="text" class="form-control" value="<?=$province?>" name="province" required>
             </div>
@@ -106,7 +99,7 @@
                 <label for="zip" class="form-label">Zip</label>
                 <input type="number" class="form-control" name="zip" value="<?=$zip?>" required>
             </div>
-            <div class="col-12">
+            <div class="col-md-8">
                 <label for="note" class="form-label">Note <small class="text-secondary"><i>(Optional)</i> </small></label>
                 <input type="text" class="form-control" name="note" value="<?=$note?>">
             </div>

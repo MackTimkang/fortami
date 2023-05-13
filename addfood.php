@@ -38,7 +38,7 @@
                 <input type="text" class="form-control" id="foodname" name="foodname" required>
         </div>
         <div class="col-md-6">
-            <label for="form-label">Food Details</label>
+            <label for="form-label">Description</label>
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required></textarea>
         </div>
         <div class="col-md-3">
@@ -51,16 +51,16 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label for="datetime" class="form-label">Creation Time <small class="text-secondary">(applicable for fresh and surplus)</small> </label>
+            <label for="datetime" class="form-label">Preparation Time </label>
             <input type="datetime-local" class="form-control" id="inputAddress" name="creation">
-        </div>
-        <div class="col-md-3">
-            <label for="inputState" class="form-label">Discounted Price</label>
-            <input type="number" class="form-control" placeholder="₱" name="disprice" id="disprice"required>
         </div>
         <div class="col-md-3">
             <label for="inputZip" class="form-label">Original Price</label>
             <input type="number" class="form-control" placeholder="₱" name="origprice" id="origprice" required>
+        </div>
+        <div class="col-md-3">
+            <label for="inputState" class="form-label">Discounted Price</label>
+            <input type="number" class="form-control" placeholder="₱" name="disprice" id="disprice"required>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary" name="savebtn">Add Product</button>

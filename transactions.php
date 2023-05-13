@@ -24,6 +24,7 @@
                         <th>Order Date</th>
                         <th>Receipt</th>
                         <th>Rating</th>
+                        <?=(isset($_GET['report'])&& $_GET['report'] == 'trans' ?'<th>Report</th>':'')?>
                     </tr>
                     <?php
                         $result = $backend->viewHistory();
@@ -63,6 +64,28 @@
                         <td>
                             <a href="rate-history.php?trans=<?=$row['payTrans_id']?>&shop=<?=$row['user_userName']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
                         </td>
+                        <?php
+                            if (isset($_GET['report']) && $_GET['report'] == 'trans') {
+                                ?>
+                                    <td>
+                                        <form action="report.php" method="post">
+                                            <input type="hidden" name="issue" value="I would like to report a transaction">
+                                            <input type="hidden" name="order" value=<?=$row['order_id']?>>
+                                            <input type="hidden" name="trans_id" value="<?=$row['payTrans_id']?>">
+                                            <input type="hidden" name="shop" value="<?=$row['user_userName']?>">
+                                            <input type="hidden" name="shop_id" value="<?=$row['user_id']?>">
+                                            <input type="hidden" name="date" value="<?=$row['order_datetime']?>">
+                                            <input type="hidden" name="status" value="<?=$row['order_status']?>">
+                                            <input type="hidden" name="delivery" value="<?=$row['delivery_option']?>">
+                                            <input type="hidden" name="total" value="<?=$row['pay_amount']?>">
+                                            <input type="hidden" name="paystats" value="<?=$row['trans_status']?>">
+                                            <input type="hidden" name="method" value="<?=$row['paymethod_type']?>">
+                                            <button type="submit" name="subbtn" value="clicked" class="btn btn-danger"><i class="bi bi-flag"> </i></button>
+                                        </form>
+                                    </td>
+                                <?php
+                            }
+                        ?>
                     </tr>
                     <?php
                             }
