@@ -45,8 +45,12 @@
             <input type="text" class="form-control" id="foodname" name="foodname" value="<?=$row['food_name'];?>" required>
     </div>
     <div class="col-md-6">
-        <label for="floatingTextarea">Food Details</label>
+        <label for="floatingTextarea">Description</label>
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required><?=$row['food_description'];?></textarea>
+    </div>
+    <div class="col-md-3">
+            <label for="food name" class="form-label">Serving Size</label>
+            <input type="text" class="form-control" name="size" placeholder="Good for " value="<?=$row['serving_size']?>" required>
     </div>
     <div class="col-md-3">
             <label for="preparation" class="form-label">Preparation</label>
@@ -58,19 +62,23 @@
             </select>
         </div>
     <div class="col-md-3">
-        <label for="datetime" class="form-label">Date & Time of Creation</label>
+        <label for="datetime" class="form-label">Preparation Time</label>
         <input type="datetime-local" class="form-control" id="inputAddress" name="creation" value="<?=$row['food_creation'];?>">
     </div>
     <div class="col-md-3">
-        <label for="inputState" class="form-label">Discounted Price</label>
-        <input type="number" class="form-control" name="disprice" id="disprice" value="<?=$row['food_discountedPrice'];?>" required>
+            <label for="date" class="form-label">Expiration Date </label>
+            <input type="date" class="form-control" id="inputAddress" name="expiration" value="<?=$row['food_expiration'];?>">
     </div>
     <div class="col-md-3">
         <label for="inputZip" class="form-label">Original Price</label>
         <input type="number" class="form-control" name="origprice" id="origprice" value="<?=$row['food_origPrice'];?>" required>
     </div>
+    <div class="col-md-3">
+        <label for="inputState" class="form-label">Discounted Price</label>
+        <input type="number" class="form-control" name="disprice" id="disprice" value="<?=$row['food_discountedPrice'];?>" required>
+    </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary" name="editbtn">Save Changes</button>
+        <button type="submit" class="btn btn-success" name="editbtn">Save Changes</button>
         <a class="btn btn-danger" href="product.php">Cancel</a>
     </div>
 </form>
@@ -86,7 +94,10 @@
             $category = $_POST['category'];
             $foodname = $_POST['foodname'];
             $desc = $_POST['fooddesc'];
+            $size = $_POST['size'];
             $time = $_POST['creation'];
+            $exp = new DateTime($_POST['expiration']);
+            $expiration_date = $exp->format('Y-m-d');
             $disc = $_POST['disprice'];
             $orig = $_POST['origprice'];
             $prep = $_POST['prep'];
@@ -121,7 +132,7 @@
                     echo "Unknown Error Occured, Please Try Again.";
                 }
 
-            $backend->editproduct($food_id,$category,$new_imgName,$foodname,$desc,$prep,$time,$disc,$orig);
+            $backend->editproduct($food_id,$category,$new_imgName,$foodname,$desc,$size,$prep,$time,$expiration_date,$disc,$orig);
         }
         else{
             echo "Please select food category and upload food image!";

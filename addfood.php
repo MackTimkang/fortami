@@ -42,6 +42,10 @@
             <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="fooddesc" required></textarea>
         </div>
         <div class="col-md-3">
+            <label for="food name" class="form-label">Serving Size</label>
+            <input type="text" class="form-control" name="size" placeholder="Good for " required>
+        </div>
+        <div class="col-md-3">
             <label for="preparation" class="form-label">Preparation</label>
             <select name="prep" id="" class="form-select" required>
                 <option value="" selected disabled>Choose....</option>
@@ -55,15 +59,19 @@
             <input type="datetime-local" class="form-control" id="inputAddress" name="creation">
         </div>
         <div class="col-md-3">
+            <label for="date" class="form-label">Expiration Date </label>
+            <input type="date" class="form-control" id="inputAddress" name="expiration">
+        </div>
+        <div class="col-md-3">
             <label for="inputZip" class="form-label">Original Price</label>
-            <input type="number" class="form-control" placeholder="₱" name="origprice" id="origprice" required>
+            <input type="number" class="form-control" placeholder="₱0" name="origprice" id="origprice" required>
         </div>
         <div class="col-md-3">
             <label for="inputState" class="form-label">Discounted Price</label>
-            <input type="number" class="form-control" placeholder="₱" name="disprice" id="disprice"required>
+            <input type="number" class="form-control" placeholder="₱0" name="disprice" id="disprice"required>
         </div>
         <div class="col-12">
-            <button type="submit" class="btn btn-primary" name="savebtn">Add Product</button>
+            <button type="submit" class="btn btn-success" name="savebtn">Add Product</button>
             <a class="btn btn-danger" href="product.php">Cancel</a>
         </div>
     </form>
@@ -74,8 +82,11 @@
             $pic=$_FILES['foodpic'];
             $foodname=$_POST['foodname'];
             $desc=$_POST['fooddesc'];
+            $size = $_POST['size'];
             $prep = $_POST['prep'];
             $time=$_POST['creation'];
+            $exp = new DateTime($_POST['expiration']);
+            $expiration_date = $exp->format('Y-m-d');
             $discount=$_POST['disprice'];
             $price=$_POST['origprice'];
 
@@ -114,7 +125,7 @@
             
             $notifs = new Notification;
             $notify = $notifs->newUserNotif($_SESSION['id'],"Hooray! You have added a new product, increase your menu by adding more products!","Unread");
-            $backend->addproduct($catid,$img_newName,$foodname,$desc,$prep,$time,$discount,$price);
+            $backend->addproduct($catid,$img_newName,$foodname,$desc,$size,$prep,$time,$expiration_date,$discount,$price);
             
             if (isset($_GET['error'])) {
                 echo $error;

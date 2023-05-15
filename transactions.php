@@ -62,7 +62,7 @@
                             </form>
                         </td>
                         <td>
-                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>&shop=<?=$row['user_userName']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
+                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>&shop=<?=$row['user_userName']?>&shop_id=<?=$row['user_id']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
                         </td>
                         <?php
                             if (isset($_GET['report']) && $_GET['report'] == 'trans') {

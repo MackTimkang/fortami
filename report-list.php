@@ -41,8 +41,11 @@
                             <td><?=date("M d, Y h:i a",strtotime($row['report_datetime']))?></td>
                             <td>
                                 <form action="report-view.php" method="post">
+                                    <input type="hidden" name="food_name" value="<?=$row['food_name']?>">
+                                    <input type="hidden" name="food_id" value="<?=$row['food_id']?>">
                                     <input type="hidden" name="reportId" value="<?=$row['report_id']?>">
                                     <input type="hidden" name="senderId" value="<?=$row['user_id']?>">
+                                    <input type="hidden" name="photo" value="<?=$row['photo']?>">
                                     <input type="hidden" name="sender" value="<?=$row['user_fName'].' '.$row['user_lName']?>">
                                     <input type="hidden" name="issue" value="<?=$row['issue']?>">
                                     <input type="hidden" name="description" value="<?=$row['description']?>">

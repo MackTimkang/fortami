@@ -3,6 +3,9 @@
     include 'admin-header.php';
 
     $backend = new Admin;
+    $sum = $backend->sumAmount();
+    $amount = mysqli_fetch_assoc($sum);
+    $total = number_format((float)$amount['total'],2,'.',',')
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +27,7 @@
                         <th>Recipient</th>
                         <th>Status</th>
                         <th>Order Date</th>
+                        <?=(isset($_GET['commission']) ? '<th>Total</th>' : '')?>
                         <th>Receipt</th>
                         <th>Rating</th>
                     </tr>
@@ -39,6 +43,13 @@
                         <td><?=$row['full_name']?></td>
                         <td><?=$row['order_status']?></td>
                         <td><?=date("M d, Y h:i a",strtotime($row['order_datetime']))?></td>
+                        <?php
+                            if (isset($_GET['commission'])) {
+                                ?>
+                                    <td><?=$row['pay_amount']?></td>
+                                <?php
+                            }
+                        ?>
                         <td>
                             <form action="receipt.php" method="post">
                                 <input type="hidden" name="trans_id" value="<?=$row['payTrans_id']?>">
@@ -62,6 +73,11 @@
                         }
                     ?>
                 </table>
+                <?php
+                    if (isset($_GET['commission'])) {
+                        echo "<h4>Total Commission: ₱ <i>$total</i></h4>";
+                    }
+                ?>
             </div>
         </div>
     </div>

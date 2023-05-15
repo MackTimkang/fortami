@@ -27,8 +27,10 @@ $backend->checksession();
                 <th>Category</th>
                 <th>Food</th>
                 <th>Description</th>
+                <th>Serving Size</th>
                 <th>Preparation</th>
                 <th>Date Prepared</th>
+                <th>Consume Before</th>
                 <th>Price</th>
                 <th>Action</th>
             </tr>
@@ -40,6 +42,7 @@ $backend->checksession();
                 <td><?=$data['category_name']?></td>
                 <td><?=$data['food_name']?></td>
                 <td><?=$data['food_description']?></td>
+                <td><?=$data['serving_size']?></td>
                 <td><?=$data['preparation']?></td>
                 <td><?php 
                         if($data['food_creation'] == '0000-00-00 00:00:00'){
@@ -47,6 +50,16 @@ $backend->checksession();
                         }
                         else {
                             echo date("M d, Y | h:i a",strtotime($data['food_creation']));
+                        }
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                        if($data['food_expiration'] == '0000-00-00'){
+                            echo "-";
+                        }
+                        else {
+                            echo date("M d, Y",strtotime($data['food_expiration']));
                         }
                     ?>
                 </td>

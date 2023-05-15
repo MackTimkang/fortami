@@ -53,7 +53,7 @@
               <a class="nav-link active" aria-current="page" href="profile.php" style="color: white">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="product.php"style="color: white">Products</a>
+              <a class="nav-link" href="product.php"style="color: white">Foods</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="order.php"style="color: white">Orders</a>
