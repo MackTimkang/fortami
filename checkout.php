@@ -6,6 +6,10 @@
     $subtotal = mysqli_fetch_assoc($result);
     $total = number_format((float)$subtotal['total'], 2, '.', ',');
     $pay_amount = number_format((float)$subtotal['total'], 2, '.', '');
+    $fee = $pay_amount * 0.10;
+    $vat = $fee * 0.12;
+    $pay = $pay_amount + $fee + $vat;
+    $payment = number_format((float)$pay,2,'.',',');
 
     if (isset($_GET['trans_id'])) {
         $transaction = $_GET['trans_id'];
@@ -203,11 +207,23 @@
                             }
                         }
                         ?>
+                        <tr>
+                            <td colspan="3">Subtotal</td>
+                            <td class="text-center">₱ <?=$pay_amount?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Processing Fee</td>
+                            <td class="text-center">₱ <i><?=$fee?></i></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" >VAT(12%)</td>
+                            <td class="text-center">₱ <?=$vat?></td>
+                        </tr>
                         <tr >
                             <td class="text-warning">Total: </td>
                             <td></td>
                             <td></td>
-                            <td class="text-warning text-center">₱  <?=$total?></td>
+                            <td class="text-warning text-center">₱  <?=$payment?></td>
                         </tr>
                     </table>
                     <br>
@@ -262,7 +278,7 @@
               $option = $_SESSION['option'];
                 if (isset($_SESSION['address_id'])) {
                     $address = $_SESSION['address_id'];
-                    $backend->payment($user,$method,$pay_amount,$option,$status);//inserting the payment to payment db
+                    $backend->payment($user,$method,$pay,$vat,$fee,$option,$status);//inserting the payment to payment db
                 
                     $getpayment = $backend->getpayment($user,$time);//get trans_id
                         if ($getpayment->num_rows > 0) {

@@ -63,6 +63,8 @@
                                 <input type="hidden" name="trans_id" value="<?=$row['payTrans_id']?>">
                                 <input type="hidden" name="address" value="<?=$row['street'].', '.$row['barangay'].', '.$row['city'].' City'?>">
                                 <input type="hidden" name="total_payment" value="<?=$row['pay_amount']?>">
+                                <input type="hidden" name="vat" value="<?=$row['vat']?>">
+                                <input type="hidden" name="comm" value="<?=$row['commission']?>">
                                 <input type="hidden" name="order_date" value="<?=$row['order_datetime']?>">
                                 <input type="hidden" name="status" value="<?=$row['order_status']?>">
                                 <input type="hidden" name="option" value="<?=$row['delivery_option']?>">

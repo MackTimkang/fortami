@@ -68,7 +68,7 @@
         </div>
         <div class="col-md-3">
             <label for="inputState" class="form-label">Discounted Price</label>
-            <input type="number" class="form-control" placeholder="₱0" name="disprice" id="disprice"required>
+            <input type="number" class="form-control" placeholder="₱0" name="disprice" id="disprice">
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-success" name="savebtn">Add Product</button>
@@ -87,9 +87,18 @@
             $time=$_POST['creation'];
             $exp = new DateTime($_POST['expiration']);
             $expiration_date = $exp->format('Y-m-d');
-            $discount=$_POST['disprice'];
             $price=$_POST['origprice'];
-
+                if ($prep == 'Surplus') {
+                    $dis = $price * 0.30;
+                    $discount = $price - $dis;
+                }else {
+                    if ($_POST['disprice'] == 0) {
+                        $discount = $price;
+                    }
+                    else{
+                        $discount = $_POST['disprice'];
+                    }
+                }
             $pic_name = $_FILES['foodpic']['name'];
             $pic_size = $_FILES['foodpic']['size'];
             $pic_tmp = $_FILES['foodpic']['tmp_name'];

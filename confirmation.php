@@ -18,7 +18,7 @@
 		$buyer_id = $_POST['buyer_id'];
 		$trans_id = $_POST['trans_id'];
 		$address = $_POST['address'];
-		$subtotal = $_POST['total_payment'];
+		$subtot = $_POST['total_payment'];
 		$received = $_POST['order_date'];
 		$status = $_POST['status'];
 		$option = $_POST['option'];
@@ -28,10 +28,13 @@
 		$shop_address = $_POST['shop_address'];
 		$shop_contact = $_POST['contact'];
 		$result = $backend->foodBought($trans_id);
-		$comm = $subtotal * 0.10;
+		$tax = $_POST['vat'];
+		$comm = $_POST['comm'];
 		$commission = number_format((float)$comm,2,'.',',');
-		$vat = $commission * 0.12;
-		$total = $commission + $subtotal + $vat;
+		$vat = number_format((float)$tax,2,'.',',');
+		$subtota = $subtot - $tax - $comm;
+		$subtotal = number_format((float)$subtota,2,'.',',');
+		$total = number_format((float)$subtot,2,'.',',');
 	}else{
 		$buyer = "";
 		$buyer_id = "";
@@ -120,7 +123,7 @@
 				?>
 				<tr>
 					<td colspan="3">Subtotal</td>
-					<td>₱ <?=$subtotal?></td>
+					<td>₱ <i><?=$subtotal?></i></td>
 				</tr>
 				<tr>
 					<td colspan="3">Processing Fee</td>

@@ -28,6 +28,16 @@ $backend = new Backend;
                 <label for="permit"><i><?=($_SESSION['role'] == 'Buyer')?'Valid ID':'Business Permit'?> <small class="text-danger">*</small></i></label>
                 <input type="file" name="permit" class="form-control" required>
             </div>
+            <?php
+                if($_SESSION['role'] == 'Seller'){
+                  ?>
+                    <div class="col-md-12">
+                        <label for="permit"><i>Sanitary Permit <small class="text-danger">*</small></i></label>
+                        <input type="file" name="sanitary" class="form-control" required>
+                    </div>
+                  <?php  
+                }
+            ?>
             <div class="col-md-6">
                 <label for="fname" class="form-label" value=""><i><?=($_SESSION['role'] == 'Seller')?'Shop Name':'Full Name'?><small class="text-danger"> *</small></i></label>
                 <input type="text" class="form-control" name="fullname" required>
@@ -109,9 +119,8 @@ $backend = new Backend;
             $zip = $_POST['zip'];
             $note = $_POST['note'];
             $label = $_POST['label'];
-    
             $backend->createAddress($id,$name,$type,$con,$province,$city,$brgy,$street,$zip,$note,$label);
-    
+            //upload business permit
             $permit = $_FILES['permit'];
 
             $permit_name = $_FILES['permit']['name'];
@@ -133,6 +142,37 @@ $backend = new Backend;
                                 move_uploaded_file($permit_tmp,$path);
 
                                 $backend->uploadPermit($permit_newName);
+                            }
+                            else {
+                                echo "Unsupported Format";
+                            }
+                    }
+                }else {
+                    echo "Unknown Error Occured, Please Try Again";
+                }
+                //end of upload business permit
+                //Sanitary permit upload
+                $sanitary = $_FILES['sanitary'];
+
+                $sanitary_name = $_FILES['sanitary']['name'];
+                $sanitary_size = $_FILES['sanitary']['size'];
+                $sanitary_tmp = $_FILES['sanitary']['tmp_name'];
+                $sanitaryError = $_FILES['sanitary']['error'];
+
+                if ($sanitaryError === 0) {
+                    if ($sanitary_size > 10000000) {
+                        echo "Please upload a pic not more that 1mb";
+                    }else{
+                        $exte = pathinfo($sanitary_name,PATHINFO_EXTENSION);
+                        $extelower = strtolower($exte);
+                        $allowedexte = array("png","jpg","jpeg");
+
+                            if (in_array($extelower,$allowedexte)) {
+                                $sanitary_newName = uniqid("FORTAMI",true).'.'.$extelower;
+                                $newPath = './src/uploads/business_permit/'.$sanitary_newName;
+                                move_uploaded_file($sanitary_tmp,$newPath);
+
+                                $backend->uploadSanitary($sanitary_newName);
                             }
                             else {
                                 echo "Unsupported Format";

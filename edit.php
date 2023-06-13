@@ -74,8 +74,8 @@
         <input type="number" class="form-control" name="origprice" id="origprice" value="<?=$row['food_origPrice'];?>" required>
     </div>
     <div class="col-md-3">
-        <label for="inputState" class="form-label">Discounted Price</label>
-        <input type="number" class="form-control" name="disprice" id="disprice" value="<?=$row['food_discountedPrice'];?>" required>
+        <label for="inputState" class="form-label">Discounted Price <?=($row['preparation'] == 'Surplus')?'(-30%)':''?></label>
+        <input type="number" class="form-control" name="disprice" id="disprice" value="<?=$row['food_discountedPrice'];?>" <?=($row['preparation']=='Surplus')?'disabled':''?> >
     </div>
     <div class="col-12">
         <button type="submit" class="btn btn-success" name="editbtn">Save Changes</button>
@@ -91,6 +91,7 @@
             $food_id = $_GET['id'];
             $foodpic = $_FILES['foodpic'];
             $food_pic = $_POST['foodIMG'];
+            $prep = $_POST['prep'];
             $category = $_POST['category'];
             $foodname = $_POST['foodname'];
             $desc = $_POST['fooddesc'];
@@ -98,9 +99,19 @@
             $time = $_POST['creation'];
             $exp = new DateTime($_POST['expiration']);
             $expiration_date = $exp->format('Y-m-d');
-            $disc = $_POST['disprice'];
             $orig = $_POST['origprice'];
             $prep = $_POST['prep'];
+                if ($prep == 'Surplus') {
+                    $dis = $orig * 0.30;
+                    $disc = $orig - $dis;
+                }else {
+                   if ($_POST['disprice'] == 0) {
+                    $disc = $orig;
+                   }
+                   else {
+                    $disc = $_POST['disprice'];
+                   }
+                }
 
                 $pic_name = $_FILES['foodpic']['name'];
                 $pic_size = $_FILES['foodpic']['size'];

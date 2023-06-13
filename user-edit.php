@@ -10,6 +10,7 @@ $backend->checksession();
     $list = $backend->usersearch($id);
     $row = mysqli_fetch_assoc($list);
     $permit = $row['permit'];
+    $sanitary = $row['sanitary'];
 
         if ($permit == '') {
             $verify = "No Permit Uploaded";
@@ -19,6 +20,7 @@ $backend->checksession();
              $verify = "<a href='./src/uploads/business_permit/$permit' class='btn btn-warning form-control p-2'>View Valid ID</a>";
            }else{
              $verify = "<a href='./src/uploads/business_permit/$permit' class='btn btn-warning form-control p-2'>View Business Permit</a>";
+             $permit = "<a href='./src/uploads/business_permit/$sanitary' class='btn btn-info form-control p-2'>View Sanitary Permit</a>";
            }
         }
 ?>
@@ -65,7 +67,8 @@ $backend->checksession();
             </div>
             <div class="col-12">
                 <h6 class="text-center"><?=$verify?></h6>
-                <a class="btn btn-info form-control my-2" href="user.php">Back</a>
+                <h6 class="text-center"><?=$permit?></h6>
+                <a class="btn btn-danger form-control my-2" href="user.php">Back</a>
             </div>
         </div>
         </form>

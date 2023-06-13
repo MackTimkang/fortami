@@ -46,7 +46,7 @@
                         <?php
                             if (isset($_GET['commission'])) {
                                 ?>
-                                    <td><?=$row['pay_amount']?></td>
+                                    <td>₱ <?=$row['pay_amount']?></td>
                                 <?php
                             }
                         ?>

@@ -641,8 +641,8 @@ session_start();
 
       //start of payment management
 
-      function payment($user,$method,$amount,$opt,$status){
-        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,delivery_option,trans_status) values($user,$method,'$amount','$opt','$status')";
+      function payment($user,$method,$amount,$vat,$com,$opt,$status){
+        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,vat,commission,delivery_option,trans_status) values($user,$method,'$amount','$vat','$com','$opt','$status')";
         $result = $this->con->query($query);
           if ($result) {
             echo "<script>alert('Payment Successful, Order is being processed');window.location.href='activeorders.php';</script>";
@@ -953,6 +953,16 @@ session_start();
               echo "<script>window.location.href='dashboard.php';</script>";
             }
         }//end of upload permit for sellers
+
+        function uploadSanitary($sanitary){
+          $id = $_SESSION['id'];
+          $query = "UPDATE user SET sanitary = '$sanitary' WHERE user_id = $id";
+          $result = $this->con->query($query);
+          
+            if ($result) {
+              echo "<script>window.location.href='dashboard.php';</script>";
+            }
+        }//end of upload sanitary permit function
     }//end of class backend
 
     class Rating {

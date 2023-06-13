@@ -12,9 +12,17 @@
 		$date = date("M d, Y h:i a",strtotime($datetime));
 		$option = $_POST['delivery'];
 		$status = $_POST['status'];
-		$total = $_POST['total'];
+		$subtot = $_POST['total'];
 		$paystats = $_POST['paystats'];
 		$method = $_POST['method'];
+		$comm = $_POST['comm'];
+		$commission = number_format((float)$comm,2,'.',',');
+		$tax = $_POST['vat'];
+		$vat = number_format((float)$tax,2,'.',',');
+		$subtota = $subtot - $comm - $tax;
+		$subtotal = number_format((float)$subtota,2,'.',',');
+		$total = number_format((float)$subtot,2,'.',',');
+		
 
 		$shopAddress = $backend->sellerAddress($shopID);
 		$address = mysqli_fetch_assoc($shopAddress);
@@ -31,7 +39,12 @@
 		$total = "";
 		$paystats = "";
 		$method = "";
-
+		$commission = 0;
+		$subtotal = 0;
+		$subtot = 0;
+		$vat = 0;
+		$comm = 0;
+		$subtota = 0;
 		$shopAddress = "";
 		$address=[];
 		$address['street'] = "";
@@ -94,13 +107,24 @@
 					<td><?=$row['food_name']?></td>
 					<td><?=$row['quantity']?></td>
 					<td><?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
-					<td><?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
+					<td>₱ <?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
 				</tr>
 				<?php
 						}
 					}
 				?>
 				<tr>
+					<td colspan="3">Subtotal</td>
+					<td>₱ <?=$subtotal?></td>
+				</tr>
+				<tr>
+					<td colspan="3">Processing Fee</td>
+					<td>₱ <i><?=$commission?></i></td>
+				</tr>
+				<tr>
+					<td colspan="3" >VAT(12%)</td>
+					<td>₱ <?=$vat?></td>
+				</tr >
 					<td colspan="3">Total Payment</td>
 					<td>₱ <?=$total?></td>
 				</tr>
