@@ -254,6 +254,14 @@ session_start();
             }
       }//end of all transaction function
 
+      function sumAmount(){
+        $query = "SELECT SUM(pay_amount) AS total FROM food_order JOIN payment_transaction ON payment_transaction.payTrans_id = food_order.payTrans_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            return $result;
+          }
+      }//end of sum amount function
+
     }//end of class Admin
 
     class Address extends Account{
@@ -375,11 +383,11 @@ session_start();
           }
       }//end of category list function
 
-      function addproduct($catid,$pic,$foodname,$desc,$preparation,$time,$discount,$price){
+      function addproduct($catid,$pic,$foodname,$desc,$size,$preparation,$time,$expire,$discount,$price){
         $id = $_SESSION['id'];
-        $query = "INSERT INTO food_product(user_id,category_id,food_pic,food_name,food_description,preparation
-        ,food_creation,food_discountedPrice,food_origPrice) values('$id','$catid','$pic','$foodname','$desc','$preparation',
-        '$time','$discount','$price')";
+        $query = "INSERT INTO food_product(user_id,category_id,food_pic,food_name,food_description,serving_size,preparation
+        ,food_creation,food_expiration,food_discountedPrice,food_origPrice) values('$id','$catid','$pic','$foodname','$desc','$size','$preparation',
+        '$time','$expire','$discount','$price')";
 
         $result = $this->con->query($query);
 
@@ -394,10 +402,10 @@ session_start();
         echo "<meta http-equiv='refresh' content='0'>";
       }// end of add product function
 
-      function editproduct($food_id,$catid,$pic,$name,$desc,$prep,$date,$discprice,$origprice){
+      function editproduct($food_id,$catid,$pic,$name,$desc,$size,$prep,$date,$exp,$discprice,$origprice){
         $id = $_SESSION['id'];//user_id
-        $query = "UPDATE food_product SET category_id ='$catid',food_pic = '$pic', food_name='$name',food_description='$desc',preparation='$prep',food_creation='$date',
-        food_discountedPrice = '$discprice', food_origPrice = '$origprice' WHERE user_id = '$id' AND food_id='$food_id'";
+        $query = "UPDATE food_product SET category_id ='$catid',food_pic = '$pic', food_name='$name',food_description='$desc',serving_size = '$size',preparation='$prep',food_creation='$date',
+        food_expiration='$exp',food_discountedPrice = '$discprice', food_origPrice = '$origprice' WHERE user_id = '$id' AND food_id='$food_id'";
         $result = $this->con->query($query);
         if ($result) {
           echo "<script>alert('Updated Successfuly!');window.location.href='product.php';</script>";
@@ -458,8 +466,8 @@ session_start();
 
       function listproduct(){
           $user = $_SESSION['id'];
-          $sql = "SELECT food_id, food_pic,category.category_name,food_name,food_description,preparation,
-          food_creation,food_discountedPrice,food_origPrice FROM food_product JOIN category ON food_product.category_id = category.category_id WHERE food_product.user_id = $user ORDER BY food_id";
+          $sql = "SELECT * FROM food_product JOIN category ON food_product.category_id = category.category_id 
+                  WHERE food_product.user_id = $user ORDER BY food_id";
           $result = $this->con->query($sql);
           return $result;
       }//end of list product function
@@ -633,8 +641,8 @@ session_start();
 
       //start of payment management
 
-      function payment($user,$method,$amount,$opt,$status){
-        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,delivery_option,trans_status) values($user,$method,'$amount','$opt','$status')";
+      function payment($user,$method,$amount,$vat,$com,$opt,$status){
+        $query = "INSERT INTO payment_transaction(user_id,paymethod_id,pay_amount,vat,commission,delivery_option,trans_status) values($user,$method,'$amount','$vat','$com','$opt','$status')";
         $result = $this->con->query($query);
           if ($result) {
             echo "<script>alert('Payment Successful, Order is being processed');window.location.href='activeorders.php';</script>";
@@ -945,6 +953,16 @@ session_start();
               echo "<script>window.location.href='dashboard.php';</script>";
             }
         }//end of upload permit for sellers
+
+        function uploadSanitary($sanitary){
+          $id = $_SESSION['id'];
+          $query = "UPDATE user SET sanitary = '$sanitary' WHERE user_id = $id";
+          $result = $this->con->query($query);
+          
+            if ($result) {
+              echo "<script>window.location.href='dashboard.php';</script>";
+            }
+        }//end of upload sanitary permit function
     }//end of class backend
 
     class Rating {
@@ -1292,20 +1310,19 @@ session_start();
         $this->con = $db->getConnection();
       }//end of function construct
 
-      function reportTrans($order,$trans,$issue,$desc){
-        $query = "INSERT INTO report(order_id,trans_id,issue,description) VALUES($order,$trans,'$issue','$desc')";
+      function reportTrans($food,$buyer,$issue,$desc,$photo){
+        $query = "INSERT INTO report(food_id,user_id,issue,description,photo) VALUES($food,$buyer,'$issue','$desc','$photo')";
         $result = $this->con->query($query);
           if ($result) {
-            $this->newUserNotif($_SESSION['id'],"You have reported transaction $trans, thank you for your feedback",'Unread');
+            $this->newUserNotif($buyer,'You have reported a food, thank you for your feedback','Unread');
             $this->newUserNotif(46,"You have a new report pending",'Unread');
             echo "<script>alert('Your report has been send to the admin, thank you!');window.location.href='transactions.php?report=trans';</script>";
           }
       }//end of function reportTrans
 
       function viewAllReports(){
-        $query = "SELECT * FROM report JOIN payment_transaction ON payment_transaction.payTrans_id = report.trans_id 
-                  JOIN food_order ON food_order.order_id = report.order_id 
-                  INNER JOIN user ON user.user_id = payment_transaction.user_id ORDER BY report_datetime";
+        $query = "SELECT * FROM report JOIN user ON user.user_id = report.user_id JOIN food_product
+                  ON food_product.food_id = report.food_id ORDER BY report_datetime";
         $result = $this->con->query($query);
           if ($result) {
             return $result;
@@ -1319,6 +1336,14 @@ session_start();
             return $result;
           }
       }//end of view report function
+
+      function banProd($food_id){
+        $query = "DELETE FROM food_product WHERE food_id = $food_id";
+        $result = $this->con->query($query);
+          if ($result) {
+            
+          }
+      }//end of function del product
 
     }
 ?>

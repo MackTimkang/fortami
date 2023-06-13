@@ -18,7 +18,7 @@
 		$buyer_id = $_POST['buyer_id'];
 		$trans_id = $_POST['trans_id'];
 		$address = $_POST['address'];
-		$total = $_POST['total_payment'];
+		$subtot = $_POST['total_payment'];
 		$received = $_POST['order_date'];
 		$status = $_POST['status'];
 		$option = $_POST['option'];
@@ -28,12 +28,19 @@
 		$shop_address = $_POST['shop_address'];
 		$shop_contact = $_POST['contact'];
 		$result = $backend->foodBought($trans_id);
+		$tax = $_POST['vat'];
+		$comm = $_POST['comm'];
+		$commission = number_format((float)$comm,2,'.',',');
+		$vat = number_format((float)$tax,2,'.',',');
+		$subtota = $subtot - $tax - $comm;
+		$subtotal = number_format((float)$subtota,2,'.',',');
+		$total = number_format((float)$subtot,2,'.',',');
 	}else{
 		$buyer = "";
 		$buyer_id = "";
 		$trans_id = "";
 		$address = "";
-		$total = "";
+		$total = 0;
 		$received = "";
 		$status = "";
 		$option = "";
@@ -42,6 +49,10 @@
 		$shop = "";
 		$shop_address = "";
 		$shop_contact = "";
+		$commission = 0;
+		$subtotal = 0;
+		$vat = 0;
+		$comm = 0;
 		$result= [];
 	}
 
@@ -58,7 +69,11 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-	
+	<style>
+		body{
+			background-image:linear-gradient(#4990b5,skyblue);
+		}
+	</style>
 </head>
 <body>
 <div class="container">
@@ -84,7 +99,7 @@
 	<div class="col-12 table-responsive">
 		<table class="table table-striped">
 			<thead>
-				<tr>
+				<tr >
 					<th>Food</th>
 					<th>Qty</th>
 					<th>Price</th>
@@ -99,22 +114,34 @@
 				<tr>
 					<td><?=$row['food_name']?></td>
 					<td><?=$row['quantity']?></td>
-					<td><?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
-					<td><?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
+					<td>₱ <?=number_format((float)$row['food_discountedPrice'],2,'.',',')?></td>
+					<td>₱ <?=number_format((float)$row['quantity']*$row['food_discountedPrice'],2,'.',',')?></td>
 				</tr>
 				<?php
 						}
 					}
 				?>
 				<tr>
-					<td colspan="3">Total Payment</td>
+					<td colspan="3">Subtotal</td>
+					<td>₱ <i><?=$subtotal?></i></td>
+				</tr>
+				<tr>
+					<td colspan="3">Processing Fee</td>
+					<td>₱ <i><?=$commission?></i></td>
+				</tr>
+				<tr>
+					<td colspan="3" >VAT(12%)</td>
+					<td>₱ <?=$vat?></td>
+				</tr>
+				<tr class="bg-dark text-light bg-gradient">
+					<td colspan="3" >Total Payment</td>
 					<td>₱ <?=$total?></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-    
-            <?php
+    <div class="col-12">
+		<?php
 				if ($status == 'Received') {
 					if ($option == 'Delivery') {
 						echo "<div class='col-12 bg-success p-3 text-center rounded'>
@@ -132,9 +159,10 @@
 						    	<h2 class='text-light'>Cancelled</h2>
 							  </div>";
 				}
-			?>
+		?>
+	</div>
 	<div class="d-flex justify-content-center align-items-center">
-		<button class="btn btn-primary my-2" id="exclude" onclick="printPage()"><i class="bi bi-printer"> Print Receipt</i></button>
+		<button class="btn btn-dark my-2" id="exclude" onclick="printPage()"><i class="bi bi-printer"> Print Receipt</i></button>
 	</div>
     <div class="col-12 my-2">
 		<h4><a href="sales.php" id="backbtn"><i class="bi bi-arrow-return-left">Back</i></a></h4>

@@ -18,6 +18,11 @@
   //total food listing
   $foods = $admin->totalFood();
   $food = mysqli_fetch_assoc($foods);
+
+  //total amount of transaction
+    $sum = $admin->sumAmount();
+    $amount = mysqli_fetch_assoc($sum);
+    $total = number_format((float)$amount['total'],2,'.',',')
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,6 +71,15 @@
                 <hr>
                 <p class="card-text"><h1><?=$food['foods']?></h1></p>
               </div>
+        </div>
+        <div class="col-md-6 card p-3  rounded-5 shadow text-center dash">
+            <a href="admin-transaction.php?commission=show" style="text-decoration:none;color:black">
+              <div class="card-body">
+                <h2 class="card-title"><i class="bi bi-cash-coin"> Commission</i></h2>
+                <hr>
+                <p class="card-text"><h1>₱ <?=$total?></h1></p>
+              </div>
+            </a>
         </div>
         <hr>
         <div class="col-md-3 card p-3 bg-dark bg-gradient text-light rounded-5 shadow text-center">

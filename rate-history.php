@@ -45,6 +45,7 @@
                         <th>Recipient</th>
                         <th>Rate</th>
                         <th>Comment</th>
+                        <?=($_SESSION['role']=='Buyer')?'<th>Report</th>':''?>
                     </tr>
                         <?php
                             if (!is_null($result)) {
@@ -70,6 +71,22 @@
                             ?>
                         </td>
                         <td><?=$rate['comment']?></td>
+                        <?php
+                            if ($_SESSION['role'] == 'Buyer') {
+                                ?>
+                                    <td>
+                                        <form action="report.php" method="post">
+                                            <input type="hidden" name="food" value="<?=$rate['food_id']?>">
+                                            <input type="hidden" name="foodname" value="<?=$rate['food_name']?>">
+                                            <input type="hidden" name="shop" value="<?=$shop?>">
+                                            <input type="hidden" name="shop_id" value="<?=$_GET['shop_id']?>">
+                                            <input type="hidden" name="trans_id" value="<?=$trans_id?>">
+                                            <button type="submit" name="repbtn" class="btn btn-danger"><i class="bi bi-flag"></i></button>
+                                        </form>
+                                    </td>
+                                <?php
+                            }
+                        ?>
                     </tr>
                         <?php
                                 }

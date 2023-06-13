@@ -56,13 +56,15 @@
                                 <input type="hidden" name="status" value="<?=$row['order_status']?>">
                                 <input type="hidden" name="delivery" value="<?=$row['delivery_option']?>">
                                 <input type="hidden" name="total" value="<?=$row['pay_amount']?>">
+                                <input type="hidden" name="vat" value="<?=$row['vat']?>">
+                                <input type="hidden" name="comm" value="<?=$row['commission']?>">
                                 <input type="hidden" name="paystats" value="<?=$row['trans_status']?>">
                                 <input type="hidden" name="method" value="<?=$row['paymethod_type']?>">
                                 <button type="submit" name="receiptbtn" class="<?=($trans == $row['payTrans_id'])?'btn btn-outline-primary':'btn btn-outline-dark'?> text-center"><i class="bi bi-receipt"></i></button>
                             </form>
                         </td>
                         <td>
-                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>&shop=<?=$row['user_userName']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
+                            <a href="rate-history.php?trans=<?=$row['payTrans_id']?>&shop=<?=$row['user_userName']?>&shop_id=<?=$row['user_id']?>" class="btn btn-outline-warning"><i class="bi bi-star"></i></a>
                         </td>
                         <?php
                             if (isset($_GET['report']) && $_GET['report'] == 'trans') {
